@@ -1,10 +1,88 @@
+import axios from 'axios';
 import { Users } from 'lucide-react';
 import React, { useState } from 'react'
 
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 const ViewCampaignDetails = () => {
-      const [selectedAmount, setSelectedAmount] = useState(50);
+      const [selectedAmount, setSelectedAmount] = useState('');
 
-      const amounts = [25, 50, 100, 250, 500, 1000];
+      const amounts = ["25", "50", "100", "250", "500", "1000"];
+
+      const onDonate=async()=>{
+        if(!selectedAmount) return;
+        let amountToInteger=Number(selectedAmount);
+        let payload={amount:amountToInteger};
+
+        
+
+        try {
+            const data:any=await axios.post("http://localhost:8080/api/razorpay/create",payload,{
+                headers:{
+                    "Authorization":`Bearer ${localStorage.getItem("token")}`
+                }
+            })
+
+            const options={
+                key:data.data.key,
+                amount:data.data.amount,
+                currency:"INR",
+                order_id:data.data.orderId,
+                handler:async function (response:any){
+                    const otherPaymentData={amount:payload.amount,transactionStatus:"SUCCESS",PaymentReference:response.razorpay_payment_id,campaignID:"654c00b0-049e-49b0-bfe5-5c5928b83794"}
+                    const data={...response,...otherPaymentData}
+                    console.log("Payment success",data)
+                      // 3️⃣ Send payment details to backend verify endpoint
+                    await axios.post("http://localhost:8080/api/razorpay/verify", data,{
+                          headers:{
+                    "Authorization":`Bearer ${localStorage.getItem("token")}`
+                  }                
+                    })
+
+                    alert("Payment Verified!");
+                }
+            }
+
+            const rzp=new window.Razorpay(options);
+
+            rzp.on("payment.failed", async function (response: any) {
+
+             console.log("Payment Failed:", response);
+
+            try {
+                 const otherPaymentData={amount:payload.amount,transactionStatus:"FAILED",PaymentReference:response.error.metadata.payment_id,campaignID:"654c00b0-049e-49b0-bfe5-5c5928b83794",razorpay_order_id: data.data.orderId,}
+
+            await axios.post("http://localhost:8080/api/razorpay/payment-failed",otherPaymentData ,{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+                }
+            );
+
+            } catch (err) {
+            console.error("Failed to update transaction:", err);
+            }
+
+        alert("Payment Failed");
+      });
+
+
+            rzp.open();
+
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+      }
+
+
+
   return (
      <section className="bg-gray-100 py-12">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-10">
@@ -53,10 +131,10 @@ const ViewCampaignDetails = () => {
             <div className="flex justify-between items-center">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900">
-                  $42,850
+                  ₹42,850
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Raised of $60,000 Target
+                  Raised of ₹60,000 Target
                 </p>
               </div>
               <div className="text-emerald-600 font-semibold text-lg">
@@ -122,7 +200,7 @@ const ViewCampaignDetails = () => {
                     }
                   `}
                 >
-                  ${amount >= 1000 ? "1k" : amount}
+                  ₹{amount}
                 </button>
               ))}
             </div>
@@ -133,13 +211,15 @@ const ViewCampaignDetails = () => {
                 Enter custom amount
               </p>
               <input
+              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setSelectedAmount(e.target.value)}
+              value={selectedAmount}
                 type="number"
-                placeholder="$ 0.00"
+                placeholder="₹ 0.00"
                 className="w-full border rounded-full px-5 py-3 outline-none focus:border-emerald-500"
               />
             </div>
 
-            <button className="mt-8 w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-full font-semibold transition">
+            <button onClick={onDonate} className="mt-8 w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-full font-semibold transition">
               Donate Now
             </button>
 
