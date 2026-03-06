@@ -12,74 +12,108 @@ const ViewCampaignDetails = () => {
 
       const amounts = ["25", "50", "100", "250", "500", "1000"];
 
-      const onDonate=async()=>{
-        if(!selectedAmount) return;
-        let amountToInteger=Number(selectedAmount);
-        let payload={amount:amountToInteger};
+     const onDonate = async () => {
 
-        
+      let GlobaltransactionId:any;
 
-        try {
-            const data:any=await axios.post("http://localhost:8080/api/razorpay/create",payload,{
+          if(!selectedAmount) return;
+
+          const payload = { amount:Number(selectedAmount),campaignId:"22857f95-1419-4e87-acbd-f359155322c8" };
+
+          try {
+
+            const orderResponse = await axios.post(
+              "http://localhost:8080/api/razorpay/create",
+              payload,
+              {
                 headers:{
-                    "Authorization":`Bearer ${localStorage.getItem("token")}`
+                  Authorization:`Bearer ${localStorage.getItem("token")}`
                 }
+              }
+            )
+
+            console.log("Order Response",orderResponse)
+
+            GlobaltransactionId=orderResponse.data.transaction_id
+
+            const options = {
+              key:orderResponse.data.key,
+              amount:orderResponse.data.amount,
+              currency:"INR",
+              order_id:orderResponse.data.orderId,
+            
+
+              handler:async function(response:any){
+
+                const paymentData = {
+                  ...response,
+                  transactionId:orderResponse.data.transaction_id,
+                  amount:payload.amount,
+                  transactionStatus:"SUCCESS",
+                  PaymentReference:response.razorpay_payment_id,
+                  campaignID:"22857f95-1419-4e87-acbd-f359155322c8",
+                  razorpay_order_id:response.razorpay_order_id
+                }
+
+                console.log('Payment data',paymentData)
+
+                
+
+                await axios.post(
+                  "http://localhost:8080/api/razorpay/verify",
+                  paymentData,
+                  {
+                    headers:{
+                      Authorization:`Bearer ${localStorage.getItem("token")}`
+                    }
+                  }
+                )
+
+                alert("Payment Verified!")
+
+              }
+            }
+
+            const rzp = new window.Razorpay(options)
+
+            rzp.on("payment.failed", async function(response:any){
+
+              try{
+
+                const failedData = {
+                  transactionId:GlobaltransactionId,
+                  amount:payload.amount,
+                  transactionStatus:"FAILED",
+                  PaymentReference:response?.error?.metadata?.payment_id,
+                  campaignID:"22857f95-1419-4e87-acbd-f359155322c8",
+                  razorpay_order_id:orderResponse.data.orderId
+                }
+
+                await axios.post(
+                  "http://localhost:8080/api/razorpay/payment-failed",
+                  failedData,
+                  {
+                    headers:{
+                      Authorization:`Bearer ${localStorage.getItem("token")}`
+                    }
+                  }
+                )
+
+              }catch(err){
+                console.error("Failed to update transaction:",err)
+              }
+
+              alert("Payment Failed")
+
             })
 
-            const options={
-                key:data.data.key,
-                amount:data.data.amount,
-                currency:"INR",
-                order_id:data.data.orderId,
-                handler:async function (response:any){
-                    const otherPaymentData={amount:payload.amount,transactionStatus:"SUCCESS",PaymentReference:response.razorpay_payment_id,campaignID:"654c00b0-049e-49b0-bfe5-5c5928b83794"}
-                    const data={...response,...otherPaymentData}
-                    console.log("Payment success",data)
-                      // 3️⃣ Send payment details to backend verify endpoint
-                    await axios.post("http://localhost:8080/api/razorpay/verify", data,{
-                          headers:{
-                    "Authorization":`Bearer ${localStorage.getItem("token")}`
-                  }                
-                    })
+            rzp.open()
 
-                    alert("Payment Verified!");
-                }
-            }
+          } catch(error:any){
+            console.error(error)
+          }
 
-            const rzp=new window.Razorpay(options);
-
-            rzp.on("payment.failed", async function (response: any) {
-
-             console.log("Payment Failed:", response);
-
-            try {
-                 const otherPaymentData={amount:payload.amount,transactionStatus:"FAILED",PaymentReference:response.error.metadata.payment_id,campaignID:"654c00b0-049e-49b0-bfe5-5c5928b83794",razorpay_order_id: data.data.orderId,}
-
-            await axios.post("http://localhost:8080/api/razorpay/payment-failed",otherPaymentData ,{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-                }
-            );
-
-            } catch (err) {
-            console.error("Failed to update transaction:", err);
-            }
-
-        alert("Payment Failed");
-      });
-
-
-            rzp.open();
-
-
-
-        } catch (error) {
-            console.log(error)
-        }
-
-
-      }
+          }
 
 
 
