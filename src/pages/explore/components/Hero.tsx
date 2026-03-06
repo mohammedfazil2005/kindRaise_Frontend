@@ -7,7 +7,7 @@ const Hero = () => {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://static.vecteezy.com/system/resources/thumbnails/070/635/549/small/diverse-group-of-people-raising-hands-outdoors-expressing-opinions-seeking-involvement-and-active-participation-photo.jpeg"
+          src="https://static.vecteezy.com/system/resources/previews/047/411/853/non_2x/wavy-abstract-background-of-indian-independence-theme-annual-holiday-template-design-for-banner-greeting-card-poster-free-vector.jpg"
           alt="Support Causes"
           className="w-full h-full object-cover"
         />

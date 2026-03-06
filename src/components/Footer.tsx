@@ -20,7 +20,7 @@ const Footer = () => {
 
           {/* Product */}
           <div>
-            <h4 className="font-extrabold mb-2">Product</h4>
+            <h4 className="font-bold mb-2">Product</h4>
             <ul className="space-y-1 text-gray-500">
               <li className="hover:text-gray-900 cursor-pointer text-sm font-extralight">How It Works</li>
               <li className="hover:text-gray-900 cursor-pointer text-sm font-extralight">Pricing</li>
@@ -31,7 +31,7 @@ const Footer = () => {
 
           {/* Resources */}
           <div>
-            <h4 className="font-extrabold mb-2">Resources</h4>
+            <h4 className="font-bold mb-2">Resources</h4>
             <ul className="space-y-1 text-gray-500">
               <li className="hover:text-gray-900 cursor-pointer text-sm font-extralight">Help Center</li>
               <li className="hover:text-gray-900 cursor-pointer text-sm font-extralight">Blog</li>
@@ -42,7 +42,7 @@ const Footer = () => {
 
           {/* Company */}
           <div>
-            <h4 className="font-extrabold mb-2">Company</h4>
+            <h4 className="font-bold mb-2">Company</h4>
             <ul className="space-y-1 text-gray-500">
               <li className="hover:text-gray-900 cursor-pointer text-sm font-extralight">About Us</li>
               <li className="hover:text-gray-900 cursor-pointer text-sm font-extralight">Careers</li>
