@@ -7,6 +7,7 @@ import Home from './pages/home/components/Home'
 import LayoutWithNavbar from './utils/LayoutWithNavbar'
 import Explore from './pages/explore/Explore'
 import ViewCampaignDetails from './pages/viewcampaigndetails/ViewCampaignDetails'
+import UserDashboard from './pages/userDashboard/UserDashboard'
 
 function App() {
 
@@ -23,6 +24,8 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path='/user/dashboard' element={<UserDashboard/>}/>
 
       </Routes>
 
