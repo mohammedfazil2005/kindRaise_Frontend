@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Heart, Share2 } from 'lucide-react';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const luxuryProperties = [
   {
@@ -44,6 +45,7 @@ const luxuryProperties = [
 const UserExploreCard = () => {
       const [isLiked, setIsLiked] = useState(false);
       const [showShare, setShowShare] = useState(false);
+      const navigate=useNavigate()
   return (
      <div className="col-span-12 md:col-span-9">
 
@@ -166,6 +168,7 @@ const UserExploreCard = () => {
                     {/* Button */}
 
                     <motion.button
+                    onClick={()=>navigate('/user/viewcampaign/1')}
                       initial={{ opacity: 0, y: 15 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4 }}

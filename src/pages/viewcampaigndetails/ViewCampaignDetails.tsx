@@ -113,7 +113,7 @@ const ViewCampaignDetails = () => {
             console.error(error)
           }
 
-          }
+     }
 
 
 
