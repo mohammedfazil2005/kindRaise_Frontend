@@ -1,29 +1,21 @@
 
+
 import { Outlet } from "react-router-dom";
-import UserSidebar from "./UserSidebar";
-import UserNavbar from "./UserNavbar";
-import UserMainDashboard from "./userDashboardComponents/UserMainDashboard";
+import UserNavbar from "./mainResuableComponents/UserNavbar";
+import UserSidebar from "./mainResuableComponents/UserSidebar";
+
+
 
 export default function UserDashboard() {
   return (
     <div className="flex">
-
-      {/* Sidebar */}
       <UserSidebar />
-
-      {/* Content */}
-      <div className="ml-64 flex-1 min-h-screen bg-gray-100 ">
-
-        {/* Navbar */}
+      <div className="lg:ml-64 flex-1 min-h-screen">
         <UserNavbar />
-
-        {/* Page Content */}
-        <div className="p-6 mt-10">
-          <UserMainDashboard/>
+        <div className="p-6 mt-10 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300">
+          <Outlet />
         </div>
-
       </div>
-
     </div>
   );
 }

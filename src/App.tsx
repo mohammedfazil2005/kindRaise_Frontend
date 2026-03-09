@@ -8,6 +8,8 @@ import LayoutWithNavbar from './utils/LayoutWithNavbar'
 import Explore from './pages/explore/Explore'
 import ViewCampaignDetails from './pages/viewcampaigndetails/ViewCampaignDetails'
 import UserDashboard from './pages/userDashboard/UserDashboard'
+import UserMainDashboard from './pages/userDashboard/userDashboardComponents/UserMainDashboard'
+import UserExploreMain from './pages/userDashboard/userExploreDashboard/UserExploreMain'
 
 function App() {
 
@@ -21,11 +23,13 @@ function App() {
           <Route path="/viewcampaign/:id" element={<ViewCampaignDetails />} />
         </Route>
 
-
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path='/user/dashboard' element={<UserDashboard/>}/>
+        <Route path='/user' element={<UserDashboard />}>
+          <Route index element={<UserMainDashboard />} />
+          <Route path='explore/campaigns' element={<UserExploreMain />} />
+        </Route>
 
       </Routes>
 
