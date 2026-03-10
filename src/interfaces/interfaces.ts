@@ -6,3 +6,9 @@ export interface CommonApiInterface{
     data?:Object
     header?:AxiosHeaders
 }
+
+export interface ApiResponseInterface{
+    message:string,
+    status:boolean,
+    data?:[]
+}

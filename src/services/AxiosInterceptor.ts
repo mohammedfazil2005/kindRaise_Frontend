@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
 
-const axiosInstance=axios.create({
+const axiosInstanceConfig=axios.create({
     baseURL:import.meta.env.VITE_KINDRAISE_API_URL,
     headers:{
         "Content-Type":"application/json"
@@ -8,7 +8,7 @@ const axiosInstance=axios.create({
 })
 
 
-axiosInstance.interceptors.request.use(
+axiosInstanceConfig.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
 );
 
 
-axiosInstance.interceptors.response.use(
+axiosInstanceConfig.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -37,4 +37,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance
+export default axiosInstanceConfig;

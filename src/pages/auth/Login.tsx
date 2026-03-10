@@ -122,7 +122,7 @@ const Login = () => {
                   placeholder=" "
                   className="peer w-full px-4 pt-4 pb-3 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                 />
-                <label className="absolute left-4 top-3 text-gray-500 text-xs transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs peer-focus:text-emerald-600">
+                <label className="absolute left-4 text-gray-500 text-xs transition-all  peer-placeholder-shown:top-4  peer-placeholder-shown:text-sm  peer-not-placeholder-shown:top-2  peer-not-placeholder-shown:text-xs  peer-focus:top-2  peer-focus:text-xs  peer-focus:text-emerald-600">
                   {field === "username" ? "Username" : "Email Address"}
                 </label>
               </motion.div>
@@ -151,7 +151,7 @@ const Login = () => {
                     className="peer w-full px-4 pt-5 pb-2 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                   />
 
-                  <label className="absolute left-4 top-3 text-gray-500 text-xs transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-emerald-600">
+                  <label className="absolute left-4 text-gray-500 text-xs transition-all  peer-placeholder-shown:top-4  peer-placeholder-shown:text-sm  peer-not-placeholder-shown:top-2  peer-not-placeholder-shown:text-xs  peer-focus:top-2  peer-focus:text-xs  peer-focus:text-emerald-600">
                     {field === "password" ? "Password" : "Confirm Password"}
                   </label>
 

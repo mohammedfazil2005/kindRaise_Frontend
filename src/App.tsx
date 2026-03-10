@@ -27,12 +27,14 @@ import AdminCreateUser from './pages/adminDashboard/adminCreateUser/AdminCreateU
 import AdminNotifications from './pages/adminDashboard/adminNotifications/AdminNotifications'
 import AdminProfile from './pages/adminDashboard/adminProfile/AdminProfile'
 import AdminTransactions from './pages/adminDashboard/adminTransactions/AdminTransactions'
+import { Toaster } from 'sonner'
 
 function App() {
 
 
   return (
     <>
+     <Toaster position="top-right" richColors />
       <Routes>
         <Route element={<LayoutWithNavbar />}>
           <Route path="/" element={<Home />} />

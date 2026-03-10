@@ -1,9 +1,8 @@
+import axios, {type AxiosRequestConfig, type RawAxiosRequestHeaders } from "axios";
+import axiosInstanceConfig from "./AxiosInterceptor";
 
-import type { CommonApiInterface } from "../interfaces/interfaces";
-import axios, { type AxiosRequestConfig } from "axios";
-import axiosInstance from "./AxiosInterceptor";
 
-export const CommonApi=async({method,endpoint,data,header}:CommonApiInterface)=>{
+export const CommonApi=async(method:string,endpoint:string,data?:object,header?:RawAxiosRequestHeaders)=>{
     try {
         const configuration:AxiosRequestConfig={
             method:method,
@@ -12,12 +11,17 @@ export const CommonApi=async({method,endpoint,data,header}:CommonApiInterface)=>
             headers:header?header:{"Content-Type":"application/json"}
 
         }
-        const AxiosConfiguration=await axiosInstance(configuration);
+        
+        const AxiosConfiguration=await axiosInstanceConfig(configuration);
         const response=AxiosConfiguration.data;
 
         return response;
 
     } catch (error) {
-        return error
+        if (axios.isAxiosError(error)) {
+           return error.response?.data
+        }
+
+      return { message: "Something went wrong",error:error }
     }
 }
