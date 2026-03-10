@@ -19,6 +19,14 @@ import AdminDashboard from './pages/adminDashboard/AdminDashboard'
 import AdminHome from './pages/adminDashboard/adminHome/AdminHome'
 import AdminManageCampaigns from './pages/adminDashboard/adminManageCampaigns/AdminManageCampaigns'
 import AdminCampaignRequests from './pages/adminDashboard/AdminCampaignRequests/AdminCampaignRequests'
+import AdminCampaignDonations from './pages/adminDashboard/AdminCampaignDonations/AdminCampaignDonations'
+import AdminRazorPaySettings from './pages/adminDashboard/adminRazorPaySettings/AdminRazorPaySettings'
+import AdminUsers from './pages/adminDashboard/adminUsers/AdminUsers'
+import AdminAnalytics from './pages/adminDashboard/adminAnalytics/AdminAnalytics'
+import AdminCreateUser from './pages/adminDashboard/adminCreateUser/AdminCreateUser'
+import AdminNotifications from './pages/adminDashboard/adminNotifications/AdminNotifications'
+import AdminProfile from './pages/adminDashboard/adminProfile/AdminProfile'
+import AdminTransactions from './pages/adminDashboard/adminTransactions/AdminTransactions'
 
 function App() {
 
@@ -49,6 +57,14 @@ function App() {
             <Route index element={<AdminHome/>}/>
             <Route path='campaigns' element={<AdminManageCampaigns/>}/>
             <Route path='campaign/requests' element={<AdminCampaignRequests/>}/>
+            <Route path='donations' element={<AdminCampaignDonations/>}/>
+            <Route path='razorpay' element={<AdminRazorPaySettings/>}/>
+            <Route path='users' element={<AdminUsers/>}/>
+            <Route path='analytics' element={<AdminAnalytics/>}/>
+            <Route path='create/users' element={<AdminCreateUser/>}/>
+            <Route path='notifications' element={<AdminNotifications/>}/>
+            <Route path='profile' element={<AdminProfile/>}/>
+            <Route path='transactions' element={<AdminTransactions/>}/>
         </Route>
 
       </Routes>

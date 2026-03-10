@@ -123,7 +123,7 @@ export default function AdminNavbar() {
                   Profile
                 </button>
 
-                <button
+                {/* <button
                   className="
                   flex items-center gap-3 w-full
                   px-4 py-3 text-sm
@@ -133,7 +133,7 @@ export default function AdminNavbar() {
                 >
                   <Settings size={16} />
                   Settings
-                </button>
+                </button> */}
 
                 <button
                   className="

@@ -1,126 +1,97 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  LayoutDashboard,
-  Megaphone,
-  HeartHandshake,
-  Users,
-  Bell,
-  FileCheck,
-  BarChart3,
-  User,
-  Menu,
-  X,
-  Moon,
-  Sun,
-  CreditCard
-} from "lucide-react";
+  import { useState, useEffect } from "react";
+  import { motion, AnimatePresence } from "framer-motion";
+  import {Menu,X,Moon,Sun,} from "lucide-react";
 
-import { NavLink } from "react-router-dom";
-import { useTheme } from "../../../contexts/ThemeContext";
+  import { NavLink } from "react-router-dom";
+  import { useTheme } from "../../../contexts/ThemeContext";
+  import { menuItems } from "../../../utils/AdminMenuItems";
 
-const menuItems = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
 
-  { label: "Manage Campaigns", icon: Megaphone, path: "/admin/campaigns" },
 
-  { label: "Campaign Requests", icon: FileCheck, path: "/admin/campaign/requests" },
 
-  { label: "Donations", icon: HeartHandshake, path: "/admin/donations" },
 
-  { label: "Razor Pay Settings", icon: CreditCard, path: "/admin/donations" },
+  export default function AdminSidebar() {
 
-  { label: "Users", icon: Users, path: "/admin/users" },
+    const [open, setOpen] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
-  { label: "Analytics", icon: BarChart3, path: "/admin/analytics" },
+    const { darkMode, toggleTheme } = useTheme();
 
-  { label: "Notifications", icon: Bell, path: "/admin/notifications" },
+    useEffect(() => {
 
-  { label: "Profile", icon: User, path: "/admin/profile" }
-];
+      const handleResize = () => {
+        setIsDesktop(window.innerWidth >= 1024);
+      };
 
-export default function AdminSidebar() {
+      window.addEventListener("resize", handleResize);
 
-  const [open, setOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+      return () => window.removeEventListener("resize", handleResize);
 
-  const { darkMode, toggleTheme } = useTheme();
+    }, []);
 
-  useEffect(() => {
-
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
+    const sidebarAnimation = {
+      open: { x: 0 },
+      closed: { x: "-100%" }
     };
 
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-
-  }, []);
-
-  const sidebarAnimation = {
-    open: { x: 0 },
-    closed: { x: "-100%" }
-  };
-
-  return (
-    <>
-      {!isDesktop && (
-        <button
-          className="fixed top-4 left-4 z-[60] bg-gray-800 p-2 rounded-lg"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X className="text-white" /> : <Menu className="text-white" />}
-        </button>
-      )}
-
-      <AnimatePresence>
-        {open && !isDesktop && (
-          <motion.div
-            onClick={() => setOpen(false)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black z-40"
-          />
+    return (
+      <>
+        {!isDesktop && (
+          <button
+            className="fixed top-4 left-4 z-[60] bg-gray-800 p-2 rounded-lg"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X className="text-white" /> : <Menu className="text-white" />}
+          </button>
         )}
-      </AnimatePresence>
 
-      <motion.aside
-        animate={isDesktop || open ? "open" : "closed"}
-        variants={sidebarAnimation}
-        transition={{ duration: 0.25 }}
-        className="
-        fixed top-0 left-0 w-64 h-screen
-        bg-gray-100 dark:bg-gray-900
-        border-r border-gray-200 dark:border-gray-700
-        p-6 z-50 flex flex-col
-        transition-colors duration-300
-        "
-      >
+        <AnimatePresence>
+          {open && !isDesktop && (
+            <motion.div
+              onClick={() => setOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black z-40"
+            />
+          )}
+        </AnimatePresence>
 
-        {/* Logo */}
-        <div className="flex items-center gap-2 mb-8">
-          <img src="/logo.png" className="h-8" />
-          {/* <span className="font-semibold text-gray-800 dark:text-white">
-            Admin
-          </span> */}
-        </div>
+        <motion.aside
+          animate={isDesktop || open ? "open" : "closed"}
+          variants={sidebarAnimation}
+          transition={{ duration: 0.25 }}
+          className="
+          fixed top-0 left-0 w-64 h-screen
+          bg-gray-100 dark:bg-gray-900
+          border-r border-gray-200 dark:border-gray-700
+          p-6 z-50 flex flex-col
+          transition-colors duration-300
+          "
+        >
 
-        {/* Menu */}
-        <nav className="flex flex-col gap-2 flex-1">
+          {/* Logo */}
+          <div className="flex items-center gap-2 mb-8">
+            <img src="/logo.png" className="h-8" />
+            {/* <span className="font-semibold text-gray-800 dark:text-white">
+              Admin
+            </span> */}
+          </div>
 
-          {menuItems.map((item, i) => {
+          {/* Menu */}
+          {/* Menu */}
+      <nav className="flex flex-col gap-2 h-[500px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
 
-            const Icon = item.icon;
+        {menuItems.map((item, i) => {
+          const Icon = item.icon;
 
-            return (
-              <NavLink key={i} to={item.path} end={item.path === "/admin"}>
-                {({ isActive }) => (
+          return (
+            <NavLink key={i} to={item.path} end={item.path === "/admin"}>
+              {({ isActive }) => (
 
-                  <motion.div
-                    whileHover={{ x: 4 }}
-                    className={`
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  className={`
                     flex items-center gap-3
                     px-4 py-3 rounded-lg text-sm
                     transition
@@ -129,44 +100,45 @@ export default function AdminSidebar() {
                         ? "bg-emerald-600 text-white"
                         : "text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"
                     }
-                    `}
-                  >
+                  `}
+                >
+                  <Icon size={18} />
+                  {item.label}
+                </motion.div>
 
-                    <Icon size={18} />
-                    {item.label}
+              )}
+            </NavLink>
+          );
+        })}
 
-                  </motion.div>
+    </nav>
 
-                )}
-              </NavLink>
-            );
 
-          })}
+{/* Bottom Section */}
+<div className="mt-auto">
 
-        </nav>
+  {/* Theme Toggle */}
+  <button
+    onClick={toggleTheme}
+    className="
+    flex items-center gap-3 px-4 py-3 rounded-lg text-sm
+    text-gray-600 dark:text-gray-300
+    hover:bg-gray-200 dark:hover:bg-gray-800
+    transition mb-3 w-full
+    "
+  >
+    {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+    {darkMode ? "Light Mode" : "Dark Mode"}
+  </button>
 
-        {/* Theme Toggle */}
-        <button
-          onClick={toggleTheme}
-          className="
-          flex items-center gap-3 px-4 py-3 rounded-lg text-sm
-          text-gray-600 dark:text-gray-300
-          hover:bg-gray-200 dark:hover:bg-gray-800
-          transition mb-3
-          "
-        >
+  {/* Footer */}
+  <div className="text-xs text-gray-500 dark:text-gray-400">
+    KindRaise Admin Panel
+  </div>
 
-          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-          {darkMode ? "Light Mode" : "Dark Mode"}
+</div>
 
-        </button>
-
-        {/* Footer */}
-        <div className="text-xs text-gray-500 dark:text-gray-400">
-          KindRaise Admin Panel
-        </div>
-
-      </motion.aside>
-    </>
-  );
-}
+        </motion.aside>
+      </>
+    );
+  }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Camera } from "lucide-react";
 
-const UserProfile = () => {
+const AdminProfile = () => {
 
   const [profile, setProfile] = useState({
     name: "John Doe",
@@ -13,7 +13,7 @@ const UserProfile = () => {
   });
 
   const [preview, setPreview] = useState(
-    "https://i.pravatar.cc/150?img=3"
+    "https://i.pravatar.cc/150?img=1"
   );
 
   const handleChange = (e: any) => {
@@ -140,22 +140,21 @@ const UserProfile = () => {
         {/* Password Section */}
         <div className="mt-6">
 
-  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-    Security
-  </h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+                Security
+            </h3>
 
-  <div className="flex items-center gap-4">
-        {/* Change Password Button */}
-        <button  type="button"  className="  bg-emerald-500  text-white  px-4 py-2  rounded-lg  text-sm  font-semibold  hover:bg-emerald-600  transition  " >
-          Change Password
-        </button>
-  </div>
+            <div className="flex items-center gap-4">
+              <button  type="button"  className="  bg-emerald-500  text-white  px-4 py-2  rounded-lg  text-sm  font-semibold  hover:bg-emerald-600  transition  " >
+                  Change Password
+                </button>
+             </div>
 
-  <p className="text-xs text-gray-400 mt-2">
-    Keep your account secure by updating your password regularly.
-  </p>
+            <p className="text-xs text-gray-400 mt-2">
+                Keep your account secure by updating your password regularly.
+            </p>
 
-</div>
+        </div>
 
         {/* Save Button */}
         <div className="flex justify-end">
@@ -173,4 +172,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default AdminProfile;
