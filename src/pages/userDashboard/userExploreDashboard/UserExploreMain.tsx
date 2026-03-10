@@ -11,8 +11,8 @@ const UserExploreMain = () => {
       <div className="grid grid-cols-12 gap-8">
       <UserExploreCategories />
       <UserExploreCard />
-</div>
-    </div>
+      </div>
+  </div>
   )
 }
 

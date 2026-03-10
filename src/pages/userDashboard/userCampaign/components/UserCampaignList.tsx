@@ -27,7 +27,7 @@ const campaigns = [
 ];
 
 const UserCampaignList = () => {
-      const [isLiked, setIsLiked] = useState(false);
+     
       const [showShare, setShowShare] = useState(false);
      
       const navigate=useNavigate()

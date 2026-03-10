@@ -15,6 +15,10 @@ import CreateCampaign from './pages/userDashboard/userCampaign/CreateCampaign'
 import UserNotification from './pages/userDashboard/userNotification/UserNotification'
 import UserProfile from './pages/userDashboard/userProfile/UserProfile'
 import UserViewCampaign from './pages/userDashboard/userViewCampaign/UserViewCampaign'
+import AdminDashboard from './pages/adminDashboard/AdminDashboard'
+import AdminHome from './pages/adminDashboard/adminHome/AdminHome'
+import AdminManageCampaigns from './pages/adminDashboard/adminManageCampaigns/AdminManageCampaigns'
+import AdminCampaignRequests from './pages/adminDashboard/AdminCampaignRequests/AdminCampaignRequests'
 
 function App() {
 
@@ -39,6 +43,12 @@ function App() {
           <Route path='notifications' element={<UserNotification />} />
           <Route path='profile' element={<UserProfile />} />
           <Route path="viewcampaign/:id" element={<UserViewCampaign />} />
+        </Route>
+
+        <Route path='/admin' element={<AdminDashboard/>}>
+            <Route index element={<AdminHome/>}/>
+            <Route path='campaigns' element={<AdminManageCampaigns/>}/>
+            <Route path='campaign/requests' element={<AdminCampaignRequests/>}/>
         </Route>
 
       </Routes>
