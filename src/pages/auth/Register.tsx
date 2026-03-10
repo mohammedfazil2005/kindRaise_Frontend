@@ -263,13 +263,13 @@ export default function Register() {
             </div>
 
             {/* Social Buttons */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <button className="border border-gray-200 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition">
                <i className="fa-brands fa-google"></i> Google
               </button> 
-              <button className="border border-gray-200 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition">
+              {/* <button className="border border-gray-200 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition">
                <i className="fa-brands fa-github"></i> GitHub
-              </button>
+              </button> */}
             </div>
 
           </form>
