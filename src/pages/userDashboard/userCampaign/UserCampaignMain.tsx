@@ -1,12 +1,12 @@
-import React from 'react'
+
 import UserCampaignStats from './components/UserCampaignStats'
 import UserCampaignList from './components/UserCampaignList'
 import { useNavigate } from 'react-router-dom'
 
 const UserCampaignMain = () => {
-    const navigate=useNavigate()
+  const navigate = useNavigate()
   return (
-     <div className="space-y-8 mt-10">
+    <div className="space-y-8 mt-10">
 
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -21,14 +21,14 @@ const UserCampaignMain = () => {
           </p>
         </div>
 
-        <button onClick={()=>navigate('/user/create/campaign')} className="bg-emerald-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition">
+        <button onClick={() => navigate('/user/create/campaign')} className="bg-emerald-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition">
           + Create Campaign
         </button>
 
       </div>
 
-     <UserCampaignStats/>
-     <UserCampaignList/>
+      <UserCampaignStats />
+      <UserCampaignList />
 
     </div>
   )

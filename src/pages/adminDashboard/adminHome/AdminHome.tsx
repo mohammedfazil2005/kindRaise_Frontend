@@ -1,4 +1,4 @@
-import React from 'react'
+
 import AdminStatsCards from './components/AdminStatsCards'
 import AdminRecentCampaigns from './components/AdminRecentCampaigns'
 import AdminRecentDonations from './components/AdminRecentDonations'
@@ -11,7 +11,7 @@ const AdminHome = () => {
       <div className="grid lg:grid-cols-2 gap-8">
         <AdminRecentCampaigns />
         <AdminRecentDonations />
-        <AdminRecentUsers/>
+        <AdminRecentUsers />
       </div>
     </div>
   )

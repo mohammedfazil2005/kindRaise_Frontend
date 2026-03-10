@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+
 
 const luxuryProperties = [
   {
@@ -51,17 +51,17 @@ const UserDashboardCardDesigns = () => {
         </div>
 
         {/* Right Button */}
-      <motion.button
-  initial={{ opacity: 0.9 }}
-  whileHover={{ opacity: 1 }}
-  whileTap={{ scale: 0.95 }}
-  transition={{ duration: 0.3 }}
-  className="px-4 py-2 text-sm font-medium rounded-lg
+        <motion.button
+          initial={{ opacity: 0.9 }}
+          whileHover={{ opacity: 1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3 }}
+          className="px-4 py-2 text-sm font-medium rounded-lg
   bg-emerald-500 text-white
   hover:bg-emerald-600"
->
-  View My Donations
-</motion.button>
+        >
+          View My Donations
+        </motion.button>
 
       </div>
 
@@ -75,86 +75,86 @@ const UserDashboardCardDesigns = () => {
         {luxuryProperties.map((property, index) => (
 
           <motion.div
-                  key={index}
-                  className="relative w-full overflow-hidden rounded-3xl bg-black"
-                >
+            key={index}
+            className="relative w-full overflow-hidden rounded-3xl bg-black"
+          >
 
-                
 
-                  <div className="relative h-[220px] w-full overflow-hidden">
 
-                    <motion.img
-                      src={property.image}
-                      alt={property.title}
-                      className="h-full w-full object-cover"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.4 }}
-                    />
+            <div className="relative h-[220px] w-full overflow-hidden">
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <motion.img
+                src={property.image}
+                alt={property.title}
+                className="h-full w-full object-cover"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.4 }}
+              />
 
-                    {/* Top Buttons */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                  
+              {/* Top Buttons */}
 
-                  </div>
 
-                  {/* Share Menu */}
 
-                 
+            </div>
 
-                  {/* Content */}
+            {/* Share Menu */}
 
-                  <div className="bg-gradient-to-b from-black/80 to-black px-3 py-3 space-y-1">
 
-                    <h2 className="text-base font-semibold text-white">
-                      {property.title}
-                    </h2>
 
-                    <p className="text-xs text-gray-300">
-                      {property.description}
-                    </p>
+            {/* Content */}
 
-                    {/* Progress */}
+            <div className="bg-gradient-to-b from-black/80 to-black px-3 py-3 space-y-1">
 
-                    <div className="mt-2 space-y-1">
+              <h2 className="text-base font-semibold text-white">
+                {property.title}
+              </h2>
 
-                      <p className="text-emerald-400 text-xs font-semibold">
-                        ₹45,230 raised
-                      </p>
+              <p className="text-xs text-gray-300">
+                {property.description}
+              </p>
 
-                      <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
+              {/* Progress */}
 
-                        <div className="bg-emerald-500 h-1.5 rounded-full w-[75%]" />
+              <div className="mt-2 space-y-1">
 
-                      </div>
+                <p className="text-emerald-400 text-xs font-semibold">
+                  ₹45,230 raised
+                </p>
 
-                      <div className="flex justify-between text-[10px] text-gray-400">
+                <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
 
-                        <span>Goal: ₹60,000</span>
+                  <div className="bg-emerald-500 h-1.5 rounded-full w-[75%]" />
 
-                        <span>12 Days Left</span>
+                </div>
 
-                      </div>
+                <div className="flex justify-between text-[10px] text-gray-400">
 
-                    </div>
+                  <span>Goal: ₹60,000</span>
 
-                    {/* Button */}
+                  <span>12 Days Left</span>
 
-                    <motion.button
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                      whileHover={{ y: -3, scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white shadow-md hover:bg-emerald-600"
-                    >
-                      View Campaign
-                    </motion.button>
+                </div>
 
-                  </div>
+              </div>
 
-                </motion.div>
+              {/* Button */}
+
+              <motion.button
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                whileHover={{ y: -3, scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white shadow-md hover:bg-emerald-600"
+              >
+                View Campaign
+              </motion.button>
+
+            </div>
+
+          </motion.div>
 
         ))}
 

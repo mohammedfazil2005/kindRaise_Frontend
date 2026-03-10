@@ -1,4 +1,4 @@
-import React from 'react'
+
 import AdminRazorPaySettingHeader from './components/AdminRazorPaySettingHeader'
 import AdminRazorPaySettingContent from './components/AdminRazorPaySettingContent'
 

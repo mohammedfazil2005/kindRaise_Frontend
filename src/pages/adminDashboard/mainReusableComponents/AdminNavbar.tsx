@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BellRing, LogOut, Settings, User } from "lucide-react";
+import { BellRing, LogOut, User } from "lucide-react";
 
 export default function AdminNavbar() {
 

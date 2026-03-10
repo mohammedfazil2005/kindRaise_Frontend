@@ -1,4 +1,4 @@
-import React from 'react'
+
 import AdminTransactionContent from './components/AdminTransactionContent'
 import AdminTransactionHeader from './components/AdminTransactionHeader'
 

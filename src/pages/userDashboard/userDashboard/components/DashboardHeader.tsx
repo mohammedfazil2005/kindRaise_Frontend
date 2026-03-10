@@ -1,4 +1,4 @@
-import React from "react";
+
 import { motion } from "framer-motion";
 import {
   HeartHandshake,
@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 const DashboardHeader = () => {
-      const stats = [
+  const stats = [
     {
       title: "Total Donations",
       value: "18",
@@ -30,10 +30,10 @@ const DashboardHeader = () => {
       icon: FolderHeart,
       color: "from-purple-400 to-purple-600"
     },
-    
+
   ];
   return (
-  <div className="p-3 mt-5 space-y-6">
+    <div className="p-3 mt-5 space-y-6">
       <div>
         <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
           Your Donation Impact
