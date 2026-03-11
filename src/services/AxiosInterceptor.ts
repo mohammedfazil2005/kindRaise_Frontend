@@ -2,15 +2,26 @@ import axios, { type AxiosRequestConfig, type InternalAxiosRequestConfig } from 
 
 const axiosInstanceConfig=axios.create({
     baseURL:import.meta.env.VITE_KINDRAISE_API_URL,
-    headers:{
-        "Content-Type":"application/json"
-    }
+    
 })
 
 
 axiosInstanceConfig.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem("token");
+
+    const publicRoutes = [
+      "/api/auth/login",
+      "/api/auth/register"
+    ];
+
+    const isPublicRoute = publicRoutes.some(route =>config.url?.includes(route));
+
+     if (token && !isPublicRoute) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +41,8 @@ axiosInstanceConfig.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      console.log("Unauthorized. Please login again.");
+        localStorage.removeItem("token");
+        // window.location.href = "/login";
     }
 
     return Promise.reject(error);

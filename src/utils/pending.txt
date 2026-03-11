@@ -1,0 +1,18 @@
+{/* Divider */}
+            {/* <div className="flex items-center gap-3 my-6">
+              <div className="flex-1 h-px bg-gray-200"></div>
+              <span className="text-xs text-gray-400 font-medium">
+                OR CONTINUE WITH
+              </span>
+              <div className="flex-1 h-px bg-gray-200"></div>
+            </div> */}
+
+            {/* Social Buttons */}
+            {/* <div className="grid grid-cols-2 gap-4">
+              <button className="border border-gray-200 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition">
+               <i className="fa-brands fa-google"></i> Google
+              </button> 
+              <button className="border border-gray-200 rounded-xl py-3 text-sm font-medium hover:bg-gray-50 transition">
+               <i className="fa-brands fa-github"></i> GitHub
+              </button>
+            </div> */}

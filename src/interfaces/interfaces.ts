@@ -12,3 +12,22 @@ export interface ApiResponseInterface{
     status:boolean,
     data?:[]
 }
+
+export interface LoginInterface{
+    username:string,
+    password:string
+}
+
+
+export interface CampaignInterface {
+  id: string;
+  title: string;
+  description: string;
+  goalAmount: number;
+  deadline: string; 
+  category_id: string;
+  category_title: string;
+  status: string;
+  user_id: string;
+  amount:number
+}

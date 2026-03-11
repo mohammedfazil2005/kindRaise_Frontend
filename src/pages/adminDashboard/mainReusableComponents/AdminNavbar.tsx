@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BellRing, LogOut, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toaster } from "../../../services/Toaster";
 
 export default function AdminNavbar() {
 
   const [open, setOpen] = useState(false);
+  const navigate=useNavigate()
+
+  const onLogout=()=>{
+      localStorage.clear();
+      toaster("Logged out!");
+      navigate('/');
+    }
 
   return (
     <div
@@ -82,7 +91,7 @@ export default function AdminNavbar() {
             <div className="hidden sm:flex flex-col leading-tight">
 
               <span className="text-sm font-medium text-gray-800 dark:text-white">
-                Admin
+               {localStorage.getItem("name")}
               </span>
 
               <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -136,6 +145,7 @@ export default function AdminNavbar() {
                 </button> */}
 
                 <button
+                onClick={onLogout}
                   className="
                   flex items-center gap-3 w-full
                   px-4 py-3 text-sm

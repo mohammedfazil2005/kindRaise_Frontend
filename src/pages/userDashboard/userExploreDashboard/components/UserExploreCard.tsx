@@ -1,7 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion'
 import { Heart, Share2 } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
+import { CampaignCardSkeleton } from '../../../../skeltons/CampaignSkeltons';
+import type { CampaignInterface } from '../../../../interfaces/interfaces';
+import moment from 'moment';
 
 const luxuryProperties = [
   {
@@ -46,18 +51,32 @@ const UserExploreCard = () => {
       const [isLiked, setIsLiked] = useState(false);
       const [showShare, setShowShare] = useState(false);
       const navigate=useNavigate()
+
+      const {data:campaigns,isLoading:isCampaignLoading,refetch:campaignRefetch}=useQuery({
+        queryKey:["activeCampaigns"],
+        queryFn:fetchActiveCampaigns
+      })
+
+      useEffect(()=>{
+        if(!campaigns)return;        
+      },[campaigns])
+
+      useEffect(()=>{
+        console.log(campaigns)
+      },[campaigns])
+
+
   return (
      <div className="col-span-12 md:col-span-9">
 
-          <motion.div
+         {isCampaignLoading?Array(6).fill(0).map((_, i) => <CampaignCardSkeleton key={i} />): <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-
             <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
-              {luxuryProperties.map((property, index) => (
+              {campaigns.map((property:CampaignInterface, index:number) => (
 
                 <motion.div
                   key={index}
@@ -66,10 +85,10 @@ const UserExploreCard = () => {
 
                 
 
-                  <div className="relative h-[220px] w-full overflow-hidden">
+                  <div className="relative h-[240px] w-full overflow-hidden">
 
                     <motion.img
-                      src={property.image}
+                      src={import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${property.id}`}
                       alt={property.title}
                       className="h-full w-full object-cover"
                       whileHover={{ scale: 1.05 }}
@@ -138,46 +157,33 @@ const UserExploreCard = () => {
                     </h2>
 
                     <p className="text-xs text-gray-300">
-                      {property.description}
+                      {property?.description?.slice(0,120)}.....
                     </p>
 
                     {/* Progress */}
 
-                    <div className="mt-2 space-y-1">
+                   <div className="mt-2 space-y-2">
 
-                      <p className="text-emerald-400 text-xs font-semibold">
-                        ₹45,230 raised
-                      </p>
+                <p className="text-emerald-400 text-xs font-semibold mt-2">
+                  ₹{property.amount?.toLocaleString("en-IN")} raised
+                </p>
 
-                      <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
+              <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
+                <div className={`bg-emerald-500 h-1.5 rounded-full`}  style={{ width: `${(property.amount / property.goalAmount) * 100}%` }}/>
+              </div>
 
-                        <div className="bg-emerald-500 h-1.5 rounded-full w-[75%]" />
+              <div className="flex justify-between text-[11px] text-gray-400 pb-2">
+                <span>Goal: ₹{property.goalAmount.toLocaleString("en-IN")}</span>
+                <span>{moment(property.deadline).diff(moment(),"days")} Days Left</span>
+              </div>
 
-                      </div>
-
-                      <div className="flex justify-between text-[10px] text-gray-400">
-
-                        <span>Goal: ₹60,000</span>
-
-                        <span>12 Days Left</span>
-
-                      </div>
-
-                    </div>
+             </div>
 
                     {/* Button */}
 
-                    <motion.button
-                    onClick={()=>navigate('/user/viewcampaign/1')}
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                      whileHover={{ y: -3, scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white shadow-md hover:bg-emerald-600"
-                    >
-                      View Campaign
-                    </motion.button>
+                   <motion.button  onClick={()=>navigate('/user/viewcampaign/1')}  initial={{ opacity: 0, y: 15 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
+                       View Campaign
+                  </motion.button>
 
                   </div>
 
@@ -186,8 +192,7 @@ const UserExploreCard = () => {
               ))}
 
             </div>
-
-          </motion.div>
+          </motion.div>}
 
         </div>
   )

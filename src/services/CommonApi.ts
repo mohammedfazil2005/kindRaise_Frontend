@@ -8,13 +8,12 @@ export const CommonApi=async(method:string,endpoint:string,data?:object,header?:
             method:method,
             url:endpoint,
             data:data,
-            headers:header?header:{"Content-Type":"application/json"}
+            headers:header
 
         }
         
         const AxiosConfiguration=await axiosInstanceConfig(configuration);
         const response=AxiosConfiguration.data;
-
         return response;
 
     } catch (error) {

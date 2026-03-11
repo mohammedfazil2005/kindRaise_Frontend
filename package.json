@@ -15,9 +15,11 @@
     "font-awesome": "^4.7.0",
     "framer-motion": "^12.34.4",
     "lucide-react": "^0.576.0",
+    "moment": "^2.30.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.1",
+    "react-spinners": "^0.17.0",
     "recharts": "^3.8.0",
     "sonner": "^2.0.7",
     "tailwind-scrollbar": "^3.1.0"

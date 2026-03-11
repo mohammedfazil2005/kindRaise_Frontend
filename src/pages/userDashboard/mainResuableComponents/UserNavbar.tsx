@@ -2,12 +2,19 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BellRing, LogOut } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
+import { useNavigate } from "react-router-dom";
+import { toaster } from "../../../services/Toaster";
 
 export default function UserNavbar() {
 
   const [open, setOpen] = useState(false);
+  const navigate=useNavigate()
 
-  const { darkMode } = useTheme();
+  const onLogout=()=>{
+    localStorage.clear();
+    toaster("Logged out!");
+    navigate('/');
+  }
 
   return (
     <div
@@ -60,7 +67,7 @@ export default function UserNavbar() {
             <div className="hidden sm:flex flex-col leading-tight">
 
               <span className="text-sm font-medium text-gray-800 dark:text-white">
-                User
+                  {localStorage.getItem("name")}
               </span>
 
               <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -88,7 +95,7 @@ export default function UserNavbar() {
                 "
               >
 
-                <button className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                <button onClick={onLogout} className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
 
                   <LogOut size={16} />
 
