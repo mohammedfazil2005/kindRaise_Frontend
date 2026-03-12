@@ -31,3 +31,19 @@ export interface CampaignInterface {
   user_id: string;
   amount:number
 }
+
+export interface CategoryInterface{
+    id:string;
+    title:string;
+    icon:string;
+    createdAt:string;    
+
+}
+
+
+export interface CampaignContextType {
+  searchCampaign: string
+  category:string
+  setSearchCampaign:React.Dispatch<React.SetStateAction<string>>
+  setCategory:React.Dispatch<React.SetStateAction<string>>
+}

@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, X } from "lucide-react";
+import { CampaignContext } from "../../../../contexts/CampainContext";
 
 const HeaderExplore = () => {
   const [query, setQuery] = useState("");
 
-  const clearSearch = () => {
-    setQuery("");
-  };
+   const {setSearchCampaign}=useContext(CampaignContext)!
+
+   let timer: any;
+
+   const handleSearch=(value:string)=>{
+    setQuery(value)
+    clearTimeout(timer);
+      timer=setTimeout(() => {
+      console.log("Inside timeout")
+      setSearchCampaign(value)
+     }, 800);
+
+   }
 
   return (
     <div className="w-full mb-8 mt-10">
@@ -39,30 +50,19 @@ const HeaderExplore = () => {
           type="text"
           placeholder="Search campaigns, causes, or keywords..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="
-          w-full
-          pl-11 pr-10 py-3
-          rounded-xl
-          border border-gray-300
-          bg-white
-          text-sm
-          focus:outline-none
-          focus:ring-2
-          focus:ring-green-500
-          focus:border-transparent
-          shadow-sm
-          dark:bg-gray-900
-          dark:border-gray-700
-          dark:text-white
-          transition
+          onChange={(e) => handleSearch(e.target.value)}
+          className=" w-full pl-11 pr-10 py-3 rounded-xl border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:text-white transition
           "
+
         />
 
         {/* Clear Button */}
         {query && (
           <button
-            onClick={clearSearch}
+            onClick={()=>{
+              setQuery("")
+              setSearchCampaign("")
+            }}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition"
           >
             <X size={18} />

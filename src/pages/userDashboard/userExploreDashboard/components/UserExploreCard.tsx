@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion'
 import { Heart, Share2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
 import { CampaignCardSkeleton } from '../../../../skeltons/CampaignSkeltons';
 import type { CampaignInterface } from '../../../../interfaces/interfaces';
 import moment from 'moment';
+import { CampaignContext } from '../../../../contexts/CampainContext';
 
 const luxuryProperties = [
   {
@@ -48,13 +49,16 @@ const luxuryProperties = [
 ];
 
 const UserExploreCard = () => {
-      const [isLiked, setIsLiked] = useState(false);
-      const [showShare, setShowShare] = useState(false);
+     const [likedCards, setLikedCards] = useState<Record<string, boolean>>({});
+      const [shareVisible, setShareVisible] = useState<Record<string, boolean>>({});
       const navigate=useNavigate()
 
+      const {searchCampaign,category}=useContext(CampaignContext)!
+
       const {data:campaigns,isLoading:isCampaignLoading,refetch:campaignRefetch}=useQuery({
-        queryKey:["activeCampaigns"],
-        queryFn:fetchActiveCampaigns
+        queryKey:["activeCampaigns",category,searchCampaign],
+        queryFn:()=>fetchActiveCampaigns(searchCampaign,category),
+        staleTime:1000*60*10
       })
 
       useEffect(()=>{
@@ -76,15 +80,12 @@ const UserExploreCard = () => {
           >
             <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
-              {campaigns.map((property:CampaignInterface, index:number) => (
+              {campaigns&&campaigns?.length>0?campaigns?.map((property:CampaignInterface, index:number) => (
 
                 <motion.div
                   key={index}
                   className="relative w-full overflow-hidden rounded-3xl bg-black"
                 >
-
-                
-
                   <div className="relative h-[240px] w-full overflow-hidden">
 
                     <motion.img
@@ -95,60 +96,53 @@ const UserExploreCard = () => {
                       transition={{ duration: 0.4 }}
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                   <div className="absolute right-2 top-2 flex gap-2">
 
-                    {/* Top Buttons */}
+  {/* LIKE BUTTON */}
 
-                    <div className="absolute right-2 top-2 flex gap-2">
-
-                      <button
-                        onClick={() => setIsLiked(!isLiked)}
-                        className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
-                      >
-                        <Heart size={16} fill={isLiked ? "white" : "none"} />
-                      </button>
-
-                      <button
-                        onMouseEnter={() => setShowShare(true)}
-                        onMouseLeave={() => setShowShare(false)}
-                        className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
-                      >
-                        <Share2 size={16} />
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                  {/* Share Menu */}
-
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{
-                      opacity: showShare ? 1 : 0,
-                      scale: showShare ? 1 : 0.9,
-                    }}
-                    transition={{ duration: 0.2 }}
-                    className={`absolute right-3 top-12 ${
-                      showShare ? "pointer-events-auto" : "pointer-events-none"
-                    }`}
+                  <button
+                    onClick={() =>
+                      setLikedCards((prev) => ({
+                        ...prev,
+                        [property.id]: !prev[property.id],
+                      }))
+                    }
+                    className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
                   >
+                    <Heart size={16} fill={likedCards[property.id] ? "white" : "none"} />
+                  </button>
 
-                    <div className="backdrop-blur-md space-y-1 rounded-lg bg-white/20 p-1 text-xs text-white">
+ 
 
-                      <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
-                        Copy Link
-                      </button>
+                <div className="relative" onMouseEnter={() =>   setShareVisible((prev) => ({ ...prev, [property.id]: true })) } onMouseLeave={() =>   setShareVisible((prev) => ({ ...prev, [property.id]: false })) }
+                >
 
-                      <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
-                        Share
-                      </button>
+              <button className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white">
+                <Share2 size={16} />
+              </button>
 
-                    </div>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{   opacity: shareVisible[property.id] ? 1 : 0,   scale: shareVisible[property.id] ? 1 : 0.9 }} transition={{ duration: 0.2 }} className={`absolute right-0 top-7 ${   shareVisible[property.id]     ? "pointer-events-auto"     : "pointer-events-none" }`}
+            >
 
-                  </motion.div>
+              <div className="backdrop-blur-md space-y-1 rounded-lg bg-black/20 p-1 text-xs text-white">
 
-                  {/* Content */}
+                <button className="blx] rounded-md px-2 py-1 hover:bg-white/20">
+                  Copy Link
+                </button>
+
+                <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
+                  Share
+                </button>
+
+              </div>
+
+            </motion.div>
+
+              </div>
+
+            </div>
+
+       </div>
 
                   <div className="bg-gradient-to-b from-black/80 to-black px-3 py-3 space-y-1">
 
@@ -159,9 +153,6 @@ const UserExploreCard = () => {
                     <p className="text-xs text-gray-300">
                       {property?.description?.slice(0,120)}.....
                     </p>
-
-                    {/* Progress */}
-
                    <div className="mt-2 space-y-2">
 
                 <p className="text-emerald-400 text-xs font-semibold mt-2">
@@ -181,7 +172,7 @@ const UserExploreCard = () => {
 
                     {/* Button */}
 
-                   <motion.button  onClick={()=>navigate('/user/viewcampaign/1')}  initial={{ opacity: 0, y: 15 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
+                   <motion.button  onClick={()=>navigate(`/user/viewcampaign/${property.id}`)}  initial={{ opacity: 0, y: 15 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
                        View Campaign
                   </motion.button>
 
@@ -189,7 +180,18 @@ const UserExploreCard = () => {
 
                 </motion.div>
 
-              ))}
+              )): <div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+
+                <p className="text-lg font-semibold">
+                  No Campaigns Found
+                </p>
+
+                <p className="text-sm">
+                  Try adjusting your search or category filter
+                </p>
+
+              </div>
+              }
 
             </div>
           </motion.div>}

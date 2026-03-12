@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllCategories } from "../../../../services/apis/CampaignApi";
+import type { CategoryInterface } from "../../../../interfaces/interfaces";
+import { CampaignContext } from "../../../../contexts/CampainContext";
 
-const categories = [
-  "All",
-  "Medical",
-  "Education",
-  "Animals",
-  "Environment",
-  "Disaster Relief",
-  "Community",
-];
+
 
 const UserExploreCategories = () => {
   const [active, setActive] = useState("All");
+
+  const {setCategory}=useContext(CampaignContext)!
+
+  const {data:categories,isLoading,refetch}=useQuery({
+    queryKey:['categories'],
+    queryFn:fetchAllCategories,
+    staleTime:1000*60*10,
+    
+  })
+
+  useEffect(()=>{
+    console.log(categories)
+  },[categories])
 
   return (
     <div className="col-span-12 md:col-span-3">
@@ -25,22 +34,60 @@ const UserExploreCategories = () => {
 
         <div className="flex flex-col gap-2">
 
-          {categories.map((cat, index) => (
-            <motion.button
-              key={index}
+          {isLoading?(
+            <>
+                {[...Array(6)].map((_, index) => (
+                <motion.div
+                  key={index}
+                  className="h-10 rounded-lg bg-gray-200 dark:bg-gray-700"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 1.2, repeat: Infinity }}
+                />
+                ))}
+            </>
+          ):(
+            <>
+            
+           <motion.button
+           
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setActive(cat)}
+              onClick={() => {
+                setActive("All");
+                setCategory("")
+              }}
               className={`px-4 py-2 rounded-lg text-left text-sm transition
                 ${
-                  active === cat
+                  active === "All"
                     ? "bg-emerald-500 text-white"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                 }`}
             >
-              {cat}
+             All
+            </motion.button>
+
+          {categories?.map((cat:CategoryInterface, index:number) => (
+            <motion.button
+              key={index}
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setActive(cat.title)
+                setCategory(cat.id)
+              }}
+              className={`px-4 py-2 rounded-lg text-left text-sm transition
+                ${
+                  active === cat.title
+                    ? "bg-emerald-500 text-white"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                }`}
+            >
+              {cat.title}
             </motion.button>
           ))}
+            </>
+          )}
+
 
         </div>
 

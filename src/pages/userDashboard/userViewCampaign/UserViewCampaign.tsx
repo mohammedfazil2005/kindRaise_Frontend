@@ -1,6 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { fetchSingleCampaign } from '../../../services/apis/CampaignApi';
 
 declare global {
   interface Window {
@@ -10,6 +13,7 @@ declare global {
 
 const UserViewCampaign = () => {
       const [selectedAmount, setSelectedAmount] = useState('');
+      const id=useParams()['id']!
 
       const amounts = ["25", "50", "100", "250", "500", "1000"];
 
@@ -115,12 +119,24 @@ const UserViewCampaign = () => {
           }
 
      }
+
+     const {data:campaign,isLoading,refetch}=useQuery({
+      queryKey:['campaign',id],
+      queryFn:()=>fetchSingleCampaign(id),
+      enabled:!!id
+     })
+
+     useEffect(()=>{
+      console.log(campaign)
+     },[campaign])
+
+
   return (
        <section className="bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
-  <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-12">
+          <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-12">
 
-    {/* LEFT CONTENT */}
-    <div className="lg:col-span-2 space-y-10">
+    
+        <div className="lg:col-span-2 space-y-10">
 
       {/* Hero Image */}
       <div className="relative rounded-3xl overflow-hidden group">
