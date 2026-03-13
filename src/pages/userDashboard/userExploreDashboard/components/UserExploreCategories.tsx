@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "../../../../services/apis/CampaignApi";
@@ -12,7 +12,7 @@ const UserExploreCategories = () => {
 
   const {setCategory}=useContext(CampaignContext)!
 
-  const {data:categories,isLoading,refetch}=useQuery({
+  const {data:categories,isLoading}=useQuery({
     queryKey:['categories'],
     queryFn:fetchAllCategories,
     staleTime:1000*60*10,

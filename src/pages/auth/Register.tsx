@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import { Eye, EyeOff, Shield, Verified, Bell, FolderHeart, HeartHandshake, Megaphone, LoaderCircle, ArrowRight } from "lucide-react"
+import { Eye, EyeOff, Shield, Verified, Bell, FolderHeart, HeartHandshake, Megaphone, ArrowRight } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 
 import { onCheckUsernameAlreadyExists, onRegister } from "../../services/apis/AuthApi"

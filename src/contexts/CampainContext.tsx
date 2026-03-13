@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import type { CampaignContextType } from "../interfaces/interfaces";
 
 export const CampaignContext=createContext<CampaignContextType|null>(null);

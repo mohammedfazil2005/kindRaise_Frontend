@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Heart, Share2 } from 'lucide-react';
-import React, { useState } from 'react'
+import  { useState } from 'react'
 
 const luxuryProperties = [
   {

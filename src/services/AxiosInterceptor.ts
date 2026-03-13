@@ -1,4 +1,4 @@
-import axios, { type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 
 const axiosInstanceConfig=axios.create({
     baseURL:import.meta.env.VITE_KINDRAISE_API_URL,

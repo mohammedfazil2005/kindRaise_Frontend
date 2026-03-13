@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 import { CampaignContext } from "../../../../contexts/CampainContext";

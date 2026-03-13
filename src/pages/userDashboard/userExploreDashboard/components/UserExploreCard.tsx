@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion'
 import { Heart, Share2 } from 'lucide-react';
-import React, { useContext, useEffect, useState } from 'react'
+import  { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
 import { CampaignCardSkeleton } from '../../../../skeltons/CampaignSkeltons';
@@ -9,44 +9,6 @@ import type { CampaignInterface } from '../../../../interfaces/interfaces';
 import moment from 'moment';
 import { CampaignContext } from '../../../../contexts/CampainContext';
 
-const luxuryProperties = [
-  {
-    image:
-      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&h=600&fit=crop',
-    title: 'Santorini Villa',
-    description:
-      'Luxury villa overlooking the Aegean Sea, offering breathtaking sunset views and a private infinity pool for ultimate relaxation.',
-    rating: 4.8,
-    duration: '3 Night Stay',
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=500&h=600&fit=crop',
-    title: 'Alpine Retreat',
-    description:
-      'Exclusive mountain villa with panoramic views of the Swiss Alps, featuring a private spa and world-class amenities.',
-    rating: 4.9,
-    duration: '5 Night Stay',
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=600&fit=crop',
-    title: 'Tropical Paradise',
-    description:
-      'Beachfront resort with crystal-clear waters, pristine white sand beaches, and world-class water sports facilities.',
-    rating: 4.7,
-    duration: '7 Night Stay',
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=600&fit=crop',
-    title: 'Tropical Paradise',
-    description:
-      'Beachfront resort with crystal-clear waters, pristine white sand beaches, and world-class water sports facilities.',
-    rating: 4.7,
-    duration: '7 Night Stay',
-  },
-];
 
 const UserExploreCard = () => {
      const [likedCards, setLikedCards] = useState<Record<string, boolean>>({});
@@ -55,7 +17,7 @@ const UserExploreCard = () => {
 
       const {searchCampaign,category,paymentAdded}=useContext(CampaignContext)!
 
-      const {data:campaigns,isLoading:isCampaignLoading,refetch:campaignRefetch}=useQuery({
+      const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
         queryKey:["activeCampaigns",category,searchCampaign,paymentAdded],
         queryFn:()=>fetchActiveCampaigns(searchCampaign,category),
         staleTime:1000*60*10
