@@ -93,25 +93,25 @@ const UserExploreCard = () => {
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{   opacity: shareVisible[property.id] ? 1 : 0,   scale: shareVisible[property.id] ? 1 : 0.9 }} transition={{ duration: 0.2 }} className={`absolute right-0 top-7 ${   shareVisible[property.id]     ? "pointer-events-auto"     : "pointer-events-none" }`}
             >
 
-              <div className=" w-[80px] backdrop-blur-md space-y-1 rounded-lg bg-black/80 p-1 text-xs text-white">
+                <div className=" w-[80px] backdrop-blur-md space-y-1 rounded-lg bg-black/80 p-1 text-xs text-white">
 
-                <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
-                  Copy Link
-                </button>
+                  <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
+                    Copy Link
+                  </button>
 
-                <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
-                  Share
-                </button>
+                  <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
+                    Share
+                  </button>
 
-              </div>
+                </div>
 
             </motion.div>
 
-              </div>
+                    </div>
+
+                  </div>
 
             </div>
-
-       </div>
 
                   <div className="bg-gradient-to-b from-black/80 to-black px-3 py-3 space-y-1">
 
