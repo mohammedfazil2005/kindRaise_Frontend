@@ -4,6 +4,10 @@ import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchSingleCampaign } from '../../../services/apis/CampaignApi';
+import moment from 'moment';
+import { Hourglass, Users } from 'lucide-react';
+import CampaignDetailsSkeleton from '../../../skeltons/CampaignSkeltons';
+import { fetchProfile } from '../../../services/apis/ProfileApi';
 
 declare global {
   interface Window {
@@ -120,11 +124,20 @@ const UserViewCampaign = () => {
 
      }
 
-     const {data:campaign,isLoading,refetch}=useQuery({
+     const {data:campaign,isLoading}=useQuery({
       queryKey:['campaign',id],
       queryFn:()=>fetchSingleCampaign(id),
       enabled:!!id
      })
+
+     const {data:profileData,isLoading:isProfileLoading}=useQuery({
+      queryKey:['profile'],
+      queryFn:fetchProfile
+     })
+
+     useEffect(()=>{
+      console.log(profileData)
+     },[profileData])
 
      useEffect(()=>{
       console.log(campaign)
@@ -132,6 +145,8 @@ const UserViewCampaign = () => {
 
 
   return (
+    <>
+    {isLoading||isProfileLoading?<CampaignDetailsSkeleton/>:
        <section className="bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
           <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-12">
 
@@ -142,7 +157,7 @@ const UserViewCampaign = () => {
       <div className="relative rounded-3xl overflow-hidden group">
 
         <img
-          src="https://www.greenpeace.org/static/planet4-international-stateless/2024/05/0262516d-gp0su0pd6-1024x683.jpg"
+          src={import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`}
           alt="Reforestation"
           className="w-full h-[420px] object-cover group-hover:scale-105 transition duration-500"
         />
@@ -150,7 +165,7 @@ const UserViewCampaign = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
 
         <span className="absolute top-6 left-6 bg-white/90 dark:bg-gray-800 text-xs font-semibold px-4 py-1 rounded-full text-emerald-600">
-          ENVIRONMENT
+          {campaign?.category_title}
         </span>
 
       </div>
@@ -159,23 +174,23 @@ const UserViewCampaign = () => {
       <div>
 
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white leading-tight">
-          Reforesting the Amazon: Planting 10,000 Native Trees
+        {campaign?.title}
         </h1>
 
         <div className="flex items-center gap-4 mt-6">
 
           <img
-            src="/org.jpg"
+           src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData.id}`}
             alt="org"
             className="w-12 h-12 rounded-full object-cover"
           />
 
           <div>
             <p className="font-semibold text-gray-800 dark:text-gray-200">
-              Global Earth Alliance
+              {profileData?.fullName}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Verified Non-profit · Manaus, Brazil
+            {profileData?.role === "USER" ? "Community Member" : "Platform Administrator"}
             </p>
           </div>
 
@@ -190,26 +205,35 @@ const UserViewCampaign = () => {
 
           <div>
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              ₹42,850
+              ₹{campaign?.amount.toLocaleString("en-IN")}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Raised of ₹60,000 goal
+              Raised of ₹{campaign?.goalAmount?.toLocaleString("en-In")} goal
             </p>
           </div>
 
           <div className="text-emerald-600 font-semibold text-lg">
-            71% Funded
+            {((campaign?.amount / campaign?.goalAmount) * 100).toFixed(1)}% Funded
           </div>
 
         </div>
 
         <div className="w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full mt-6 overflow-hidden">
-          <div className="bg-emerald-500 h-3 rounded-full w-[71%]"></div>
+          <div className="bg-emerald-500 h-3 rounded-full" style={{ width: `${(campaign.amount / campaign.goalAmount) * 100}%` }}></div>
         </div>
 
         <div className="flex justify-between mt-4 text-sm text-gray-500 dark:text-gray-400">
-          <span>👥 1,428 Donors</span>
-          <span>⏳ 12 Days Left</span>
+  
+        <span className="flex items-center gap-2">
+          <Users size={18} className="text-blue-500" />
+          {campaign?.totalDonors} {campaign?.totalDonors==1?"Donor":"Donors"}
+        </span>
+
+        <span className="flex items-center gap-2">
+          <Hourglass size={18} className="text-orange-500" />
+          {moment(campaign.deadline).diff(moment(), "days")} Days Left
+        </span>
+
         </div>
 
       </div>
@@ -222,14 +246,11 @@ const UserViewCampaign = () => {
         </h2>
 
         <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-          The Amazon rainforest is the lungs of our planet, but it is disappearing
-          at an alarming rate. Our mission is to restore 50 hectares of critical
-          wildlife corridors by planting 10,000 native tree species.
+          {campaign?.description}
         </p>
 
         <p className="text-gray-600 dark:text-gray-300 leading-relaxed mt-4">
-          Every donation helps procure seedlings, support local farmers,
-          and maintain long-term ecological monitoring to ensure success.
+         Every contribution on KindRaise helps bring meaningful ideas to life. Your support empowers communities, fuels important initiatives, and creates lasting positive impact.
         </p>
 
       </div>
@@ -333,6 +354,8 @@ const UserViewCampaign = () => {
 
   </div>
 </section>
+    }
+    </>
   )
 }
 

@@ -14,13 +14,13 @@ export const fetchActiveCampaigns=async(search="",category="")=>{
 
 
      const url = params.toString() ? `/campaign/active/campaigns?${params.toString()}`:`/campaign/active/campaigns`;
-     return CommonApi("GET",url);
+     return await CommonApi("GET",url);
 }
 
 export const fetchAllCategories=async()=>{
-    return CommonApi("GET",'/category/get');
+    return  await CommonApi("GET",'/category/get');
 }
 
 export const fetchSingleCampaign=async(id:string)=>{
-    return CommonApi('GET',`/campaign/user/campaign/${id}`);
+    return  await CommonApi('GET',`/campaign/user/campaign/${id}`);
 }
