@@ -46,4 +46,8 @@ export interface CampaignContextType {
   category:string
   setSearchCampaign:React.Dispatch<React.SetStateAction<string>>
   setCategory:React.Dispatch<React.SetStateAction<string>>
+  setPaymentAdded:React.Dispatch<React.SetStateAction<string>>
+  paymentAdded:string
+
+
 }

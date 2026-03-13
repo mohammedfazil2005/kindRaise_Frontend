@@ -1,13 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchSingleCampaign } from '../../../services/apis/CampaignApi';
 import moment from 'moment';
 import { Hourglass, Users } from 'lucide-react';
 import CampaignDetailsSkeleton from '../../../skeltons/CampaignSkeltons';
-import { fetchProfile } from '../../../services/apis/ProfileApi';
+import { fetchProfileById } from '../../../services/apis/ProfileApi';
+import { createOrder, failedOrder, verifyOrder } from '../../../services/apis/RazorPayApi';
+import { toaster } from '../../../services/Toaster';
+import { CampaignContext } from '../../../contexts/CampainContext';
+import { motion } from 'framer-motion';
+
 
 declare global {
   interface Window {
@@ -21,98 +26,73 @@ const UserViewCampaign = () => {
 
       const amounts = ["25", "50", "100", "250", "500", "1000"];
 
+       const {data:campaign,isLoading,refetch}=useQuery({
+        queryKey:['campaign',id],
+        queryFn:()=>fetchSingleCampaign(id),
+        enabled:!!id
+     })
+
+     const {setPaymentAdded}=useContext(CampaignContext)!
+
+     const {data:profileData,isLoading:isProfileLoading}=useQuery({
+      queryKey:['profile'],
+      queryFn:()=>fetchProfileById(campaign.user_id),
+      enabled:!!campaign
+     })
+
      const onDonate = async () => {
-
-      let GlobaltransactionId:any;
-
+         let GlobaltransactionId:any;
           if(!selectedAmount) return;
-
-          const payload = { amount:Number(selectedAmount),campaignId:"22857f95-1419-4e87-acbd-f359155322c8" };
-
+          const payload = { amount:Number(selectedAmount),campaignId:id };
           try {
-
-            const orderResponse = await axios.post(
-              "http://localhost:8080/api/razorpay/create",
-              payload,
-              {
-                headers:{
-                  Authorization:`Bearer ${localStorage.getItem("token")}`
-                }
-              }
-            )
+            const orderResponse =await createOrder(payload)
 
             console.log("Order Response",orderResponse)
 
-            GlobaltransactionId=orderResponse.data.transaction_id
+            GlobaltransactionId=orderResponse.transaction_id
 
             const options = {
-              key:orderResponse.data.key,
-              amount:orderResponse.data.amount,
+              key:orderResponse.key,
+              amount:orderResponse.amount,
               currency:"INR",
-              order_id:orderResponse.data.orderId,
-            
-
+              order_id:orderResponse.orderId,
               handler:async function(response:any){
 
                 const paymentData = {
                   ...response,
-                  transactionId:orderResponse.data.transaction_id,
+                  transactionId:orderResponse.transaction_id,
                   amount:payload.amount,
                   transactionStatus:"SUCCESS",
                   PaymentReference:response.razorpay_payment_id,
-                  campaignID:"22857f95-1419-4e87-acbd-f359155322c8",
+                  campaignID:id,
                   razorpay_order_id:response.razorpay_order_id
                 }
-
                 console.log('Payment data',paymentData)
-
-                
-
-                await axios.post(
-                  "http://localhost:8080/api/razorpay/verify",
-                  paymentData,
-                  {
-                    headers:{
-                      Authorization:`Bearer ${localStorage.getItem("token")}`
-                    }
-                  }
-                )
-
-                alert("Payment Verified!")
-
+                await verifyOrder(paymentData)
+                refetch()
+                toaster("❤️ Donation successfull! Your support makes a real difference.");
+                setPaymentAdded("Payment done.")
               }
             }
-
             const rzp = new window.Razorpay(options)
 
             rzp.on("payment.failed", async function(response:any){
-
               try{
 
                 const failedData = {
                   transactionId:GlobaltransactionId,
                   amount:payload.amount,
                   transactionStatus:"FAILED",
-                  PaymentReference:response?.error?.metadata?.payment_id,
-                  campaignID:"22857f95-1419-4e87-acbd-f359155322c8",
+                  PaymentReference:response.payment_id,
+                  campaignID:id,
                   razorpay_order_id:orderResponse.data.orderId
                 }
-
-                await axios.post(
-                  "http://localhost:8080/api/razorpay/payment-failed",
-                  failedData,
-                  {
-                    headers:{
-                      Authorization:`Bearer ${localStorage.getItem("token")}`
-                    }
-                  }
-                )
-
+                await failedOrder(failedData);
               }catch(err){
                 console.error("Failed to update transaction:",err)
               }
 
-              alert("Payment Failed")
+              toaster("Payment Failed")
 
             })
 
@@ -120,20 +100,13 @@ const UserViewCampaign = () => {
 
           } catch(error:any){
             console.error(error)
+          }finally{
+            setSelectedAmount('')
           }
 
      }
 
-     const {data:campaign,isLoading}=useQuery({
-      queryKey:['campaign',id],
-      queryFn:()=>fetchSingleCampaign(id),
-      enabled:!!id
-     })
-
-     const {data:profileData,isLoading:isProfileLoading}=useQuery({
-      queryKey:['profile'],
-      queryFn:fetchProfile
-     })
+    
 
      useEffect(()=>{
       console.log(profileData)
@@ -180,7 +153,7 @@ const UserViewCampaign = () => {
         <div className="flex items-center gap-4 mt-6">
 
           <img
-           src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData.id}`}
+            src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData.id}`}
             alt="org"
             className="w-12 h-12 rounded-full object-cover"
           />
@@ -256,7 +229,7 @@ const UserViewCampaign = () => {
       </div>
 
       {/* Updates */}
-      <div>
+      {/* <div>
 
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
           Latest Updates
@@ -271,7 +244,7 @@ const UserViewCampaign = () => {
           </span>
         </div>
 
-      </div>
+      </div> */}
 
     </div>
 
@@ -319,13 +292,9 @@ const UserViewCampaign = () => {
           onChange={(e)=>setSelectedAmount(e.target.value)}
           className="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white mt-6 rounded-full px-5 py-3 outline-none focus:border-emerald-500"
         />
-
-        <button
-          onClick={onDonate}
-          className="mt-6 w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-full font-semibold transition"
-        >
-          Donate Now
-        </button>
+           <motion.button onClick={onDonate} initial={{ opacity: 0, y: 3 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className="mt-6 w-full rounded-full py-3 font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
+             Donate Now
+            </motion.button>
 
         <p className="text-xs text-gray-400 text-center mt-4">
           🔒 Secure payments • 100% verified campaign

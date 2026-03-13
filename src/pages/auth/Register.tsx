@@ -110,6 +110,7 @@ export default function Register() {
       multipartFormData.append("file", profilePhoto);
 
       const response = await onRegister(multipartFormData);
+      console.log(response)
       toaster(response.message)
       navigate("/login")
     } catch (error) {

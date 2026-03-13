@@ -53,10 +53,10 @@ const UserExploreCard = () => {
       const [shareVisible, setShareVisible] = useState<Record<string, boolean>>({});
       const navigate=useNavigate()
 
-      const {searchCampaign,category}=useContext(CampaignContext)!
+      const {searchCampaign,category,paymentAdded}=useContext(CampaignContext)!
 
       const {data:campaigns,isLoading:isCampaignLoading,refetch:campaignRefetch}=useQuery({
-        queryKey:["activeCampaigns",category,searchCampaign],
+        queryKey:["activeCampaigns",category,searchCampaign,paymentAdded],
         queryFn:()=>fetchActiveCampaigns(searchCampaign,category),
         staleTime:1000*60*10
       })
@@ -98,9 +98,14 @@ const UserExploreCard = () => {
                       transition={{ duration: 0.4 }}
                     />
 
-                   <div className="absolute right-2 top-2 flex gap-2">
+                   
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-  {/* LIKE BUTTON */}
+                    {/* Top Buttons */}
+
+                    <div className="absolute right-2 top-2 flex gap-2">
+
+
 
                   <button
                     onClick={() =>
@@ -126,9 +131,9 @@ const UserExploreCard = () => {
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{   opacity: shareVisible[property.id] ? 1 : 0,   scale: shareVisible[property.id] ? 1 : 0.9 }} transition={{ duration: 0.2 }} className={`absolute right-0 top-7 ${   shareVisible[property.id]     ? "pointer-events-auto"     : "pointer-events-none" }`}
             >
 
-              <div className="backdrop-blur-md space-y-1 rounded-lg bg-black/20 p-1 text-xs text-white">
+              <div className=" w-[80px] backdrop-blur-md space-y-1 rounded-lg bg-black/80 p-1 text-xs text-white">
 
-                <button className="blx] rounded-md px-2 py-1 hover:bg-white/20">
+                <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
                   Copy Link
                 </button>
 
