@@ -58,3 +58,14 @@ export interface UserDonationType{
     goalAmount:number
     campaign_id:string
 }
+
+export interface UserDonationDashboardStats{
+    totalAmountDonated:number
+    totalDonations:number
+    totalCampaignsDonated:number
+}
+
+export interface DonationContextType{
+    updated:string,
+    setUpdated:React.Dispatch<React.SetStateAction<string>>
+}

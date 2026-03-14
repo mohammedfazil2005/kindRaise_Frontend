@@ -24,3 +24,7 @@ export const fetchAllCategories=async()=>{
 export const fetchSingleCampaign=async(id:string)=>{
     return  await CommonApi('GET',`/campaign/user/campaign/${id}`);
 }
+
+export const createCampaign=async(formData:FormData)=>{
+    return await CommonApi("GET",'/campaign/create',formData);
+}

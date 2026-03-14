@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { fetchUserDonations } from "../../../../services/apis/Donation";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import type { UserDonationType } from "../../../../interfaces/interfaces";
 import { DonationCardSkeleton } from "../../../../skeltons/DonationSkeltons";
+import { CampaignContext } from "../../../../contexts/CampainContext";
 
 const donationss = [
   {
@@ -32,10 +33,15 @@ const donationss = [
 
 const UserDonationCard = () => {
 
+  const {paymentAdded}=useContext(CampaignContext)!
+
+
    const {data:donations,isLoading}=useQuery({
-    queryKey:['donation'],
+    queryKey:['donation',paymentAdded],
     queryFn:fetchUserDonations
    })
+
+   
 
    useEffect(()=>{
     console.log(donations)
