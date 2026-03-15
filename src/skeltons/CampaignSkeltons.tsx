@@ -39,7 +39,7 @@ export const CampaignCardSkeleton = () => {
 
 
 
-const CampaignDetailsSkeleton = () => {
+export const CampaignDetailsSkeleton = () => {
   return (
     <section className="bg-gray-50 dark:bg-gray-900 py-12 animate-pulse">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-12">
@@ -148,4 +148,23 @@ const CampaignDetailsSkeleton = () => {
   );
 };
 
-export default CampaignDetailsSkeleton;
+
+
+
+
+export const DashboardCampaignUserCardSkeleton = () => {
+  return (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border shadow-sm dark:border-gray-700 animate-pulse">
+      <div className="flex items-center justify-between">
+
+        <div className="space-y-3">
+          <div className="h-3 w-28 bg-gray-300 dark:bg-gray-700 rounded"></div>
+          <div className="h-6 w-16 bg-gray-300 dark:bg-gray-700 rounded"></div>
+        </div>
+
+        <div className="h-12 w-12 bg-gray-300 dark:bg-gray-700 rounded-xl"></div>
+
+      </div>
+    </div>
+  );
+};

@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { fetchSingleCampaign } from '../../../services/apis/CampaignApi';
 import moment from 'moment';
 import { Hourglass, Users } from 'lucide-react';
-import CampaignDetailsSkeleton from '../../../skeltons/CampaignSkeltons';
+import {CampaignDetailsSkeleton} from '../../../skeltons/CampaignSkeltons';
 import { fetchProfileById } from '../../../services/apis/ProfileApi';
 import { createOrder, failedOrder, verifyOrder } from '../../../services/apis/RazorPayApi';
 import { toaster } from '../../../services/Toaster';

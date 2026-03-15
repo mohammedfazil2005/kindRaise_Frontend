@@ -5,35 +5,16 @@ import { useContext, useEffect } from "react";
 import type { UserDonationType } from "../../../../interfaces/interfaces";
 import { DonationCardSkeleton } from "../../../../skeltons/DonationSkeltons";
 import { CampaignContext } from "../../../../contexts/CampainContext";
+import { useNavigate } from "react-router-dom";
 
-const donationss = [
-  {
-    id: 1,
-    image:
-      "https://img.freepik.com/free-photo/explaining-project-points_1098-15436.jpg?semt=ais_rp_50_assets&w=740&q=80",
-    title: "Help Rural Schools",
-    description: "Providing educational resources for rural children.",
-    amount: "₹2,000",
-    goal: 60000,
-    raised: 45230,
-    daysLeft: "12 Days Left",
-  },
-  {
-    id: 2,
-    image:
-      "https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=500",
-    title: "Medical Aid for Children",
-    description: "Helping children receive critical medical treatment.",
-    amount: "₹5,000",
-    goal: 80000,
-    raised: 50400,
-    daysLeft: "8 Days Left",
-  },
-];
+
 
 const UserDonationCard = () => {
 
+
   const {paymentAdded}=useContext(CampaignContext)!
+
+  const navigate=useNavigate()
 
 
    const {data:donations,isLoading}=useQuery({
@@ -51,7 +32,27 @@ const UserDonationCard = () => {
   return (
     <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-      {isLoading?<DonationCardSkeleton/>:donations.map((donation:UserDonationType, index:number) => {
+      {isLoading?(<DonationCardSkeleton/>):donations.length==0?(
+
+          <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
+
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              No Donations Yet
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              You haven't supported any campaigns yet. Start making an impact today.
+            </p>
+
+            <button
+              onClick={() => navigate("/user/explore/campaigns")}
+              className="mt-5 px-5 py-2 rounded-lg bg-emerald-500 text-white text-sm font-medium hover:bg-emerald-600 transition"
+            >
+              Donate Now
+            </button>
+
+          </div>
+      ):donations.map((donation:UserDonationType, index:number) => {
 
         return (
           <motion.div
@@ -107,6 +108,7 @@ const UserDonationCard = () => {
 
                 {/* View Button */}
                 <motion.button
+                onClick={()=>navigate(`/user/viewcampaign/${donation.campaign_id}`)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="text-xs px-3 py-1.5 rounded-lg bg-emerald-500 text-white font-medium hover:bg-emerald-600"

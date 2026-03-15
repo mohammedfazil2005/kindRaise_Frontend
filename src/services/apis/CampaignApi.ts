@@ -26,5 +26,13 @@ export const fetchSingleCampaign=async(id:string)=>{
 }
 
 export const createCampaign=async(formData:FormData)=>{
-    return await CommonApi("GET",'/campaign/create',formData);
+    return await CommonApi("POST",'/campaign/create',formData);
+}
+
+export const fetchUserCampaignDashboardStats=async()=>{
+    return await CommonApi("GET",'/campaign/dashboard/user');
+}
+
+export const fetchUserCampaigns=async()=>{
+    return await CommonApi("GET",'/campaign/user/campaigns');
 }

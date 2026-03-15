@@ -48,6 +48,8 @@ export interface CampaignContextType {
   setCategory:React.Dispatch<React.SetStateAction<string>>
   setPaymentAdded:React.Dispatch<React.SetStateAction<string>>
   paymentAdded:string
+  setCampaignCreated:React.Dispatch<React.SetStateAction<string>>
+  campaignCreated:string
 }
 
 export interface UserDonationType{
