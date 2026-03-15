@@ -1,14 +1,16 @@
-import  { useContext, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Upload } from "lucide-react";
 import { toaster } from "../../../services/Toaster";
 import { useQuery } from "@tanstack/react-query";
-import { createCampaign, fetchAllCategories } from "../../../services/apis/CampaignApi";
+import { createCampaign, fetchAllCategories, fetchSingleCampaign, updateCampaign, updateCampaignStatus } from "../../../services/apis/CampaignApi";
 import type { CategoryInterface } from "../../../interfaces/interfaces";
 import { ClipLoader } from "react-spinners";
 import { CampaignContext } from "../../../contexts/CampainContext";
+import { useParams } from "react-router-dom";
+import { EditCampaignSkeleton } from "../../../skeltons/CampaignSkeltons";
 
-const CreateCampaign = () => {
+const UserEditCampaign = () => {
 
   const [formData, setFormData] = useState({
     title: "",
@@ -16,6 +18,8 @@ const CreateCampaign = () => {
     goalAmount: 0,
     deadline: "",
     categoryId: "",
+    status:''
+   
   });
 
   const [preview, setPreview] = useState<string|null>("");
@@ -24,13 +28,31 @@ const CreateCampaign = () => {
   const [image, setImage] = useState<File | null>(null);
 
   const {setCampaignCreated}=useContext(CampaignContext)!
+
+  const id=useParams()['id']!
   
- const {data:categories,isLoading}=useQuery({
+    const {data:categories,isLoading:isCategoriesLoading}=useQuery({
      queryKey:['categories'],
      queryFn:fetchAllCategories,
      staleTime:1000*60*10,  
    })
 
+   const {data:campaign,isLoading:isCampaignLoading,refetch:refetchCampaign}=useQuery({
+    queryKey:['editcampaign',id],
+    queryFn:()=>fetchSingleCampaign(id),
+    enabled:!!id
+   })
+
+   useEffect(()=>{
+    if(!campaign) return;
+    setFormData({...campaign,categoryId:campaign.category_id})
+   },[campaign])
+
+   useEffect(()=>{
+    if(formData){
+        console.log(formData)
+    }
+   },[formData])
 
   const validateField = (name: string, value: any) => {
     let error = "";
@@ -139,22 +161,23 @@ const CreateCampaign = () => {
       toaster("Please fill in all required fields before submitting the campaign.")
       return;
     }
-  setLoading(true)
+    setLoading(true)
     try {
       
       const formDataPayload=new FormData();
       formDataPayload.append("campaign",new Blob([JSON.stringify(formData)],{type:"application/json"}));
-      formDataPayload.append("file",image!);
-
-      const apiResponse=await createCampaign(formDataPayload);
+      if(image){
+        formDataPayload.append("file",image!);
+      }
+      const apiResponse=await updateCampaign(id,formDataPayload);
       toaster(apiResponse.message);
       setCampaignCreated(apiResponse.message);
-      resetForm();
     } catch (error) {
-      toaster("Something went wrong on Creating a campaign.");
+      toaster("Something went wrong on Updating a campaign.");
       console.log(error);
     }finally{
       setLoading(false);
+      refetchCampaign()
     }
 
     
@@ -166,18 +189,22 @@ const CreateCampaign = () => {
     return isFormValid;
   }
 
-  const resetForm=()=>{
-    setFormData({...formData,
-      title: "",
-    description: "",
-    goalAmount: 0,
-    deadline: "",
-    categoryId: "",})
-    setImage(null)
-    setPreview(null)
+  const changeCampaignStatus=async(status:string)=>{
+    try {
+        const apiResponse=await updateCampaignStatus(status,id);
+        toaster(apiResponse.message);
+        refetchCampaign();
+    } catch (error) {
+        console.log(error)
+        toaster("Something went wrong while changing the status.")
+    }
   }
 
+  
+
   return (
+    <>
+    {isCampaignLoading?<EditCampaignSkeleton/>:
     <div className="grid lg:grid-cols-3 gap-10 mt-10">
             <div className="lg:col-span-2 rounded-2xl ">
 
@@ -261,10 +288,10 @@ const CreateCampaign = () => {
 
               <select name="categoryId" value={formData.categoryId} onChange={handleChange} className="mt-2 w-full p-4 text-black dark:text-white rounded-xl border border-gray-300 dark:border-gray-700 dark:bg-gray-800">
               <option value="" disabled>Select Category</option>
-              {isLoading? 
+              {isCategoriesLoading? 
               <option disabled>Loading categories...</option>
               :categories?.map((each:CategoryInterface)=>(
-                 <option key={each.id} value={each?.id}>{each?.title}</option>
+                 <option value={each?.id}>{each?.title}</option>
               ))}
               </select>
               </div>
@@ -312,19 +339,10 @@ const CreateCampaign = () => {
                <ClipLoader size={20} color="#ffffff" />
              ):(
               <>
-               Submit Campaign for Review
+               Save Changes
               </>
              )}
             </motion.button>
-
-            {/* {loading ? (
-                   
-                  ) : (
-                    <>
-                      Create Account<ArrowRight size={22} />
-                    </>
-                  )} */}
-
               </form>
             </div>
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 h-fit">
@@ -334,14 +352,13 @@ const CreateCampaign = () => {
             </h3>
 
             {/* Image */}
-            {preview ? (
+          
             <img
-            src={preview}
+            src={preview?preview:import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`}
+            alt={campaign.title}
             className="rounded-xl h-48 w-full object-cover mb-4"
             />
-            ) : (
-            <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-xl mb-4"/>
-            )}
+           
 
 
             {/* Title */}
@@ -381,10 +398,36 @@ const CreateCampaign = () => {
             Deadline: {formData.deadline || "Not set"}
             </p>
 
+            <div className="border-t border-gray-200 dark:border-gray-700 my-5"></div>
+
+{/* Danger Zone */}
+                {campaign.status=="ACTIVE"&&(
+                    <div>
+            <h4 className="text-sm font-semibold text-amber-500 mb-2">
+            Campaign Action
+            </h4>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                Mark this campaign as completed once your goal has been achieved or the campaign has finished. 
+                After completion, the campaign will stop accepting new donations.
+                </p>
+                 <div className="flex flex-col gap-3">
+                <motion.button
+                onClick={()=>changeCampaignStatus("COMPLETED")}
+                className="mt-2 w-full rounded-xl py-3 font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500"
+                >
+                Mark as Completed
+                </motion.button>
+              </div>
+
+                </div>
+                )}
+
             </div>
 
         </div>
+    }
+    </>
   );
 };
 
-export default CreateCampaign;
+export default UserEditCampaign;

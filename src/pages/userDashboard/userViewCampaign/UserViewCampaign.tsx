@@ -228,29 +228,13 @@ const UserViewCampaign = () => {
 
       </div>
 
-      {/* Updates */}
-      {/* <div>
-
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-          Latest Updates
-        </h2>
-
-        <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl p-5">
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            🌱 First 1,000 trees planted successfully! Thank you to all our supporters.
-          </p>
-          <span className="text-xs text-gray-400">
-            2 days ago
-          </span>
-        </div>
-
-      </div> */}
-
     </div>
 
     {/* RIGHT SIDEBAR */}
     <div className="space-y-8 sticky top-24 h-fit">
 
+      {campaign.status=="ACTIVE"?
+      <>
       {/* Donation Card */}
       <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border dark:border-gray-700">
 
@@ -317,7 +301,22 @@ const UserViewCampaign = () => {
           Learn More
         </button>
 
-      </div>
+      </div>:
+      </>
+      :  <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border dark:border-gray-700 text-center">
+
+    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+      Donations Unavailable
+    </h3>
+
+    <p className="text-sm text-gray-500 dark:text-gray-400">
+      {campaign.status === "PENDING" && "This campaign is waiting for admin approval."}
+      {campaign.status === "REJECTED" && "This campaign was rejected and cannot accept donations."}
+      {campaign.status === "COMPLETED" && "This campaign has successfully completed."}
+    </p>
+
+  </div>
+      }
 
     </div>
 

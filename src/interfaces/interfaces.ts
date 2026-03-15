@@ -71,3 +71,12 @@ export interface DonationContextType{
     updated:string,
     setUpdated:React.Dispatch<React.SetStateAction<string>>
 }
+
+export interface NotificationInterface{
+    id:string
+    title:string
+    message:string
+    readStatus:boolean
+    date:string,
+    user_id:string
+}

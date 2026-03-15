@@ -54,7 +54,7 @@ const UserCampaignList = () => {
               showShare === campaign.id ? "pointer-events-auto" : "pointer-events-none"
             }`}>
             <div className="backdrop-blur-md rounded-lg bg-black/70 p-1 text-xs text-white shadow-lg">
-              <button className="block w-full rounded-md px-3 py-1 hover:bg-white/20">
+              <button onClick={()=>navigate(`/user/editcampaign/${showShare}`)} className="block w-full rounded-md px-3 py-1 hover:bg-white/20">
                   Edit
               </button>
             </div>
@@ -63,9 +63,9 @@ const UserCampaignList = () => {
             </div>
                    <div
           className={`absolute inset-0 opacity-40 pointer-events-none
-            ${campaign.status === "ACTIVE" && "bg-emerald-500/40"}
-            ${campaign.status === "PENDING" && "bg-yellow-500/40"}
-            ${campaign.status === "REJECTED" && "bg-red-500/40"}
+            ${campaign.status === "ACTIVE" && "bg-emerald-500/30"}
+            ${campaign.status === "PENDING" && "bg-yellow-500/60"}
+            ${campaign.status === "REJECTED" && "bg-red-500/60"}
           `}
         ></div>
             <div className="bg-gradient-to-b from-black/80 to-black px-4 py-4 space-y-2">

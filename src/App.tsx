@@ -28,6 +28,7 @@ import AdminNotifications from './pages/adminDashboard/adminNotifications/AdminN
 import AdminProfile from './pages/adminDashboard/adminProfile/AdminProfile'
 import AdminTransactions from './pages/adminDashboard/adminTransactions/AdminTransactions'
 import { Toaster } from 'sonner'
+import UserEditCampaign from './pages/userDashboard/userEditCampaign/UserEditCampaign'
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
           <Route path='notifications' element={<UserNotification />} />
           <Route path='profile' element={<UserProfile />} />
           <Route path="viewcampaign/:id" element={<UserViewCampaign />} />
+          <Route path="editcampaign/:id" element={<UserEditCampaign />} />
         </Route>
 
         <Route path='/admin' element={<AdminDashboard/>}>

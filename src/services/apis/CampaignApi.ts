@@ -36,3 +36,11 @@ export const fetchUserCampaignDashboardStats=async()=>{
 export const fetchUserCampaigns=async()=>{
     return await CommonApi("GET",'/campaign/user/campaigns');
 }
+
+export const updateCampaign=async(id:string,data:FormData)=>{
+    return await CommonApi("PUT",`/campaign/update/campaign/${id}`,data);
+}
+
+export const updateCampaignStatus=async(status:string,campaign_id:string)=>{
+    return await CommonApi("PUT",`/campaign/update/campaign/status/${campaign_id}/${status}`);
+}
