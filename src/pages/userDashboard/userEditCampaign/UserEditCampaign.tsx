@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Upload } from "lucide-react";
 import { toaster } from "../../../services/Toaster";
 import { useQuery } from "@tanstack/react-query";
-import { createCampaign, fetchAllCategories, fetchSingleCampaign, updateCampaign, updateCampaignStatus } from "../../../services/apis/CampaignApi";
+import {  fetchAllCategories, fetchSingleCampaign, updateCampaign, updateCampaignStatus } from "../../../services/apis/CampaignApi";
 import type { CategoryInterface } from "../../../interfaces/interfaces";
 import { ClipLoader } from "react-spinners";
 import { CampaignContext } from "../../../contexts/CampainContext";

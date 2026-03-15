@@ -22,12 +22,12 @@ const UserNotification = () => {
     // setNotifications(updated);
   };
 
-  const openNotification = (id:Number) => {
-    // const updated = notifications.map((n) =>
-    //   n.id === id ? { ...n, read: true } : n
-    // );
-    // setNotifications(updated);
-  };
+  // const openNotification = (id:Number) => {
+  //   const updated = notifications.map((n) =>
+  //     n.id === id ? { ...n, read: true } : n
+  //   );
+  //   setNotifications(updated);
+  // };
 
   const {data:notifications,isLoading}=useQuery({
     queryKey:['notifications',page],
