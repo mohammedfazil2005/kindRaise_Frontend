@@ -29,6 +29,8 @@ import AdminProfile from './pages/adminDashboard/adminProfile/AdminProfile'
 import AdminTransactions from './pages/adminDashboard/adminTransactions/AdminTransactions'
 import { Toaster } from 'sonner'
 import UserEditCampaign from './pages/userDashboard/userEditCampaign/UserEditCampaign'
+import UserOldPassword from './pages/userDashboard/userProfile/UserOldPassword'
+
 
 function App() {
 
@@ -55,6 +57,8 @@ function App() {
           <Route path='profile' element={<UserProfile />} />
           <Route path="viewcampaign/:id" element={<UserViewCampaign />} />
           <Route path="editcampaign/:id" element={<UserEditCampaign />} />
+          <Route path="oldpassword/:id" element={<UserOldPassword />} />
+         
         </Route>
 
         <Route path='/admin' element={<AdminDashboard/>}>

@@ -1,20 +1,31 @@
-import  { useState } from "react";
+import  { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Camera } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLoggedInUserProfile, updateProfile } from "../../../services/apis/ProfileApi";
+import { ProfileSkelton } from "../../../skeltons/ProfileSkelton";
+import { toaster } from "../../../services/Toaster";
+import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
 
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john@email.com",
+    id:null,
+    fullName: "John Doe",
+    username: "john123",
     phone: "9876543210",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    defaultFullName:"",
+    defaultUsername:""
   });
 
-  const [preview, setPreview] = useState(
-    "https://i.pravatar.cc/150?img=3"
-  );
+  const [preview, setPreview] = useState('');
+  const [file,setFile]=useState<File|null>(null);
+  const [loading,setLoading]=useState(false)
+
+  const navigate=useNavigate()
 
   const handleChange = (e: any) => {
     setProfile({
@@ -26,16 +37,48 @@ const UserProfile = () => {
   const handleImage = (e: any) => {
     const file = e.target.files[0];
     if (file) {
+      setFile(file)
       setPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async(e: any) => {
     e.preventDefault();
-    console.log(profile);
+    setLoading(true);
+    try {
+      const formData=new FormData();
+
+      formData.append("info",new Blob([JSON.stringify(profile)],{type:"application/json"}));
+      
+      if(file){
+        formData.append("file",file);
+      }
+
+      const apiResponse=await updateProfile(profile.id!,formData);
+
+      toaster(apiResponse.message)
+      
+    } catch (error) {
+      toaster("Something went wrong. Please Contact KindRaise Admin");
+      console.log(error);
+    }finally{
+      setLoading(false);
+    }
   };
 
+  const {data,isLoading}=useQuery({
+    queryKey:['profile'],
+    queryFn:fetchLoggedInUserProfile
+  })
+
+  useEffect(()=>{
+    if(!data) return;
+    setProfile({...data,defaultFullName:data.fullName,defaultUsername:data.username})
+  },[data])
+
   return (
+    <>
+    {isLoading?<ProfileSkelton/>:
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -58,7 +101,7 @@ const UserProfile = () => {
         <div className="relative">
 
           <img
-            src={preview}
+            src={ preview? preview:import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profile.id}`}
             className="w-20 h-20 rounded-full object-cover border"
           />
 
@@ -75,9 +118,9 @@ const UserProfile = () => {
 
         <div>
           <h2 className="font-semibold text-gray-800 dark:text-white">
-            {profile.name}
+            {profile.defaultFullName}
           </h2>
-          <p className="text-sm text-gray-500">{profile.email}</p>
+          <p className="text-sm text-gray-500">{profile.defaultUsername}</p>
         </div>
 
       </div>
@@ -93,13 +136,13 @@ const UserProfile = () => {
 
             <div>
               <label className="text-sm text-gray-600 dark:text-gray-300">
-                Name
+                Full Name
               </label>
 
               <input
                 type="text"
-                name="name"
-                value={profile.name}
+                name="fullName"
+                value={profile.fullName}
                 onChange={handleChange}
                 className="w-full text-gray-600 dark:text-gray-300  mt-1 border rounded-lg p-3 focus:ring-2 focus:ring-emerald-500 outline-none dark:bg-gray-800 dark:border-gray-700"
               />
@@ -107,13 +150,13 @@ const UserProfile = () => {
 
             <div>
               <label className="text-sm text-gray-600 dark:text-gray-300">
-                Email
+                Username
               </label>
 
               <input
-                type="email"
-                name="email"
-                value={profile.email}
+                type="text"
+                name="username"
+                value={profile.username}
                 onChange={handleChange}
                 className="w-full text-gray-600 dark:text-gray-300 mt-1 border rounded-lg p-3 focus:ring-2 focus:ring-emerald-500 outline-none dark:bg-gray-800 dark:border-gray-700"
               />
@@ -140,36 +183,42 @@ const UserProfile = () => {
         {/* Password Section */}
         <div className="mt-6">
 
-  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-    Security
-  </h3>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+            Security
+          </h3>
 
-  <div className="flex items-center gap-4">
-        {/* Change Password Button */}
-        <button  type="button"  className="  bg-emerald-500  text-white  px-4 py-2  rounded-lg  text-sm  font-semibold  hover:bg-emerald-600  transition  " >
-          Change Password
-        </button>
-  </div>
+          <div className="flex items-center gap-4">
+                {/* Change Password Button */}
+                <button onClick={()=>navigate(`/user/oldpassword/${profile.id}`)}  type="button"  className="  bg-emerald-500  text-white  px-4 py-2  rounded-lg  text-sm  font-semibold  hover:bg-emerald-600  transition  " >
+                  Change Password
+                </button>
+          </div>
 
-  <p className="text-xs text-gray-400 mt-2">
-    Keep your account secure by updating your password regularly.
-  </p>
+          <p className="text-xs text-gray-400 mt-2">
+            Keep your account secure by updating your password regularly.
+          </p>
 
-</div>
+      </div>
 
         {/* Save Button */}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-emerald-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-emerald-600 transition"
-          >
-            Save Changes
-          </button>
+          <motion.button disabled={loading}  initial={{ opacity: 0, y: 3 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className={`mt-6 w-full rounded-xl py-3 font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500`}>
+            
+             {loading?(
+               <ClipLoader size={20} color="#ffffff" />
+             ):(
+              <>
+              Save Changes
+              </>
+             )}
+            </motion.button>
         </div>
 
       </form>
 
     </motion.div>
+    }
+    </>
   );
 };
 
