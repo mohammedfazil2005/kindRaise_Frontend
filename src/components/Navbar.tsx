@@ -1,11 +1,13 @@
-import React, { useState } from "react"
-import { HandHeart, Menu, X } from "lucide-react"
+import  { useState } from "react"
+import { ArrowBigRight, LogOut, Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useNavigate } from "react-router-dom"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
+    const [open, setOpen] = useState(false);
   const navigate=useNavigate()
+  const token=localStorage.getItem("token")
 
   return (
     <>
@@ -30,7 +32,8 @@ const Navbar = () => {
         </div>
 
         {/* DESKTOP ACTIONS */}
-        <div className="hidden md:flex items-center gap-5">
+        {!token&&(
+          <div className="hidden md:flex items-center gap-5">
           <p
            onClick={()=>{navigate('/login')}}
             className="text-sm font-medium text-gray-700 hover:text-gray-900 transition cursor-pointer"
@@ -47,6 +50,70 @@ const Navbar = () => {
             Get Started
           </motion.button>
         </div>
+        )}
+
+
+      {token&&(
+         <div className="relative hidden md:block" onMouseEnter={() => setOpen(true)}  onMouseLeave={() => setOpen(false)}   >
+
+          {/* Profile Trigger */}
+          <div className="flex items-center gap-3 cursor-pointer px-3 py-2 rounded-xl hover:bg-gray-100 transition">
+
+            <div className="flex flex-col leading-tight">
+              <span className="text-sm font-semibold text-gray-800">
+                {localStorage.getItem("name")}
+              </span>
+
+              <span className="text-xs text-gray-500">
+                {localStorage.getItem("role") === "ROLE_USER"
+                  ? "KindRaise Member"
+                  : "System Administrator"}
+              </span>
+            </div>
+
+          </div>
+
+        {/* Dropdown */}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden"
+            >
+
+              {/* Dashboard */}
+              <button
+                onClick={() => navigate('/user')}
+                className="flex items-center gap-2 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
+              >
+                <ArrowBigRight size={16} className="text-emerald-500" />
+                Dashboard
+              </button>
+
+              {/* Divider */}
+              <div className="h-px bg-gray-100" />
+
+              {/* Logout */}
+              <button
+                onClick={()=>{
+                  localStorage.clear()
+                  navigate('/login')
+                }}
+                className="flex items-center gap-2 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+          </div>
+      )}
 
         {/* MOBILE MENU BUTTON */}
         <button
@@ -79,7 +146,8 @@ const Navbar = () => {
                 How It Works
               </a>
 
-              <div className="border-t border-gray-200 pt-4 flex flex-col gap-4">
+              {!token&&(
+                <div className="border-t border-gray-200 pt-4 flex flex-col gap-4">
                <motion.button
                onClick={()=>{navigate('/login')}}
                   whileTap={{ scale: 0.95 }}
@@ -96,6 +164,30 @@ const Navbar = () => {
                   Get Started
                 </motion.button>
               </div>
+              )}
+
+             {token&&(
+               <div className="border-t border-gray-200 pt-4 flex flex-col gap-4">
+               <motion.button
+               onClick={()=>{navigate('/user')}}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-emerald-500 text-white py-2 "
+                >
+                  KindRaise Dashboard
+                </motion.button>
+
+                <motion.button
+                onClick={()=>{
+                  localStorage.clear()
+                  navigate('/login')
+                }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-emerald-500 text-white py-2 "
+                >
+                 Logout
+                </motion.button>
+              </div>
+             )}
 
             </div>
           </motion.div>

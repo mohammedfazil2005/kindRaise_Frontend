@@ -38,6 +38,51 @@ export const CampaignCardSkeleton = () => {
 };
 
 
+export const CampaignCardSkeletonForExplorePage = () => {
+  return (
+    <div className="relative w-full overflow-hidden rounded-3xl bg-gradient-to-b from-black/80 to-black animate-pulse">
+
+      {/* Image Skeleton */}
+      <div className="relative h-[220px] w-full overflow-hidden">
+        <div className="h-full w-full bg-gray-700/40" />
+
+        {/* Overlay like real card */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+      </div>
+
+      {/* Content */}
+      <div className="px-4 py-4 space-y-2">
+
+        {/* Title */}
+        <div className="h-4 w-3/4 bg-gray-600 rounded"></div>
+
+        {/* Description */}
+        <div className="h-3 w-full bg-gray-700/60 rounded"></div>
+        <div className="h-3 w-5/6 bg-gray-700/60 rounded"></div>
+
+        {/* Raised Amount */}
+        <div className="h-3 w-28 bg-emerald-500/40 rounded"></div>
+
+        {/* Progress bar */}
+        <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
+          <div className="h-1.5 w-1/3 bg-emerald-500/40 rounded-full"></div>
+        </div>
+
+        {/* Goal & Days */}
+        <div className="flex justify-between text-[10px]">
+          <div className="h-2 w-16 bg-gray-700 rounded"></div>
+          <div className="h-2 w-20 bg-gray-700 rounded"></div>
+        </div>
+
+        {/* Button */}
+        <div className="h-9 w-full rounded-xl bg-emerald-500/40"></div>
+
+      </div>
+    </div>
+  );
+};
+
+
 
 export const CampaignDetailsSkeleton = () => {
   return (

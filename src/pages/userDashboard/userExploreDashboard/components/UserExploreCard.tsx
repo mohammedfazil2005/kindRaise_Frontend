@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion'
-import { Heart, Share2 } from 'lucide-react';
+import {  Share2 } from 'lucide-react';
 import  { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
@@ -8,10 +8,11 @@ import { CampaignCardSkeleton } from '../../../../skeltons/CampaignSkeltons';
 import type { CampaignInterface } from '../../../../interfaces/interfaces';
 import moment from 'moment';
 import { CampaignContext } from '../../../../contexts/CampainContext';
+import { toaster } from '../../../../services/Toaster';
 
 
 const UserExploreCard = () => {
-     const [likedCards, setLikedCards] = useState<Record<string, boolean>>({});
+    //  const [likedCards, setLikedCards] = useState<Record<string, boolean>>({});
       const [shareVisible, setShareVisible] = useState<Record<string, boolean>>({});
       const navigate=useNavigate()
 
@@ -22,6 +23,38 @@ const UserExploreCard = () => {
         queryFn:()=>fetchActiveCampaigns(searchCampaign,category),
         staleTime:1000*60*10
       })
+
+
+      const handleCopy = (id: string) => {
+          const link = `${window.location.origin}/user/viewcampaign/${id}`;
+          navigator.clipboard.writeText(link)
+          .then(() => {
+            toaster("Link copied to clipboard ");
+          })
+          .catch(() => {
+            toaster("Failed to copy ");
+          });
+      };
+      
+      const handleShare = async (id: string, title: string) => {
+            const link = `${window.location.origin}/user/viewcampaign/${id}`;
+      
+            if (navigator.share) {
+              try {
+                await navigator.share({
+                  title: title,
+                  text: "Check out this campaign",
+                  url: link,
+                });
+              } catch (err) {
+                console.log("Share cancelled");
+              }
+            } else {
+              // fallback (copy)
+              navigator.clipboard.writeText(link);
+              alert("Link copied (sharing not supported)");
+            }
+      };
 
       
 
@@ -69,7 +102,7 @@ const UserExploreCard = () => {
 
 
 
-                  <button
+                  {/* <button
                     onClick={() =>
                       setLikedCards((prev) => ({
                         ...prev,
@@ -79,7 +112,7 @@ const UserExploreCard = () => {
                     className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
                   >
                     <Heart size={16} fill={likedCards[property.id] ? "white" : "none"} />
-                  </button>
+                  </button> */}
 
  
 
@@ -95,11 +128,11 @@ const UserExploreCard = () => {
 
                 <div className=" w-[80px] backdrop-blur-md space-y-1 rounded-lg bg-black/80 p-1 text-xs text-white">
 
-                  <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
+                  <button onClick={()=>handleCopy(property.id)} className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
                     Copy Link
                   </button>
 
-                  <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
+                  <button onClick={()=>handleShare(property.id,property.title)} className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
                     Share
                   </button>
 

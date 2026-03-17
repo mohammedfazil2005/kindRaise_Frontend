@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BellRing, LogOut } from "lucide-react";
+import { ArrowBigLeft, BellRing, LogOut } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 import { toaster } from "../../../services/Toaster";
@@ -48,7 +48,7 @@ export default function UserNavbar() {
       <div className="flex items-center gap-6">
 
 
-        <button className="relative p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition">
+        <button onClick={()=>navigate('/user/notifications')} className="relative p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition">
 
           <BellRing
             className="text-gray-600 dark:text-gray-300"
@@ -112,6 +112,14 @@ export default function UserNavbar() {
                 rounded-xl shadow-lg overflow-hidden
                 "
               >
+
+                 <button onClick={()=>navigate('/')} className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+
+                  <ArrowBigLeft size={16} />
+
+                Home
+
+                </button>
 
                 <button onClick={onLogout} className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
 

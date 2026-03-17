@@ -30,7 +30,26 @@ const UserCampaignList = () => {
     <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
 
       {isLoading?Array(4).fill(0).map((_, i) => <CampaignCardSkeleton key={i} />)
-      :
+      :campaigns?.length==0?(
+         <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
+
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              No Campaigns Found
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+               You haven't created any campaigns yet. Start your first one now .
+            </p>
+
+            <button
+              onClick={() => navigate("user/create/campaign")}
+              className="mt-5 px-5 py-2 rounded-lg bg-emerald-500 text-white text-sm font-medium hover:bg-emerald-600 transition"
+            >
+              Create Campaign
+            </button>
+
+          </div>
+      ):
       campaigns?.map((campaign:CampaignInterface, index:number) => (
          <motion.div key={index} whileHover={{ y: -5 }} className="relative w-full overflow-hidden rounded-3xl bg-black">
             <div className="relative h-[220px] w-full overflow-hidden">
