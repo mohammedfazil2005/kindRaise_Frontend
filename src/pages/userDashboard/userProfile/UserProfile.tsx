@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Camera } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import { ProfileSkelton } from "../../../skeltons/ProfileSkelton";
 import { toaster } from "../../../services/Toaster";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { CampaignContext } from "../../../contexts/CampainContext";
 
 const UserProfile = () => {
 
@@ -26,6 +27,8 @@ const UserProfile = () => {
   const [loading,setLoading]=useState(false)
 
   const navigate=useNavigate()
+
+  const {setProfileUpdated}=useContext(CampaignContext)!
 
   const handleChange = (e: any) => {
     setProfile({
@@ -62,13 +65,15 @@ const UserProfile = () => {
       toaster("Something went wrong. Please Contact KindRaise Admin");
       console.log(error);
     }finally{
+      setProfileUpdated("updated")
       setLoading(false);
     }
   };
 
   const {data,isLoading}=useQuery({
     queryKey:['profile'],
-    queryFn:fetchLoggedInUserProfile
+    queryFn:fetchLoggedInUserProfile,
+    staleTime:1000*60*10
   })
 
   useEffect(()=>{

@@ -22,7 +22,8 @@ const UserCampaignList = () => {
 
       const {data:campaigns,isLoading}=useQuery({
         queryKey:['usercampaigns',campaignCreated],
-        queryFn:fetchUserCampaigns
+        queryFn:fetchUserCampaigns,
+        staleTime:1000*60*10
       })
 
   return (

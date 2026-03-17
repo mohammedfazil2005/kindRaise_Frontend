@@ -50,6 +50,8 @@ export interface CampaignContextType {
   paymentAdded:string
   setCampaignCreated:React.Dispatch<React.SetStateAction<string>>
   campaignCreated:string
+  profileUpdated:string
+  setProfileUpdated:React.Dispatch<React.SetStateAction<string>>
 }
 
 export interface UserDonationType{

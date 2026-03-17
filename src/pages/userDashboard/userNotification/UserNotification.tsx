@@ -23,7 +23,8 @@ const UserNotification = () => {
 
    const {data:notifications,isLoading,refetch}=useQuery({
     queryKey:['notifications',page],
-    queryFn:()=>fetchUserNotifications(page)
+    queryFn:()=>fetchUserNotifications(page),
+    staleTime:1000*60*10
   })
 
   useEffect(()=>{

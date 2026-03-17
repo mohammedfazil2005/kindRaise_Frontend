@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BellRing, LogOut } from "lucide-react";
-import { useTheme } from "../../../contexts/ThemeContext";
+
 import { useNavigate } from "react-router-dom";
 import { toaster } from "../../../services/Toaster";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLoggedUserProfile } from "../../../services/apis/ProfileApi";
+import { CampaignContext } from "../../../contexts/CampainContext";
+import { totalMessagesUnRead } from "../../../services/apis/UserDashboardApi";
 
 export default function UserNavbar() {
 
   const [open, setOpen] = useState(false);
   const navigate=useNavigate()
+  
+  const {profileUpdated,campaignCreated,paymentAdded}=useContext(CampaignContext)!
+
+  const {data}=useQuery({
+    queryKey:['profile',profileUpdated],
+    queryFn:fetchLoggedUserProfile
+  })
+  const {data:notificationCount}=useQuery({
+    queryKey:['profile',profileUpdated,campaignCreated,paymentAdded],
+    queryFn:totalMessagesUnRead
+  })
 
   const onLogout=()=>{
     localStorage.clear();
@@ -40,7 +55,10 @@ export default function UserNavbar() {
             size={20}
           />
 
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+          {notificationCount?.total>0&&(
+             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+          )}
+         
 
         </button>
 
@@ -57,7 +75,7 @@ export default function UserNavbar() {
             <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600">
 
               <img
-                src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg"
+                src={data?.id?import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${data.id}`:'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg'}
                 className="w-full h-full object-cover"
               />
 
@@ -67,7 +85,7 @@ export default function UserNavbar() {
             <div className="hidden sm:flex flex-col leading-tight">
 
               <span className="text-sm font-medium text-gray-800 dark:text-white">
-                  {localStorage.getItem("name")}
+                  {data?.fullName}
               </span>
 
               <span className="text-xs text-gray-500 dark:text-gray-400">

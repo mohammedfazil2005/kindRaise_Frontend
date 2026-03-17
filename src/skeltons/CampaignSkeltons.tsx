@@ -258,3 +258,82 @@ export const EditCampaignSkeleton = () => {
     </div>
   );
 };
+
+
+
+
+
+
+export const UserDashboardStatsSkeleton = () => {
+  return (
+    <div className="p-3 mt-5 space-y-6 animate-pulse">
+
+      {/* Heading */}
+      <div>
+        <div className="h-5 w-48 bg-gray-300 dark:bg-gray-700 rounded mb-2"></div>
+        <div className="h-4 w-72 bg-gray-200 dark:bg-gray-700 rounded"></div>
+      </div>
+
+      {/* Cards */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        {[1, 2, 3].map((_, index) => (
+          <div
+            key={index}
+            className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm"
+          >
+
+            {/* Icon placeholder */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="w-12 h-12 rounded-xl bg-gray-300 dark:bg-gray-700"></div>
+            </div>
+
+            {/* Title */}
+            <div className="h-3 w-24 bg-gray-300 dark:bg-gray-700 rounded mb-2"></div>
+
+            {/* Value */}
+            <div className="h-8 w-32 bg-gray-300 dark:bg-gray-700 rounded mb-2"></div>
+
+            {/* Subtitle */}
+            <div className="h-3 w-40 bg-gray-200 dark:bg-gray-700 rounded"></div>
+
+          </div>
+        ))}
+
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+
+export const ChartSkeleton = () => {
+  return (
+    <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 mb-8 animate-pulse">
+
+      {/* Title */}
+      <div className="h-5 w-40 bg-gray-300 dark:bg-gray-700 rounded mb-6"></div>
+
+      {/* Chart Area */}
+      <div className="w-full h-[300px] bg-gray-200 dark:bg-gray-700 rounded-xl relative overflow-hidden">
+
+        {/* Fake grid lines (optional for realism) */}
+        <div className="absolute inset-0 flex flex-col justify-between p-4">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="h-[1px] bg-gray-300 dark:bg-gray-600 w-full"
+            ></div>
+          ))}
+        </div>
+
+      </div>
+
+    </div>
+  );
+};
+
+

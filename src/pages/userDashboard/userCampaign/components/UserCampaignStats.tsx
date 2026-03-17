@@ -15,7 +15,8 @@ const UserCampaignStats = () => {
 
   const {data,isLoading}=useQuery({
     queryKey:['usercampaignDashboardStats',campaignCreated],
-    queryFn:fetchUserCampaignDashboardStats
+    queryFn:fetchUserCampaignDashboardStats,
+    staleTime:1000*60*10
   })
 
 

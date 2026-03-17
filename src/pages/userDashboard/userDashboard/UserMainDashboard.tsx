@@ -1,11 +1,12 @@
 import DashboardHeader from "./components/DashboardHeader";
-import UserDashboardCardDesigns from "./components/UserDashboardCardDesigns";
+
+import UserDashboardChart from "./components/UserDashboardChart";
 
 export default function UserMainDashboard() {
   return (
     <>
       <DashboardHeader />
-      <UserDashboardCardDesigns />
+      <UserDashboardChart/>
     </>
   );
 }
