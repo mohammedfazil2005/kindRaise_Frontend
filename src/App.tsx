@@ -31,6 +31,7 @@ import { Toaster } from 'sonner'
 import UserEditCampaign from './pages/userDashboard/userEditCampaign/UserEditCampaign'
 import UserOldPassword from './pages/userDashboard/userProfile/UserOldPassword'
 import ProtectedRoutes from './utils/ProtectedRoutes'
+import AdminViewCampaign from './pages/adminDashboard/AdminViewCampaignPage/AdminViewCampaign'
 
 
 function App() {
@@ -77,6 +78,7 @@ function App() {
               <Route path='notifications' element={<AdminNotifications/>}/>
               <Route path='profile' element={<AdminProfile/>}/>
               <Route path='transactions' element={<AdminTransactions/>}/>
+              <Route path='viewcampaign/:id' element={<AdminViewCampaign/>}/>
         </Route>
         </Route>
 

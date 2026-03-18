@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import {  Share2 } from 'lucide-react';
 import  { useEffect, useState } from 'react'
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
 import type { AdminCampaignCardsProps, CampaignInterface } from '../../../../interfaces/interfaces';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ import moment from 'moment';
 const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsProps) => {
       
       const [showShare, setShowShare] = useState(false);
-      // const navigate=useNavigate()
+      const navigate=useNavigate()
 
       const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
         queryKey:["activeCampaigns",category,search,status],
@@ -156,7 +156,7 @@ const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsPro
 
                 {/* Button */}
                 <motion.button
-                //   onClick={() => navigate(`/admin/viewcampaign/${campaign.id}`)}
+                  onClick={() => navigate(`/admin/viewcampaign/${campaign.id}`)}
                   whileHover={{ y: -3, scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   className="mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white shadow-md hover:bg-emerald-600"
