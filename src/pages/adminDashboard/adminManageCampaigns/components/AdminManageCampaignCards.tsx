@@ -1,71 +1,32 @@
 import { motion } from 'framer-motion'
-import { Heart, Share2 } from 'lucide-react';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import {  Share2 } from 'lucide-react';
+import  { useEffect, useState } from 'react'
+// import { useNavigate } from 'react-router-dom';
+import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
+import type { AdminCampaignCardsProps, CampaignInterface } from '../../../../interfaces/interfaces';
+import { useQuery } from '@tanstack/react-query';
+import { CampaignCardSkeletonForExplorePage } from '../../../../skeltons/CampaignSkeltons';
+import moment from 'moment';
 
-const luxuryProperties = [
-  {
-    image:
-      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&h=600&fit=crop',
-    title: 'Santorini Villa',
-    description:
-      'Luxury villa overlooking the Aegean Sea, offering breathtaking sunset views and a private infinity pool for ultimate relaxation.',
-    rating: 4.8,
-    duration: '3 Night Stay',
-     raised: 45230,
-      progress: 75,
-    daysLeft: 12,
-     category: "Education",
-      goal: 60000,
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=500&h=600&fit=crop',
-    title: 'Alpine Retreat',
-    description:
-      'Exclusive mountain villa with panoramic views of the Swiss Alps, featuring a private spa and world-class amenities.',
-    rating: 4.9,
-    duration: '5 Night Stay',
-     raised: 45230,
-      progress: 75,
-    daysLeft: 12,
-     category: "Education",
-      goal: 60000,
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=600&fit=crop',
-    title: 'Tropical Paradise',
-    description:
-      'Beachfront resort with crystal-clear waters, pristine white sand beaches, and world-class water sports facilities.',
-    rating: 4.7,
-    duration: '7 Night Stay',
-     raised: 45230,
-      progress: 75,
-    daysLeft: 12,
-     category: "Education",
-      goal: 60000,
-  },
-  {
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=600&fit=crop',
-    title: 'Tropical Paradise',
-    description:
-      'Beachfront resort with crystal-clear waters, pristine white sand beaches, and world-class water sports facilities.',
-    rating: 4.7,
-    duration: '7 Night Stay',
-     raised: 45230,
-      progress: 75,
-    daysLeft: 12,
-     category: "Education",
-      goal: 60000,
-  },
-];
 
-const AdminManageCampaignCards = () => {
-      const [isLiked, setIsLiked] = useState(false);
+const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsProps) => {
+      
       const [showShare, setShowShare] = useState(false);
-      const navigate=useNavigate()
+      // const navigate=useNavigate()
+
+      const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
+        queryKey:["activeCampaigns",category,search,status],
+        queryFn:()=>fetchActiveCampaigns(search,category,status),
+        staleTime:1000*60*10
+      })
+
+
+
+      useEffect(()=>{
+        console.log(campaigns)
+      },[campaigns])
+
+
   return (
      <div className="col-span-12 md:col-span-9">
 
@@ -77,132 +38,136 @@ const AdminManageCampaignCards = () => {
 
             <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
-              {luxuryProperties.map((campaign, index) => (
+              {isCampaignLoading?Array(6).fill(0).map((_, i) => <CampaignCardSkeletonForExplorePage key={i} />):
+              campaigns.length==0?<div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
 
-                <motion.div
-      className="relative w-full overflow-hidden rounded-3xl bg-black"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      {/* Image */}
-      <div className="relative h-[220px] w-full overflow-hidden">
+                <p className="text-lg font-semibold">
+                  No Campaigns Found
+                </p>
 
-        <motion.img
-          src={campaign.image}
-          alt={campaign.title}
-          className="h-full w-full object-cover"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.4 }}
-        />
+                <p className="text-sm">
+                  Try adjusting your search or category filter
+                </p>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              </div>:
+              campaigns.map((campaign:CampaignInterface) => (
+                <motion.div  className="relative w-full overflow-hidden rounded-3xl bg-black"  initial={{ opacity: 0, y: 20 }}  animate={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}>
 
-        {/* Status Badge */}
-        <div className="absolute left-3 top-3">
-          <span className="bg-emerald-500 text-white text-[11px] px-2 py-1 rounded-full">
-            Active
-          </span>
-        </div>
+              {/* Image */}
+              <div className="relative h-[220px] w-full overflow-hidden">
 
-        {/* Top Buttons */}
-        <div className="absolute right-2 top-2 flex gap-2">
+                <motion.img
+                  src={import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`}
+                  alt={campaign.title}
+                  className="h-full w-full object-cover"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.4 }}
+                />
 
-          <button
-            onClick={() => setIsLiked(!isLiked)}
-            className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
-          >
-            <Heart size={16} fill={isLiked ? "white" : "none"} />
-          </button>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-          <button
-            onMouseEnter={() => setShowShare(true)}
-            onMouseLeave={() => setShowShare(false)}
-            className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
-          >
-            <Share2 size={16} />
-          </button>
+                {/* Status Badge */}
+                <div className="absolute left-3 top-3">
+                  {campaign?.status=="ACTIVE"?<span className="bg-emerald-500 text-white text-[11px] px-2 py-1 rounded-full">
+                  {campaign.status}
+                  </span>:campaign.status=="COMPLETED"?<span className="bg-blue-500 text-white text-[11px] px-2 py-1 rounded-full">
+                    {campaign.status}
+                  </span>:campaign.status=="PENDING"?<span className="bg-yellow-500 text-white text-[11px] px-2 py-1 rounded-full">
+                    {campaign.status}
+                  </span>:<span className="bg-yellow-500 text-white text-[11px] px-2 py-1 rounded-full">
+                    {campaign.status}
+                  </span>}
+                </div>
 
-        </div>
+                {/* Top Buttons */}
+                <div className="absolute right-2 top-2 flex gap-2">
 
-      </div>
 
-      {/* Share Menu */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{
-          opacity: showShare ? 1 : 0,
-          scale: showShare ? 1 : 0.9,
-        }}
-        transition={{ duration: 0.2 }}
-        className={`absolute right-3 top-12 ${
-          showShare ? "pointer-events-auto" : "pointer-events-none"
-        }`}
-      >
-        <div className="backdrop-blur-md space-y-1 rounded-lg bg-white/20 p-1 text-xs text-white">
-          <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
-            Copy Link
-          </button>
-          <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
-            Share
-          </button>
-        </div>
-      </motion.div>
+                  <button
+                    onMouseEnter={() => setShowShare(true)}
+                    onMouseLeave={() => setShowShare(false)}
+                    className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
+                  >
+                    <Share2 size={16} />
+                  </button>
 
-      {/* Content */}
-      <div className="bg-gradient-to-b from-black/80 to-black px-3 py-3 space-y-1">
+                </div>
 
-        <h2 className="text-base font-semibold text-white">
-          {campaign.title}
-        </h2>
+              </div>
 
-        <p className="text-xs text-gray-300">
-          {campaign.description}
-        </p>
+            {/* Share Menu */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{
+                  opacity: showShare ? 1 : 0,
+                  scale: showShare ? 1 : 0.9,
+                }}
+                transition={{ duration: 0.2 }}
+                className={`absolute right-3 top-12 ${
+                  showShare ? "pointer-events-auto" : "pointer-events-none"
+                }`}
+              >
+                <div className="backdrop-blur-md space-y-1 rounded-lg bg-white/20 p-1 text-xs text-white">
+                  <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
+                    Copy Link
+                  </button>
+                  <button className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
+                    Share
+                  </button>
+                </div>
+              </motion.div>
 
-        {/* Category */}
-        <p className="text-[11px] text-gray-400">
-          Category: {campaign.category}
-        </p>
+            {/* Content */}
+              <div className="bg-gradient-to-b from-black/80 to-black px-3 py-3 space-y-1">
 
-        {/* Progress */}
-        <div className="mt-2 space-y-1">
+                <h2 className="text-base font-semibold text-white">
+                  {campaign.title.slice(0,30)}..
+                </h2>
 
-          <p className="text-emerald-400 text-xs font-semibold">
-            ₹{campaign.raised} raised
-          </p>
+                <p className="text-xs text-gray-300">
+                  {campaign.description.slice(0,84)}..
+                </p>
 
-          <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
-            <div
-              className="bg-emerald-500 h-1.5 rounded-full"
-              style={{ width: `${campaign.progress}%` }}
-            />
-          </div>
+                {/* Category */}
+                <p className="text-[11px] text-gray-400">
+                  Category: {campaign.category_title}
+                </p>
 
-          <div className="flex justify-between text-[10px] text-gray-400">
-            <span>Goal: ₹{campaign.goal}</span>
-            <span>{campaign.daysLeft} Days Left</span>
-          </div>
+                {/* Progress */}
+                <div className="mt-2 space-y-1">
 
-        </div>
+                  <p className="text-emerald-400 text-xs font-semibold">
+                    ₹{campaign.amount} raised
+                  </p>
 
-        {/* Button */}
-        <motion.button
-        //   onClick={() => navigate(`/admin/viewcampaign/${campaign.id}`)}
-          whileHover={{ y: -3, scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className="mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white shadow-md hover:bg-emerald-600"
-        >
-          View Campaign
-        </motion.button>
+                  <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
+                    <div
+                      className="bg-emerald-500 h-1.5 rounded-full"
+                      style={{ width: `${(campaign.amount / campaign.goalAmount) * 100}%` }}
+                    />
+                  </div>
 
-      </div>
-    </motion.div>
+                  <div className="flex justify-between text-[10px] text-gray-400">
+                    <span>Goal: ₹{campaign.goalAmount.toLocaleString("en-IN")}</span>
+                    <span>{moment(campaign.deadline).diff(moment(),"days")} Days Left</span>
+                  </div>
 
+                </div>
+
+                {/* Button */}
+                <motion.button
+                //   onClick={() => navigate(`/admin/viewcampaign/${campaign.id}`)}
+                  whileHover={{ y: -3, scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white shadow-md hover:bg-emerald-600"
+                >
+                  View Campaign
+                </motion.button>
+
+              </div>
+            </motion.div>
               ))}
-
             </div>
-
           </motion.div>
 
         </div>

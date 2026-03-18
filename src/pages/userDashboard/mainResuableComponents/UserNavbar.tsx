@@ -18,11 +18,13 @@ export default function UserNavbar() {
 
   const {data}=useQuery({
     queryKey:['profile',profileUpdated],
-    queryFn:fetchLoggedUserProfile
+    queryFn:fetchLoggedUserProfile,
+     staleTime:1000*60*10
   })
   const {data:notificationCount}=useQuery({
     queryKey:['profile',profileUpdated,campaignCreated,paymentAdded],
-    queryFn:totalMessagesUnRead
+    queryFn:totalMessagesUnRead,
+     staleTime:1000*60*10
   })
 
   const onLogout=()=>{

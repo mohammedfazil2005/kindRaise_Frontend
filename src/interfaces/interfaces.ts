@@ -61,6 +61,8 @@ export interface UserDonationType{
     totalAmount:number
     goalAmount:number
     campaign_id:string
+    fullName:string
+    user_id:string
 }
 
 export interface UserDonationDashboardStats{
@@ -81,4 +83,34 @@ export interface NotificationInterface{
     readStatus:boolean
     date:string,
     user_id:string
+}
+
+export interface UserInterface{
+    id:string
+    fullName:string
+    username:string
+    role:string
+    phone:string
+    createdAt:string
+}
+
+
+
+
+// Header
+export type AdminCampaignHeaderProps = {
+  setSearch: React.Dispatch<React.SetStateAction<string>>
+  setStatus: React.Dispatch<React.SetStateAction<string>>
+}
+
+// Categories
+export type AdminCampaignCategoryProps = {
+  setCategory: React.Dispatch<React.SetStateAction<string>>
+}
+
+// Cards
+export type AdminCampaignCardsProps = {
+  search: string
+  category: string
+  status: string
 }

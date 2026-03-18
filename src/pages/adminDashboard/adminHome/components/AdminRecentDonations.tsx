@@ -1,13 +1,21 @@
 import { motion } from "framer-motion";
 import { Eye } from "lucide-react";
-
-const donations = [
-  { user: "Rahul", amount: "₹500", campaign: "Help Rural Schools" },
-  { user: "Aisha", amount: "₹2000", campaign: "Medical Aid" },
-  { user: "John", amount: "₹750", campaign: "Save Street Animals" },
-];
+import { adminDashboardRecentDonations } from "../../../../services/apis/AdminDashboardApi";
+import { AdminDashboardActivityRowSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
+import { useQuery } from "@tanstack/react-query";
+import type { UserDonationType } from "../../../../interfaces/interfaces";
 
 export default function AdminRecentDonations() {
+
+  const {data,isLoading}=useQuery({
+    queryKey:['adminDashboardRecentDonations'],
+    queryFn:adminDashboardRecentDonations,
+     staleTime:1000*60*10
+  })
+
+
+
+
   return (
     <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm">
 
@@ -24,8 +32,9 @@ export default function AdminRecentDonations() {
 
       <div className="space-y-4">
 
-        {donations.map((item, index) => (
-
+        {isLoading?Array.from({length:3}).map((_,_1)=>(
+                      <AdminDashboardActivityRowSkeleton/>
+      )) :data.map((item:UserDonationType, index:number) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, x: -20 }}
@@ -43,18 +52,18 @@ export default function AdminRecentDonations() {
             <div className="flex items-center gap-3">
 
               {/* Avatar */}
-              <div className="w-9 h-9 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-semibold">
-                {item.user.charAt(0)}
+              <div className=" b flex items-center justify-center text-white text-sm font-semibold">
+                <img className="w-10 h-10 rounded-full" src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${item.user_id}`} alt="" />
               </div>
 
               {/* User Info */}
               <div>
                 <p className="font-medium text-gray-800 dark:text-gray-200">
-                  {item.user}
+                  {item.fullName}
                 </p>
 
                 <p className="text-xs text-gray-500">
-                  {item.campaign}
+                  {item.title}
                 </p>
               </div>
 
@@ -65,7 +74,7 @@ export default function AdminRecentDonations() {
 
               {/* Amount */}
               <span className="text-emerald-600 font-semibold text-sm">
-                {item.amount}
+               ₹ {item?.amount?.toLocaleString("en-IN")}
               </span>
 
               {/* View button */}

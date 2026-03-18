@@ -1,7 +1,22 @@
 
 import { Search, Filter } from "lucide-react";
+import type { AdminCampaignHeaderProps } from "../../../../interfaces/interfaces";
+import { useEffect, useState } from "react";
 
-const AdminManageCampaignHeader = () => {
+const AdminManageCampaignHeader = ({setSearch,setStatus}:AdminCampaignHeaderProps) => {
+
+  const [searchValue,setSearchValue]=useState("")
+  
+
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setSearch(searchValue);
+  }, 800);
+
+  return () => clearTimeout(timer);
+}, [searchValue]);
+
+  
   return (
     <div className="space-y-6">
 
@@ -33,6 +48,7 @@ const AdminManageCampaignHeader = () => {
           />
 
           <input
+          onChange={(e)=>setSearchValue(e.target.value)}
             type="text"
             placeholder="Search campaigns by name, category, or creator..."
             className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 
@@ -52,17 +68,18 @@ const AdminManageCampaignHeader = () => {
           />
 
           <select
+          onClick={(e:any)=>setStatus(e.target.value)}
             className="pl-9 pr-6 py-3 rounded-xl border border-gray-200 
             dark:border-gray-700 
             bg-white dark:bg-gray-900 
             text-gray-700 dark:text-gray-200 
             focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Pending</option>
-            <option>Completed</option>
-            <option>Rejected</option>
+            <option value={""}>All Status</option>
+            <option value={"ACTIVE"}>Active</option>
+            <option value={"PENDING"}>Pending</option>
+            <option value={"COMPLETED"}>Completed</option>
+            <option value={"REJECTED"}>Rejected</option>
           </select>
         </div>
 

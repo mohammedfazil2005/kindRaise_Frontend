@@ -1,25 +1,18 @@
 import { motion } from "framer-motion";
 import { User } from "lucide-react";
+import { adminDashboardRecentUsers } from "../../../../services/apis/AdminDashboardApi";
+import { AdminDashboardActivityRowSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
+import { useQuery } from "@tanstack/react-query";
+import type { UserInterface } from "../../../../interfaces/interfaces";
+import moment from "moment";
 
-const users = [
-  {
-    name: "Rahul Sharma",
-    email: "rahul@email.com",
-    joined: "2 hours ago",
-  },
-  {
-    name: "Aisha Khan",
-    email: "aisha@email.com",
-    joined: "5 hours ago",
-  },
-  {
-    name: "John Mathew",
-    email: "john@email.com",
-    joined: "1 day ago",
-  },
-];
 
 export default function AdminRecentUsers() {
+    const {data,isLoading}=useQuery({
+    queryKey:['adminDashboardRecentUsers'],
+    queryFn:adminDashboardRecentUsers,
+     staleTime:1000*60*10
+  })
   return (
     <motion.div
       initial={{ opacity: 0, y: 35 }}
@@ -34,7 +27,9 @@ export default function AdminRecentUsers() {
 
       <div className="space-y-4">
 
-        {users.map((user, index) => (
+        {isLoading?Array.from({length:3}).map((_,_1)=>(
+                              <AdminDashboardActivityRowSkeleton/>
+              )) :data.map((user:UserInterface, index:number) => (
 
           <motion.div
             key={index}
@@ -58,18 +53,18 @@ export default function AdminRecentUsers() {
 
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-white">
-                  {user.name}
+                  {user.fullName}
                 </p>
 
                 <p className="text-xs text-gray-500">
-                  {user.email}
+                  {user.username}
                 </p>
               </div>
 
             </div>
 
             <span className="text-xs text-gray-400">
-              {user.joined}
+              {moment(user.createdAt).fromNow()}
             </span>
 
           </motion.div>

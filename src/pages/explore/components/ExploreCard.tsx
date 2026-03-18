@@ -13,9 +13,10 @@ import { toaster } from '../../../services/Toaster';
 
 type CategoryProp={
   category:string
+  search:string
 }
 
-const ExploreCard = ({category}:CategoryProp) => {
+const ExploreCard = ({category,search}:CategoryProp) => {
      
       const [shareVisible, setShareVisible] = useState<Record<string, boolean>>({});
 
@@ -23,8 +24,8 @@ const ExploreCard = ({category}:CategoryProp) => {
 
 
    const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
-      queryKey:["activeCampaigns",category],
-      queryFn:()=>fetchActiveCampaigns('',category),
+      queryKey:["activeCampaigns",category,search],
+      queryFn:()=>fetchActiveCampaigns(search,category,'ACTIVE'),
       staleTime:1000*60*10
     })
 

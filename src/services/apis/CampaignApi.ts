@@ -1,6 +1,6 @@
 import { CommonApi } from "../CommonApi"
 
-export const fetchActiveCampaigns=async(search="",category="")=>{
+export const fetchActiveCampaigns=async(search="",category="",status="")=>{
     const params=new URLSearchParams();
     if(search){
         params.append("search",search)
@@ -10,6 +10,11 @@ export const fetchActiveCampaigns=async(search="",category="")=>{
     if(category){
         params.append("category",category)
         console.log(category)
+    }
+
+    if(status){
+        params.append("status",status)
+        console.log(status) 
     }
 
 

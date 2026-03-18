@@ -1,6 +1,22 @@
+import { useEffect, useState } from "react";
 
+type HeroSearch={
+  setSearch:React.Dispatch<React.SetStateAction<string>>
+  
+}
 
-const Hero = () => {
+const Hero = ({setSearch}:HeroSearch) => {
+
+    const [searchValue,setSearchValue]=useState("")
+
+    useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchValue);
+    }, 800);
+  
+    return () => clearTimeout(timer);
+  }, [searchValue]);
+
   return (
     <section className="relative h-[400px] flex items-center justify-center text-center text-white">
 
@@ -28,6 +44,7 @@ const Hero = () => {
         {/* Search Box */}
         <div className="mt-8 flex bg-white rounded-full overflow-hidden shadow-lg max-w-xl mx-auto">
           <input
+          onChange={(e)=>setSearchValue(e.target.value)}
             type="text"
             placeholder="Search for campaigns, causes, or locations..."
             className="flex-1 px-6 py-3 text-gray-700 outline-none"

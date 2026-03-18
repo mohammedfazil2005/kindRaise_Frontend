@@ -20,7 +20,7 @@ const UserExploreCard = () => {
 
       const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
         queryKey:["activeCampaigns",category,searchCampaign,paymentAdded],
-        queryFn:()=>fetchActiveCampaigns(searchCampaign,category),
+        queryFn:()=>fetchActiveCampaigns(searchCampaign,category,'ACTIVE'),
         staleTime:1000*60*10
       })
 
@@ -122,10 +122,8 @@ const UserExploreCard = () => {
               <button className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white">
                 <Share2 size={16} />
               </button>
-
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{   opacity: shareVisible[property.id] ? 1 : 0,   scale: shareVisible[property.id] ? 1 : 0.9 }} transition={{ duration: 0.2 }} className={`absolute right-0 top-7 ${   shareVisible[property.id]     ? "pointer-events-auto"     : "pointer-events-none" }`}
             >
-
                 <div className=" w-[80px] backdrop-blur-md space-y-1 rounded-lg bg-black/80 p-1 text-xs text-white">
 
                   <button onClick={()=>handleCopy(property.id)} className="block w-full rounded-md px-2 py-1 hover:bg-white/20">
