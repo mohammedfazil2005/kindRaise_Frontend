@@ -30,6 +30,7 @@ import AdminTransactions from './pages/adminDashboard/adminTransactions/AdminTra
 import { Toaster } from 'sonner'
 import UserEditCampaign from './pages/userDashboard/userEditCampaign/UserEditCampaign'
 import UserOldPassword from './pages/userDashboard/userProfile/UserOldPassword'
+import ProtectedRoutes from './utils/ProtectedRoutes'
 
 
 function App() {
@@ -47,32 +48,36 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path='/user' element={<UserDashboard />}>
-          <Route index element={<UserMainDashboard />} />
-          <Route path='explore/campaigns' element={<UserExploreMain />} />
-          <Route path='donations' element={<UserDonationMain />} />
-          <Route path='my/campaigns' element={<UserCampaignMain />} />
-          <Route path='create/campaign' element={<CreateCampaign />} />
-          <Route path='notifications' element={<UserNotification />} />
-          <Route path='profile' element={<UserProfile />} />
-          <Route path="viewcampaign/:id" element={<UserViewCampaign />} />
-          <Route path="editcampaign/:id" element={<UserEditCampaign />} />
-          <Route path="oldpassword/:id" element={<UserOldPassword />} />
-         
+
+        <Route element={<ProtectedRoutes allowedRoles={["ROLE_USER"]}/>}>
+          <Route path='/user' element={<UserDashboard />}>
+            <Route index element={<UserMainDashboard />} />
+            <Route path='explore/campaigns' element={<UserExploreMain />} />
+            <Route path='donations' element={<UserDonationMain />} />
+            <Route path='my/campaigns' element={<UserCampaignMain />} />
+            <Route path='create/campaign' element={<CreateCampaign />} />
+            <Route path='notifications' element={<UserNotification />} />
+            <Route path='profile' element={<UserProfile />} />
+            <Route path="viewcampaign/:id" element={<UserViewCampaign />} />
+            <Route path="editcampaign/:id" element={<UserEditCampaign />} />
+            <Route path="oldpassword/:id" element={<UserOldPassword />} />
+          </Route>
         </Route>
 
-        <Route path='/admin' element={<AdminDashboard/>}>
-            <Route index element={<AdminHome/>}/>
-            <Route path='campaigns' element={<AdminManageCampaigns/>}/>
-            <Route path='campaign/requests' element={<AdminCampaignRequests/>}/>
-            <Route path='donations' element={<AdminCampaignDonations/>}/>
-            <Route path='razorpay' element={<AdminRazorPaySettings/>}/>
-            <Route path='users' element={<AdminUsers/>}/>
-            <Route path='analytics' element={<AdminAnalytics/>}/>
-            <Route path='create/users' element={<AdminCreateUser/>}/>
-            <Route path='notifications' element={<AdminNotifications/>}/>
-            <Route path='profile' element={<AdminProfile/>}/>
-            <Route path='transactions' element={<AdminTransactions/>}/>
+        <Route element={<ProtectedRoutes allowedRoles={["ROLE_ADMIN"]}/>}>
+          <Route path='/admin' element={<AdminDashboard/>}>
+              <Route index element={<AdminHome/>}/>
+              <Route path='campaigns' element={<AdminManageCampaigns/>}/>
+              <Route path='campaign/requests' element={<AdminCampaignRequests/>}/>
+              <Route path='donations' element={<AdminCampaignDonations/>}/>
+              <Route path='razorpay' element={<AdminRazorPaySettings/>}/>
+              <Route path='users' element={<AdminUsers/>}/>
+              <Route path='analytics' element={<AdminAnalytics/>}/>
+              <Route path='create/users' element={<AdminCreateUser/>}/>
+              <Route path='notifications' element={<AdminNotifications/>}/>
+              <Route path='profile' element={<AdminProfile/>}/>
+              <Route path='transactions' element={<AdminTransactions/>}/>
+        </Route>
         </Route>
 
       </Routes>

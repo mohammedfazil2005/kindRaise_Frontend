@@ -86,7 +86,13 @@ const Navbar = () => {
 
               {/* Dashboard */}
               <button
-                onClick={() => navigate('/user')}
+                onClick={() =>{ 
+                  if(localStorage.getItem("role") === "ROLE_USER"){
+                     navigate('/user')
+                  }else{
+                    navigate('/admin')
+                  }
+                 }}
                 className="flex items-center gap-2 w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
               >
                 <ArrowBigRight size={16} className="text-emerald-500" />
