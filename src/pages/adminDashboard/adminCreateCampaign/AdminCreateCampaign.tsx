@@ -3,56 +3,55 @@ import { motion } from "framer-motion";
 import { Upload } from "lucide-react";
 import { toaster } from "../../../services/Toaster";
 import { useQuery } from "@tanstack/react-query";
-import {  fetchAllCategories, fetchSingleCampaign, updateCampaign, updateCampaignStatus } from "../../../services/apis/CampaignApi";
+import { createCampaign, fetchAllCategories, fetchSingleCampaign, updateCampaign } from "../../../services/apis/CampaignApi";
 import type { CategoryInterface } from "../../../interfaces/interfaces";
 import { ClipLoader } from "react-spinners";
 import { CampaignContext } from "../../../contexts/CampainContext";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { EditCampaignSkeleton } from "../../../skeltons/CampaignSkeltons";
 
-const UserEditCampaign = () => {
+const AdminCreateCampaign = () => {
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    goalAmount: 0,
-    deadline: "",
-    categoryId: "",
-   
-   
-  });
+    const [searchParams]=useSearchParams();
+    const id=searchParams.get("id");
+
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        goalAmount: 0,
+        deadline: "",
+        categoryId: "",
+        status:"ACTIVE"
+    });
 
   const [preview, setPreview] = useState<string|null>("");
   const [errors, setErrors] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
 
-  const {setCampaignCreated}=useContext(CampaignContext)!
 
-  const id=useParams()['id']!
+
+  const {setCampaignCreated}=useContext(CampaignContext)!
   
-    const {data:categories,isLoading:isCategoriesLoading}=useQuery({
+ const {data:categories,isLoading}=useQuery({
      queryKey:['categories'],
      queryFn:fetchAllCategories,
      staleTime:1000*60*10,  
    })
 
-   const {data:campaign,isLoading:isCampaignLoading,refetch:refetchCampaign}=useQuery({
-    queryKey:['editcampaign',id],
-    queryFn:()=>fetchSingleCampaign(id),
-    enabled:!!id
-   })
+    const {data:campaign,isLoading:campaignLoading ,refetch}=useQuery({
+        queryKey:['campaign',id],
+        queryFn:()=>fetchSingleCampaign(id!),
+        enabled:!!id
+    })
 
-   useEffect(()=>{
-    if(!campaign) return;
-    setFormData({...campaign,categoryId:campaign.category_id})
-   },[campaign])
+    useEffect(()=>{
+        if(!campaign) return;
+        setFormData({...campaign,categoryId:campaign.category_id})
+    },[campaign])
 
-   useEffect(()=>{
-    if(formData){
-        console.log(formData)
-    }
-   },[formData])
+   
+
 
   const validateField = (name: string, value: any) => {
     let error = "";
@@ -124,99 +123,121 @@ const UserEditCampaign = () => {
     }
   };
 
-  // drag drop
-  const handleDrop = (e: any) => {
+    // drag drop
+    const handleDrop = (e: any) => {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    const file = e.dataTransfer.files[0];
+        const file = e.dataTransfer.files[0];
 
-      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-        const maxSize = 5 * 1024 * 1024; // 5MB
-    
-    
-        if (!allowedTypes.includes(file.type)) {
-          toaster("Only JPG, JPEG, and PNG files are allowed.");
-          return;
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+        
+        
+            if (!allowedTypes.includes(file.type)) {
+            toaster("Only JPG, JPEG, and PNG files are allowed.");
+            return;
+            }
+        
+        
+        if (file.size > maxSize) {
+            toaster("File size must be less than 5MB.");
+            return;
         }
-    
-    
-      if (file.size > maxSize) {
-          toaster("File size must be less than 5MB.");
-          return;
-      }
-    
+        
 
-    if (file) {
-     setImage(file);
-      setPreview(URL.createObjectURL(file));
-    }
-  };
+        if (file) {
+        setImage(file);
+        setPreview(URL.createObjectURL(file));
+        }
+    };
 
-  // submit
-  const handleSubmit = async (e: any) => {
+    // submit
+    const handleSubmit = async (e: any) => {
 
-    e.preventDefault();
-    if(!checkFormIsValid()){
-      toaster("Please fill in all required fields before submitting the campaign.")
-      return;
-    }
-    setLoading(true)
-    try {
+        e.preventDefault();
+        if(!checkFormIsValid()){
+        toaster("Please fill in all required fields before submitting the campaign.")
+        return;
+        }
+         setLoading(true)
+        try {
+            const formDataPayload=new FormData();
+            formDataPayload.append("campaign",new Blob([JSON.stringify(formData)],{type:"application/json"}));
+            if(id){
+                if(image){
+                    formDataPayload.append("file",image!)
+                }
+            }else{
+                if(!image){
+                    toaster("Image is required");
+                    return;
+                }
+                formDataPayload.append("file",image!)
+            }
+
+            let apiResponse:any;
+
+            if(id){
+                apiResponse=await updateCampaign(id!,formDataPayload);
+                toaster("Campaign updated.");
+                refetch()
+            }else{
+                apiResponse=await createCampaign(formDataPayload);
+                toaster("Campaign Created.");
+                
+                resetForm()
+            }
+        
+            setCampaignCreated(apiResponse.message);
       
-      const formDataPayload=new FormData();
-      formDataPayload.append("campaign",new Blob([JSON.stringify(formData)],{type:"application/json"}));
-      if(image){
-        formDataPayload.append("file",image!);
-      }
-      const apiResponse=await updateCampaign(id,formDataPayload);
-      toaster(apiResponse.message);
-      setCampaignCreated(apiResponse.message);
-    } catch (error) {
-      toaster("Something went wrong on Updating a campaign.");
-      console.log(error);
-    }finally{
-      setLoading(false);
-      refetchCampaign()
-    }
+        } catch (error) {
+        toaster("Something went wrong on Please Contact KindRaise Admin.");
+        console.log(error);
+        }finally{
+        setLoading(false);
+        }
 
+        
+    };
     
-  };
-  
-  // check from is valid
-  const checkFormIsValid=()=>{
-    const isFormValid = formData.title && formData.description && formData.goalAmount && formData.deadline && formData.categoryId && !errors.title && !errors.description && !errors.goalAmount && !errors.deadline;
-    return isFormValid;
-  }
-
-  const changeCampaignStatus=async(status:string)=>{
-    try {
-        const apiResponse=await updateCampaignStatus(status,id);
-        toaster(apiResponse.message);
-        refetchCampaign();
-    } catch (error) {
-        console.log(error)
-        toaster("Something went wrong while changing the status.")
+    // check from is valid
+    const checkFormIsValid=()=>{
+        const isFormValid = formData.title && formData.description && formData.goalAmount && formData.deadline && formData.categoryId && !errors.title && !errors.description && !errors.goalAmount && !errors.deadline;
+        return isFormValid;
     }
-  }
+
+     const resetForm=()=>{
+    setFormData({...formData,
+      title: "",
+    description: "",
+    goalAmount: 0,
+    deadline: "",
+    categoryId: "",})
+    setImage(null)
+    setPreview(null)
+    }
 
   
+
+  
+
 
   return (
     <>
-    {isCampaignLoading?<EditCampaignSkeleton/>:
+    {isLoading||campaignLoading?<EditCampaignSkeleton/>:
     <div className="grid lg:grid-cols-3 gap-10 mt-10">
             <div className="lg:col-span-2 rounded-2xl ">
 
                   <div className="mb-6">
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
-            Start a New Campaign
-          </h2>
+                <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
+                    Start a New Campaign
+                </h2>
 
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Share your cause and submit your campaign for admin review.
-          </p>
-        </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Share your cause and submit your campaign for admin review.
+                </p>
+                 </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -288,10 +309,10 @@ const UserEditCampaign = () => {
 
               <select name="categoryId" value={formData.categoryId} onChange={handleChange} className="mt-2 w-full p-4 text-black dark:text-white rounded-xl border border-gray-300 dark:border-gray-700 dark:bg-gray-800">
               <option value="" disabled>Select Category</option>
-              {isCategoriesLoading? 
+              {isLoading? 
               <option disabled>Loading categories...</option>
               :categories?.map((each:CategoryInterface)=>(
-                 <option value={each?.id}>{each?.title}</option>
+                 <option key={each.id} value={each?.id}>{each?.title}</option>
               ))}
               </select>
               </div>
@@ -339,10 +360,19 @@ const UserEditCampaign = () => {
                <ClipLoader size={20} color="#ffffff" />
              ):(
               <>
-               Save Changes
+               Submit Campaign for Review
               </>
              )}
             </motion.button>
+
+            {/* {loading ? (
+                   
+                  ) : (
+                    <>
+                      Create Account<ArrowRight size={22} />
+                    </>
+                  )} */}
+
               </form>
             </div>
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 h-fit">
@@ -352,12 +382,22 @@ const UserEditCampaign = () => {
             </h3>
 
             {/* Image */}
-          
+           
+         {id?(
             <img
             src={preview?preview:import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`}
-            alt={campaign.title}
             className="rounded-xl h-48 w-full object-cover mb-4"
             />
+         ):preview?(
+            <img
+            src={preview}
+            className="rounded-xl h-48 w-full object-cover mb-4"
+            />
+         ):(
+              <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-xl mb-4"/>
+         )}
+         
+          
            
 
 
@@ -398,36 +438,11 @@ const UserEditCampaign = () => {
             Deadline: {formData.deadline || "Not set"}
             </p>
 
-            <div className="border-t border-gray-200 dark:border-gray-700 my-5"></div>
-
-{/* Danger Zone */}
-                {campaign.status=="ACTIVE"&&(
-                    <div>
-            <h4 className="text-sm font-semibold text-amber-500 mb-2">
-            Campaign Action
-            </h4>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                Mark this campaign as completed once your goal has been achieved or the campaign has finished. 
-                After completion, the campaign will stop accepting new donations.
-                </p>
-                 <div className="flex flex-col gap-3">
-                <motion.button
-                onClick={()=>changeCampaignStatus("COMPLETED")}
-                className="mt-2 w-full rounded-xl py-3 font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500"
-                >
-                Mark as Completed
-                </motion.button>
-              </div>
-
-                </div>
-                )}
-
             </div>
 
         </div>
-    }
-    </>
+    }</>
   );
 };
 
-export default UserEditCampaign;
+export default AdminCreateCampaign;

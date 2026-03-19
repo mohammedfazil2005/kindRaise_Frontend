@@ -101,6 +101,7 @@ export interface UserInterface{
 export type AdminCampaignHeaderProps = {
   setSearch: React.Dispatch<React.SetStateAction<string>>
   setStatus: React.Dispatch<React.SetStateAction<string>>
+  status:string
 }
 
 // Categories

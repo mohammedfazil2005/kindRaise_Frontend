@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion'
 import {  Share2 } from 'lucide-react';
-import  { useEffect, useState } from 'react'
+import  { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
 import type { AdminCampaignCardsProps, CampaignInterface } from '../../../../interfaces/interfaces';
 import { useQuery } from '@tanstack/react-query';
 import { CampaignCardSkeletonForExplorePage } from '../../../../skeltons/CampaignSkeltons';
 import moment from 'moment';
+import { CampaignContext } from '../../../../contexts/CampainContext';
 
 
 const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsProps) => {
@@ -14,8 +15,10 @@ const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsPro
       const [showShare, setShowShare] = useState(false);
       const navigate=useNavigate()
 
+      const {campaignCreated}=useContext(CampaignContext)!
+
       const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
-        queryKey:["activeCampaigns",category,search,status],
+        queryKey:["activeCampaigns",category,search,status,campaignCreated],
         queryFn:()=>fetchActiveCampaigns(search,category,status),
         staleTime:1000*60*10
       })
@@ -72,7 +75,7 @@ const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsPro
                   {campaign.status}
                   </span>:campaign.status=="COMPLETED"?<span className="bg-blue-500 text-white text-[11px] px-2 py-1 rounded-full">
                     {campaign.status}
-                  </span>:campaign.status=="PENDING"?<span className="bg-yellow-500 text-white text-[11px] px-2 py-1 rounded-full">
+                  </span>:campaign.status=="REJECTED"?<span className="bg-red-500 text-white text-[11px] px-2 py-1 rounded-full">
                     {campaign.status}
                   </span>:<span className="bg-yellow-500 text-white text-[11px] px-2 py-1 rounded-full">
                     {campaign.status}

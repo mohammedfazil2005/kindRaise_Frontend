@@ -1,30 +1,43 @@
 import { useQuery } from '@tanstack/react-query';
 
 
-import {  useEffect} from 'react'
-import { useParams } from 'react-router-dom';
-import { fetchSingleCampaign } from '../../../services/apis/CampaignApi';
+import {  useContext, useEffect, useState} from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import { fetchSingleCampaign, updateCampaignStatus } from '../../../services/apis/CampaignApi';
 import moment from 'moment';
-import { Hourglass, Pencil, Users } from 'lucide-react';
+import { CheckCircle, Hourglass, Pencil, Users, XCircle, Check } from 'lucide-react';
 import {CampaignDetailsSkeleton} from '../../../skeltons/CampaignSkeltons';
 import { fetchProfileById } from '../../../services/apis/ProfileApi';
 
 import { motion } from 'framer-motion';
+import { toaster } from '../../../services/Toaster';
+import { ClipLoader } from 'react-spinners';
+import { CampaignContext } from '../../../contexts/CampainContext';
 
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
 
 const AdminViewCampaign = () => {
-     
-      const id=useParams()['id']!
+    
+    const [approveLoader,setApproveLoader]=useState(false);
+    const [rejectLoader,setRejectLoader]=useState(false);
+    const [completeLoader,setCompleteLoader]=useState(false);
 
+    const {setCampaignCreated}=useContext(CampaignContext)!
     
 
-       const {data:campaign,isLoading}=useQuery({
+    const adminStatusMessages :any= {
+    PENDING: "Review this campaign submission and either approve or reject it.",
+    ACTIVE: "This campaign is live. You can monitor or mark it as completed.",
+    COMPLETED: "This campaign has been successfully completed and closed.",
+    REJECTED: "This campaign has been rejected and is no longer visible to users."
+    };
+     
+    const id=useParams()['id']!
+
+    const navigate=useNavigate();
+    
+
+    const {data:campaign,isLoading,refetch}=useQuery({
         queryKey:['campaign',id],
         queryFn:()=>fetchSingleCampaign(id),
         enabled:!!id
@@ -63,7 +76,32 @@ const AdminViewCampaign = () => {
         }
 
         return `Top contributor! Donated ₹${amount.toLocaleString("en-IN")} in ${donations} contributions and supporting ${campaigns} campaigns.`;
-};
+    };
+
+    const onChangeStatusOfCampaign=async(status:string)=>{
+            if(status=="ACTIVE"){
+                setApproveLoader(true)
+            }
+            if(status=="REJECTED"){
+                setRejectLoader(true)
+            }
+            if(status=="COMPLETED"){
+                setCompleteLoader(true)
+            }
+            try {
+                const apiResponse=await updateCampaignStatus(status,id!);
+                toaster(apiResponse.message);
+                setCampaignCreated("updatedStatus")
+                refetch()
+            } catch (error) {
+                toaster("Somthing went wrong. please contact KindRaise Admin");
+                console.log(error)
+            }finally{
+                setApproveLoader(false)
+                setRejectLoader(false)
+                setCompleteLoader(false)
+            }
+        }
 
     
 
@@ -104,7 +142,7 @@ const AdminViewCampaign = () => {
 
         {/* ================= EDIT ICON ================= */}
         <button
-            // onClick={handleEditCampaign}
+            onClick={()=>navigate(`/admin/createcampaign?id=${id}`)}
             className="absolute top-6 right-6 p-2 rounded-full 
             bg-white/90 dark:bg-gray-800 text-gray-800 dark:text-white 
             shadow-md hover:scale-110 hover:bg-white transition-all duration-300"
@@ -193,10 +231,7 @@ const AdminViewCampaign = () => {
           {campaign?.description}
         </p>
 
-        <p className="text-gray-600 dark:text-gray-300 leading-relaxed mt-4">
-         Every contribution on KindRaise helps bring meaningful ideas to life. Your support empowers communities, fuels important initiatives, and creates lasting positive impact.
-        </p>
-
+        
       </div>
 
     </div>
@@ -206,7 +241,9 @@ const AdminViewCampaign = () => {
 
        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-2xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700">
 
-                {/* Profile Header */}
+        {profileData.profile.role!="ADMIN"&&(
+            <>
+               {/* Profile Header */}
             <div className="flex items-center gap-4">
 
                 <motion.img
@@ -279,106 +316,157 @@ const AdminViewCampaign = () => {
             >
                 View Profile
             </motion.button>
+            </>
+        )}
 
-                        </div>
+        {profileData.profile.role=="ADMIN"&&(
+             <div className="flex items-center gap-4">
 
-                {/* ================= ACTION BOX ================= */}
+    <motion.img
+      whileHover={{ scale: 1.1 }}
+      transition={{ duration: 0.3 }}
+      className="w-14 h-14 rounded-full object-cover border-2 border-emerald-500"
+      src={`${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profileData?.profile?.id}`}
+      alt="profile"
+    />
 
-                <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="bg-white dark:bg-gray-900 rounded-2xl p-3 shadow-md border border-gray-200 dark:border-gray-700 transition-all duration-300"
-                >
+    <div>
+      <h4 className="font-semibold text-lg leading-tight">
+        {profileData?.profile?.fullName || "User"}
+      </h4>
 
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Campaign Actions
-                </h4>
-
-                {/* Small Description */}
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    {campaign.status === "PENDING" && "Review and approve or reject this campaign."}
-                    {campaign.status === "ACTIVE" && "This campaign is live. You can mark it as completed."}
-                    {campaign.status === "COMPLETED" && "This campaign has already been completed."}
-                    {campaign.status === "REJECTED" && "This campaign was rejected and cannot proceed."}
-                </p>
-
-                {/* STATUS BADGE */}
-                <div className="mb-5">
-                    {/* <span
-                    className={`text-xs px-3 py-1 rounded-full font-medium
-                    ${
-                        campaign.status === "PENDING"
-                        ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-400"
-                        : campaign.status === "ACTIVE"
-                        ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400"
-                        : campaign.status === "COMPLETED"
-                        ? "bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400"
-                        : "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400"
-                    }`}
-                    >
-                    {campaign.status}
-                    </span> */}
-                </div>
-
-                {/* ================= BUTTONS ================= */}
-
-                {campaign.status === "PENDING" && (
-                    <div className="flex gap-3">
-
-                    <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        whileHover={{ scale: 1.03 }}
-                        className="flex-1 rounded-xl py-2.5 font-semibold text-white shadow-md
-                        bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-700
-                        bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500"
-                    >
-                        Approve
-                    </motion.button>
-
-                    <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        whileHover={{ scale: 1.03 }}
-                        className="flex-1 rounded-xl py-2.5 font-semibold text-white shadow-md
-                        bg-gradient-to-r from-red-500 via-red-400 to-red-700
-                        bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500"
-                    >
-                        Reject
-                    </motion.button>
-
-                    </div>
-                )}
-
-                {campaign.status === "ACTIVE" && (
-                    <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    whileHover={{ scale: 1.03 }}
-                    className="w-full rounded-xl py-3 font-semibold text-white shadow-md
-                    bg-gradient-to-r from-blue-500 via-blue-400 to-blue-700
-                    bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500"
-                    >
-                    Mark as Completed
-                    </motion.button>
-                )}
-
-                {campaign.status === "COMPLETED" && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-                    Campaign already completed ✅
-                    </p>
-                )}
-
-                {campaign.status === "REJECTED" && (
-                    <p className="text-sm text-red-500 text-center">
-                    Campaign rejected ❌
-                    </p>
-                )}
-
-                </motion.div>
-
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        @{profileData?.profile?.username || "username"}
+      </p>
     </div>
 
   </div>
-</section>
+        )}
+        </div>
+           <motion.div
+  initial={{ opacity: 0, y: 12 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.4 }}
+  className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-gray-200/60 dark:border-gray-700/60 space-y-4"
+>
+
+  {/* Header */}
+  <div className="flex items-center justify-between">
+    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+      Campaign Actions
+    </h4>
+
+    {/* Status Badge */}
+    <span className={`text-xs px-3 py-1 rounded-full font-medium
+      ${
+        campaign.status === "PENDING"
+          ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-400"
+          : campaign.status === "ACTIVE"
+          ? "bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400"
+          : campaign.status === "COMPLETED"
+          ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400"
+          : "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400"
+      }`}
+    >
+      {campaign.status}
+    </span>
+  </div>
+
+  {/* Description */}
+  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+    {adminStatusMessages[campaign.status] || "No status information available."}
+  </p>
+
+  {/* Divider */}
+  <div className="border-t border-gray-200 dark:border-gray-700"></div>
+
+  {/* ================= ACTION BUTTONS ================= */}
+
+  {campaign.status === "PENDING" && (
+    <div className="flex gap-3">
+
+      <motion.button
+        onClick={() => onChangeStatusOfCampaign("ACTIVE")}
+        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.03 }}
+        className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 font-semibold text-white shadow-md
+        bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-700"
+      >
+        {approveLoader?<ClipLoader size={18}/>:
+        <>
+        <Check size={16} />
+        Approve
+        </>
+        }
+      </motion.button>
+
+      <motion.button
+        onClick={() => onChangeStatusOfCampaign("REJECTED")}
+        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.03 }}
+        className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 font-semibold text-white shadow-md
+        bg-gradient-to-r from-red-500 via-red-400 to-red-700"
+      >
+        {rejectLoader?<ClipLoader size={18}/>:<>
+        <XCircle size={16} />
+        Reject
+        </>}
+      </motion.button>
+
+    </div>
+  )}
+
+  {campaign.status === "ACTIVE" && (
+    <motion.button
+      onClick={() => onChangeStatusOfCampaign("COMPLETED")}
+      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.03 }}
+      className="w-full flex items-center justify-center gap-2 rounded-xl py-3 font-semibold text-white shadow-md
+      bg-gradient-to-r from-blue-500 via-blue-400 to-blue-700"
+    >
+      {completeLoader?<ClipLoader size={18}/>:<>
+      <CheckCircle size={18} />
+      Mark as Completed
+      </>}
+    </motion.button>
+  )}
+
+  {/* ================= STATUS FEEDBACK ================= */}
+
+  {campaign.status === "COMPLETED" && (
+    <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50 dark:bg-emerald-500/10 flex items-start gap-3">
+      <CheckCircle className="text-emerald-500 w-5 h-5 mt-0.5" />
+      <div>
+        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+          Campaign Completed
+        </p>
+        <p className="text-xs text-emerald-500 dark:text-emerald-300">
+          This campaign has been successfully closed.
+        </p>
+      </div>
+    </div>
+  )}
+
+  {campaign.status === "REJECTED" && (
+    <div className="p-4 rounded-xl border border-red-200 bg-red-50 dark:bg-red-500/10 flex items-start gap-3">
+      <XCircle className="text-red-500 w-5 h-5 mt-0.5" />
+      <div>
+        <p className="text-sm font-semibold text-red-600 dark:text-red-400">
+          Campaign Rejected
+        </p>
+        <p className="text-xs text-red-500 dark:text-red-300">
+          This campaign was not approved and is no longer active.
+        </p>
+      </div>
+    </div>
+  )}
+
+</motion.div>
+
+        </div>
+
+    </div>
+    </section>
     }
     </>
   )

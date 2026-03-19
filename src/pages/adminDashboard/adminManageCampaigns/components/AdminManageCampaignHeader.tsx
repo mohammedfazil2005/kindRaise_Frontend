@@ -1,11 +1,14 @@
 
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Plus } from "lucide-react";
 import type { AdminCampaignHeaderProps } from "../../../../interfaces/interfaces";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const AdminManageCampaignHeader = ({setSearch,setStatus}:AdminCampaignHeaderProps) => {
 
-  const [searchValue,setSearchValue]=useState("")
+  const [searchValue,setSearchValue]=useState("");
+  const navigate=useNavigate();
   
 
   useEffect(() => {
@@ -14,7 +17,7 @@ const AdminManageCampaignHeader = ({setSearch,setStatus}:AdminCampaignHeaderProp
   }, 800);
 
   return () => clearTimeout(timer);
-}, [searchValue]);
+  }, [searchValue]);
 
   
   return (
@@ -32,9 +35,16 @@ const AdminManageCampaignHeader = ({setSearch,setStatus}:AdminCampaignHeaderProp
           </p>
         </div>
 
-        <button className="bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition">
-          + Create Campaign
-        </button>
+          <motion.button
+          onClick={()=>navigate(`/admin/createcampaign`)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 300 }}
+          className="bg-emerald-500 flex items-center gap-2 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-md hover:bg-emerald-600 transition"
+          >
+        <Plus size={18} />
+        Create Campaign
+        </motion.button>
       </div>
 
       {/* Search + Filters */}

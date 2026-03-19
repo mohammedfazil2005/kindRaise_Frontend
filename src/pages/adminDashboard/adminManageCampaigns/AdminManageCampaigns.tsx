@@ -10,7 +10,7 @@ const AdminManageCampaigns = () => {
   const [search,setSearch]=useState<string>("")
   return (
     <div className='space-y-8 mt-10'>
-      <AdminManageCampaignHeader setSearch={setSearch} setStatus={setStatus}/>
+      <AdminManageCampaignHeader setSearch={setSearch} status={status} setStatus={setStatus}/>
       <div className="grid grid-cols-12 gap-8">
         <AdminManageCampaignCategories setCategory={setCategory}/>
         <AdminManageCampaignCards status={status} category={category} search={search}/>

@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchSingleCampaign } from '../../../services/apis/CampaignApi';
 import moment from 'moment';
-import { Hourglass, Users } from 'lucide-react';
+import { CheckCircle, Clock, Hourglass, Users, XCircle } from 'lucide-react';
 import {CampaignDetailsSkeleton} from '../../../skeltons/CampaignSkeltons';
 import { fetchProfileById } from '../../../services/apis/ProfileApi';
 import { createOrder, failedOrder, verifyOrder } from '../../../services/apis/RazorPayApi';
@@ -153,17 +153,17 @@ const UserViewCampaign = () => {
         <div className="flex items-center gap-4 mt-6">
 
           <img
-            src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData.id}`}
+            src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData.profile.id}`}
             alt="org"
             className="w-12 h-12 rounded-full object-cover"
           />
 
           <div>
             <p className="font-semibold text-gray-800 dark:text-gray-200">
-              {profileData?.fullName}
+              {profileData?.profile.fullName}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-            {profileData?.role === "USER" ? "Community Member" : "Platform Administrator"}
+            {profileData?.profile?.role === "USER" ? "Community Member" : "Platform Administrator"}
             </p>
           </div>
 
@@ -287,7 +287,7 @@ const UserViewCampaign = () => {
       </div>
 
       {/* Volunteer */}
-      <div className="bg-gray-900 dark:bg-gray-800 text-white rounded-xl p-6">
+      <div className="bg-gray-900 dark:bg-gray-800 text-white rounded-xl p-4">
 
         <h4 className="font-bold text-lg mb-2">
           Become a Volunteer
@@ -301,21 +301,55 @@ const UserViewCampaign = () => {
           Learn More
         </button>
 
-      </div>:
+      </div>
       </>
-      :  <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border dark:border-gray-700 text-center">
+      : <div className="mt-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/40 backdrop-blur-sm p-5 space-y-4">
 
-    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-      Donations Unavailable
-    </h3>
+  <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">
+    Donations Unavailable
+  </h3>
 
-    <p className="text-sm text-gray-500 dark:text-gray-400">
-      {campaign.status === "PENDING" && "This campaign is waiting for admin approval."}
-      {campaign.status === "REJECTED" && "This campaign was rejected and cannot accept donations."}
-      {campaign.status === "COMPLETED" && "This campaign has successfully completed."}
-    </p>
+  {/* PENDING */}
+  {campaign.status === "PENDING" && (
+    <div className="p-4 rounded-xl border border-yellow-200 bg-yellow-50 dark:bg-yellow-500/10 flex items-center gap-3">
+      <Clock className="text-yellow-500 w-5 h-5" />
+      <p className="text-sm text-yellow-600 dark:text-yellow-400">
+        This campaign is waiting for admin approval.
+      </p>
+    </div>
+  )}
 
-  </div>
+  {/* REJECTED */}
+  {campaign.status === "REJECTED" && (
+    <div className="p-4 rounded-xl border border-red-200 bg-red-50 dark:bg-red-500/10 flex items-start gap-3">
+      <XCircle className="text-red-500 w-5 h-5 mt-0.5" />
+      <div>
+        <p className="text-sm font-semibold text-red-600 dark:text-red-400">
+          Campaign Rejected
+        </p>
+        <p className="text-xs text-red-500 dark:text-red-300">
+          This campaign did not meet approval guidelines.
+        </p>
+      </div>
+    </div>
+  )}
+
+  {/* COMPLETED */}
+  {campaign.status === "COMPLETED" && (
+    <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50 dark:bg-emerald-500/10 flex items-start gap-3">
+      <CheckCircle className="text-emerald-500 w-5 h-5 mt-0.5" />
+      <div>
+        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+          Campaign Completed 🎉
+        </p>
+        <p className="text-xs text-emerald-500 dark:text-emerald-300">
+          This campaign has successfully reached its goal.
+        </p>
+      </div>
+    </div>
+  )}
+
+</div>
       }
 
     </div>
