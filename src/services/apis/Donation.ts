@@ -7,3 +7,7 @@ export const fetchUserDonations=async()=>{
 export const fetchUserDonationDashboardStats=async()=>{
     return await CommonApi("GET",'/donation/dashboard/user/stats')
 }
+
+export const findAllDonationsAdmin=async(page:number)=>{
+    return await CommonApi("GET",`/donation/all?page=${page}`)
+}

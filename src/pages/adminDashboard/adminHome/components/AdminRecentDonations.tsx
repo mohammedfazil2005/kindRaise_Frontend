@@ -34,7 +34,7 @@ export default function AdminRecentDonations() {
 
         {isLoading?Array.from({length:3}).map((_,_1)=>(
                       <AdminDashboardActivityRowSkeleton/>
-      )) :data.map((item:UserDonationType, index:number) => (
+      )) :data?.content?.map((item:UserDonationType, index:number) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, x: -20 }}

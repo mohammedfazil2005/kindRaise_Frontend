@@ -60,7 +60,8 @@ const AdminRecentCampaigns = () => {
                     className={`text-xs px-2 py-1 rounded-full font-medium
                     ${
                       item.status === "ACTIVE"
-                        ? "bg-emerald-100 text-emerald-600 font-light dark:bg-emerald-900/30"
+                        ? "bg-emerald-100 text-emerald-600 font-light dark:bg-emerald-900/30":
+                        item.status=="REJECTED"?"bg-red-100 text-red-600 font-light dark:bg-yellow-900/30"
                         : "bg-yellow-100 text-yellow-600 font-light dark:bg-yellow-900/30"
                     }`}
                   >

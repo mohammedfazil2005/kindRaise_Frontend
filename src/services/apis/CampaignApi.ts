@@ -49,3 +49,7 @@ export const updateCampaign=async(id:string,data:FormData)=>{
 export const updateCampaignStatus=async(status:string,campaign_id:string)=>{
     return await CommonApi("PUT",`/campaign/update/campaign/status/${campaign_id}/${status}`);
 }
+
+export const getTotalNumberOfPendingRequests=async()=>{
+    return await CommonApi("GET",`/campaign/pending/count`);
+}

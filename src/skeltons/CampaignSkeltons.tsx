@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 
 
 export const CampaignCardSkeleton = () => {
@@ -382,3 +383,57 @@ export const ChartSkeleton = () => {
 };
 
 
+
+
+
+
+export const DonationTableSkeleton = ({ rows = 5 }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+    >
+      {/* Header Skeleton */}
+      <div className="grid grid-cols-5 gap-4 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={i}
+            className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
+          />
+        ))}
+      </div>
+
+      {/* Rows Skeleton */}
+      {[...Array(rows)].map((_, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: index * 0.1 }}
+          className="grid grid-cols-5 gap-7 px-6 py-4 items-center border-b border-gray-100 dark:border-gray-800"
+        >
+          {/* Donor */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-gray-300 dark:bg-gray-700 animate-pulse" />
+            <div className="h-4 w-24 bg-gray-300 dark:bg-gray-700 rounded animate-pulse" />
+          </div>
+
+          {/* Campaign */}
+          <div className="h-4 w-32 bg-gray-300 dark:bg-gray-700 rounded animate-pulse" />
+
+          {/* Amount */}
+          <div className="h-4 w-20 bg-gray-300 dark:bg-gray-700 rounded animate-pulse" />
+
+          {/* Date */}
+          <div className="h-4 w-24 bg-gray-300 dark:bg-gray-700 rounded animate-pulse" />
+
+          {/* Status */}
+          <div className="h-6 w-20 rounded-full bg-gray-300 dark:bg-gray-700 animate-pulse" />
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+};
+
+ ;

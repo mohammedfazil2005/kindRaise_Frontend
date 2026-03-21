@@ -29,6 +29,7 @@ export interface CampaignInterface {
   category_title: string;
   status: string;
   user_id: string;
+  creatorName:string;
   amount:number
 }
 
@@ -55,6 +56,7 @@ export interface CampaignContextType {
 }
 
 export interface UserDonationType{
+    id:string
     title:string
     description:string
     amount:number
@@ -63,6 +65,7 @@ export interface UserDonationType{
     campaign_id:string
     fullName:string
     user_id:string
+    donationDate:string
 }
 
 export interface UserDonationDashboardStats{

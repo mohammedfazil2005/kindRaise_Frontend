@@ -101,7 +101,7 @@ const AdminViewCampaign = () => {
                 setRejectLoader(false)
                 setCompleteLoader(false)
             }
-        }
+    }
 
     
 
@@ -172,7 +172,7 @@ const AdminViewCampaign = () => {
               {profileData?.profile?.fullName}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-            {profileData?.role === "USER" ? "Community Member" : "Platform Administrator"}
+            {profileData?.profile.role === "USER" ? "Community Member" : "Platform Administrator"}
             </p>
           </div>
 
