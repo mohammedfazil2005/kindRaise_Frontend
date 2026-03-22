@@ -1,7 +1,25 @@
 
 import { Search, Filter, Users } from "lucide-react";
+import { useEffect, useState, type SetStateAction } from "react";
+import type React from "react";
 
-const AdminUserHeader = () => {
+type AdminUserHeaderProps={
+    setSearch:React.Dispatch<SetStateAction<string>>
+    setRole:React.Dispatch<SetStateAction<string>>
+}
+
+const AdminUserHeader = ({setSearch,setRole}:AdminUserHeaderProps) => {
+
+    const [query,setQuery]=useState("")
+
+    useEffect(()=>{
+        let timer=setTimeout(()=>{
+            setSearch(query)
+        },800)
+        return ()=>clearTimeout(timer);
+    },[query])
+
+
     return (
         <div className="space-y-6">
 
@@ -41,14 +59,15 @@ const AdminUserHeader = () => {
                     />
 
                     <input
+                        onChange={(e)=>setQuery(e.target.value)}
                         type="text"
                         placeholder="Search users by name"
                         className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200
-            dark:border-gray-700
-            bg-white dark:bg-gray-900
-            text-gray-700 dark:text-gray-200
-            placeholder-gray-400
-            focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
+                        dark:border-gray-700
+                        bg-white dark:bg-gray-900
+                        text-gray-700 dark:text-gray-200
+                        placeholder-gray-400
+                        focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
                     />
 
                 </div>
@@ -62,15 +81,16 @@ const AdminUserHeader = () => {
                     />
 
                     <select
+                    onChange={(e)=>setRole(e.target.value)}
                         className="pl-9 pr-6 py-3 rounded-xl border border-gray-200
-            dark:border-gray-700
-            bg-white dark:bg-gray-900
-            text-gray-700 dark:text-gray-200
-            focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                         dark:border-gray-700
+                         bg-white dark:bg-gray-900
+                         text-gray-700 dark:text-gray-200
+                        focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
-                        <option>All Users</option>
-                        <option>Donors</option>
-                        <option>Admins</option>
+                        <option value={""}>All Users</option>
+                        <option value={"USER"}>Donors</option>
+                        <option value={"ADMIN"}>Admins</option>
                     </select>
 
                 </div>

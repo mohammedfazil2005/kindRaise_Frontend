@@ -1,36 +1,44 @@
 
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Eye, Trash2 } from "lucide-react";
+import { fetchAllUsers } from "../../../../services/apis/UserApi";
+import { useEffect } from "react";
+import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
+import type { UserInterface } from "../../../../interfaces/interfaces";
 
-const users = [
-    {
-        id: 1,
-        name: "Rahul Sharma",
-        username: "rahul@gmail.com",
-        avatar: "https://i.pravatar.cc/40?img=3",
-        role: "Donor",
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "Aisha Khan",
-        username: "aisha@gmail.com",
-        avatar: "https://i.pravatar.cc/40?img=5",
-        role: "Admin",
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "John Mathew",
-        username: "john@gmail.com",
-        avatar: "https://i.pravatar.cc/40?img=7",
-        role: "Donor",
-        status: "Blocked",
-    },
-];
+type AdminUserContentProps={
+    search:string
+    role:string
+}
 
-const AdminUserContent = () => {
+const AdminUserContent = ({search,role}:AdminUserContentProps) => {
+    const {data,isLoading}=useQuery({
+        queryKey:["adminUserContent",search,role],
+        queryFn:()=>fetchAllUsers(0,search,role)
+    })
+
+    useEffect(()=>{
+        console.log(data)
+    },[data])
+
+
     return (
+        <>
+        {isLoading?<DonationTableSkeleton/>:
+        data?.content?.length==0?
+              <div className="text-center py-16">
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                {search ? "No Results Found" : "No Users Available"}
+            </h2>
+
+                <p className="text-sm text-gray-500 mt-2">
+                    {search
+                    ? `No users or admins found for "${search}". Try a different keyword.`
+                    : "There are no users or admins to display at the moment."}
+                </p>
+                </div>
+        :
         <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
@@ -48,7 +56,7 @@ const AdminUserContent = () => {
             </div>
 
             {/* Users List */}
-            {users.map((user, index) => (
+            {data?.content?.map((user:UserInterface, index:number) => (
                 <motion.div
                     key={user.id}
                     initial={{ opacity: 0, y: 15 }}
@@ -60,12 +68,12 @@ const AdminUserContent = () => {
                     {/* User Info */}
                     <div className="flex items-center gap-3">
                         <img
-                            src={user.avatar}
-                            alt={user.name}
+                             src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${user.id}`}
+                            alt={user.fullName}
                             className="w-9 h-9 rounded-full object-cover"
                         />
                         <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {user.name}
+                            {user.fullName}
                         </span>
                     </div>
 
@@ -83,7 +91,7 @@ const AdminUserContent = () => {
                     <span>
                         <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold
-              ${user.status === "Active"
+              ${user.status === "ACTIVE"
                                     ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30"
                                     : "bg-red-100 text-red-600 dark:bg-red-900/30"
                                 }`}
@@ -108,6 +116,8 @@ const AdminUserContent = () => {
                 </motion.div>
             ))}
         </motion.div>
+}
+        </>
     );
 };
 

@@ -8,6 +8,11 @@ export const fetchUserDonationDashboardStats=async()=>{
     return await CommonApi("GET",'/donation/dashboard/user/stats')
 }
 
-export const findAllDonationsAdmin=async(page:number)=>{
-    return await CommonApi("GET",`/donation/all?page=${page}`)
+export const findAllDonationsAdmin=async(page:number,search:string)=>{
+    return await CommonApi("GET",`/donation/all?page=${page}&search=${search}`)
 }
+
+export const fetchAdminDonationDashboardStats=async()=>{
+    return await CommonApi("GET","/donation/admin/dashboard/donation/stats")
+}
+

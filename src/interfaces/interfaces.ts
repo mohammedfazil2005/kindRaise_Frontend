@@ -95,6 +95,7 @@ export interface UserInterface{
     role:string
     phone:string
     createdAt:string
+    status:string
 }
 
 
@@ -118,3 +119,4 @@ export type AdminCampaignCardsProps = {
   category: string
   status: string
 }
+

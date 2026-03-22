@@ -8,14 +8,17 @@ import moment from "moment";
 import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
 
 
+type AdminCampaignDonationContentPropsType={
+    search:string
+}
 
-const AdminCampaignDonationContent = () => {
+const AdminCampaignDonationContent = ({search}:AdminCampaignDonationContentPropsType) => {
 
     const [page,setPage]=useState(0)
 
     const {data,isLoading}=useQuery({
-        queryKey:["allDonations",page],
-        queryFn:()=>findAllDonationsAdmin(page)
+        queryKey:["allDonations",page,search],
+        queryFn:()=>findAllDonationsAdmin(page,search)
     })
     useEffect(()=>{
         console.log(data)
@@ -24,6 +27,18 @@ const AdminCampaignDonationContent = () => {
     return (
         <>
         {isLoading?<DonationTableSkeleton/>:
+        data?.content?.length==0?
+          <div className="text-center py-16">
+
+          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+            No Results Found
+          </h2>
+
+          <p className="text-sm text-gray-500 mt-2">
+             No donations match your search criteria.
+          </p>
+
+        </div>:
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

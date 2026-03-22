@@ -1,7 +1,23 @@
 
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
+import React, { useEffect, useState, type SetStateAction } from "react";
 
-const AdminCampaignDonationHeader = () => {
+type AdminCampaignDonationHeaderPropsType={
+    setSearch:React.Dispatch<SetStateAction<string>>;
+}
+
+const AdminCampaignDonationHeader = ({setSearch}:AdminCampaignDonationHeaderPropsType) => {
+
+    const [query,seyQuery]=useState("");
+
+    useEffect(()=>{
+        let timer=setTimeout(()=>{
+            setSearch(query)
+        },800)
+        return () => clearTimeout(timer); 
+    },[query])
+
+
     return (
         <div className="space-y-6">
 
@@ -27,6 +43,7 @@ const AdminCampaignDonationHeader = () => {
                     />
 
                     <input
+                        onChange={(e)=>seyQuery(e.target.value)}
                         type="text"
                         placeholder="Search donations by donor name or campaign..."
                         className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200
@@ -38,26 +55,8 @@ const AdminCampaignDonationHeader = () => {
                     />
                 </div>
 
-                {/* Campaign Filter */}
-                <div className="relative">
-                    <Filter
-                        size={16}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                    />
-
-                    <select
-                        className="pl-9 pr-6 py-3 rounded-xl border border-gray-200
-            dark:border-gray-700
-            bg-white dark:bg-gray-900
-            text-gray-700 dark:text-gray-200
-            focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                        <option>All Campaigns</option>
-                        <option>Flood Relief</option>
-                        <option>Medical Aid</option>
-                        <option>Education Support</option>
-                    </select>
-                </div>
+                
+            
 
             </div>
 
