@@ -9,7 +9,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { userDashboardChart } from "../../../../services/apis/UserDashboardApi";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ChartSkeleton } from "../../../../skeltons/CampaignSkeltons";
 import { CampaignContext } from "../../../../contexts/CampainContext";
 
@@ -21,13 +21,11 @@ const UserDashboardChart = () => {
 
     const {data,isLoading}=useQuery({
         queryKey:['recharts',paymentAdded],
-        queryFn:userDashboardChart,
+        queryFn:()=>userDashboardChart(),
         staleTime:1000*60*10
     })
 
-    useEffect(()=>{
-        console.log(data)
-    },[data])
+    
 
   const allMonths = Array.from({ length: 12 }, (_, i) => {
   const date = new Date(2026, i); // year, month index

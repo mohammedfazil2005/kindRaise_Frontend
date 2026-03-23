@@ -5,7 +5,7 @@ import { ArrowBigLeft, BellRing, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toaster } from "../../../services/Toaster";
 import { useQuery } from "@tanstack/react-query";
-import { fetchLoggedUserProfile } from "../../../services/apis/ProfileApi";
+import { fetchLoggedInUserProfile } from "../../../services/apis/ProfileApi";
 import { CampaignContext } from "../../../contexts/CampainContext";
 import { totalMessagesUnRead } from "../../../services/apis/UserDashboardApi";
 
@@ -18,7 +18,7 @@ export default function UserNavbar() {
 
   const {data}=useQuery({
     queryKey:['profile',profileUpdated],
-    queryFn:fetchLoggedUserProfile,
+    queryFn:fetchLoggedInUserProfile,
      staleTime:1000*60*10
   })
   const {data:notificationCount}=useQuery({

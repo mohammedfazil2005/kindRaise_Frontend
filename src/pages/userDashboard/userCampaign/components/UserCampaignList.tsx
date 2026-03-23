@@ -15,6 +15,7 @@ import { CampaignCardSkeleton } from "../../../../skeltons/CampaignSkeltons";
 const UserCampaignList = () => {
      
       const [showShare, setShowShare] = useState<string | null>(null);
+      // const [page,setPage]=useState(0)
      
       const navigate=useNavigate()
       
@@ -22,7 +23,7 @@ const UserCampaignList = () => {
 
       const {data:campaigns,isLoading}=useQuery({
         queryKey:['usercampaigns',campaignCreated],
-        queryFn:fetchUserCampaigns,
+        queryFn:()=>fetchUserCampaigns(0,7),
         staleTime:1000*60*10
       })
 
@@ -50,7 +51,7 @@ const UserCampaignList = () => {
 
           </div>
       ):
-      campaigns?.map((campaign:CampaignInterface, index:number) => (
+      campaigns?.content?.map((campaign:CampaignInterface, index:number) => (
          <motion.div key={index} whileHover={{ y: -5 }} className="relative w-full overflow-hidden rounded-3xl bg-black">
             <div className="relative h-[220px] w-full overflow-hidden">
 

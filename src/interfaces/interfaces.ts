@@ -120,3 +120,16 @@ export type AdminCampaignCardsProps = {
   status: string
 }
 
+
+
+export interface TransactionInterface{
+    id: string
+    amount:number
+    transactionStatus:string 
+    PaymentReference: string
+    transactionDate: string
+    campaign_id:string
+    campaign_name:string 
+    user_id: string
+    user_name: string
+}

@@ -33,6 +33,7 @@ import UserOldPassword from './pages/userDashboard/userProfile/UserOldPassword'
 import ProtectedRoutes from './utils/ProtectedRoutes'
 import AdminViewCampaign from './pages/adminDashboard/AdminViewCampaignPage/AdminViewCampaign'
 import AdminCreateCampaign from './pages/adminDashboard/adminCreateCampaign/AdminCreateCampaign'
+import AdminViewUserProfile from './pages/adminDashboard/AdminViewUserProfile/AdminViewUserProfile'
 
 
 function App() {
@@ -81,6 +82,7 @@ function App() {
               <Route path='transactions' element={<AdminTransactions/>}/>
               <Route path='viewcampaign/:id' element={<AdminViewCampaign/>}/>
               <Route path='createcampaign' element={<AdminCreateCampaign/>}/>
+              <Route path='viewuserprofile/:id' element={<AdminViewUserProfile/>}/>
         </Route>
         </Route>
 

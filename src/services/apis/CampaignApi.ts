@@ -38,8 +38,9 @@ export const fetchUserCampaignDashboardStats=async()=>{
     return await CommonApi("GET",'/campaign/dashboard/user');
 }
 
-export const fetchUserCampaigns=async()=>{
-    return await CommonApi("GET",'/campaign/user/campaigns');
+export const fetchUserCampaigns=async(currentPage:number,size:number,userid?:string)=>{
+    
+    return await CommonApi("GET",`/campaign/user/campaigns?userId=${userid}&currentPage=${currentPage}&sizePerPage=${size}`);
 }
 
 export const updateCampaign=async(id:string,data:FormData)=>{
@@ -52,4 +53,7 @@ export const updateCampaignStatus=async(status:string,campaign_id:string)=>{
 
 export const getTotalNumberOfPendingRequests=async()=>{
     return await CommonApi("GET",`/campaign/pending/count`);
+}
+export const getTotalNumberOfCampaignsOfUser=async(id:string)=>{
+    return await CommonApi("GET",`/campaign/user/totalcampaigns/${id}`);
 }
