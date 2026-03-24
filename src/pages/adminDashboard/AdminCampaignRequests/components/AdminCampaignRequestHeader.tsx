@@ -5,10 +5,11 @@ import { getTotalNumberOfPendingRequests } from "../../../../services/apis/Campa
 import { useQuery } from "@tanstack/react-query";
 
 type CampaignHeaderSearchType={
-  setSearch:React.Dispatch<SetStateAction<string>>;
+  setSearch:React.Dispatch<SetStateAction<string>>
+  setPage:React.Dispatch<SetStateAction<number>>
 }
 
-const AdminCampaignRequestHeader = ({setSearch}:CampaignHeaderSearchType) => {
+const AdminCampaignRequestHeader = ({setSearch,setPage}:CampaignHeaderSearchType) => {
   const [query, setQuery] = useState("");
 
   const inputRef:any = useRef(null);
@@ -34,6 +35,7 @@ const AdminCampaignRequestHeader = ({setSearch}:CampaignHeaderSearchType) => {
     useEffect(()=>{
         const timer = setTimeout(() => {
           setSearch(query);
+          setPage(0)
         }, 800);
 
       return () => {

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import {  Share2 } from 'lucide-react';
-import  { useEffect, useState } from 'react'
+import {  FolderOpen, Share2 } from 'lucide-react';
+import  { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { fetchActiveCampaigns } from '../../../services/apis/CampaignApi';
 import type { CampaignInterface } from '../../../interfaces/interfaces';
 import { useQuery } from '@tanstack/react-query';
@@ -14,9 +14,11 @@ import { toaster } from '../../../services/Toaster';
 type CategoryProp={
   category:string
   search:string
+  page:number,
+  setPage:Dispatch<SetStateAction<number>>
 }
 
-const ExploreCard = ({category,search}:CategoryProp) => {
+const ExploreCard = ({category,search,page,setPage}:CategoryProp) => {
      
       const [shareVisible, setShareVisible] = useState<Record<string, boolean>>({});
 
@@ -25,7 +27,7 @@ const ExploreCard = ({category,search}:CategoryProp) => {
 
    const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
       queryKey:["activeCampaigns",category,search],
-      queryFn:()=>fetchActiveCampaigns(search,category,'ACTIVE'),
+      queryFn:()=>fetchActiveCampaigns(search,category,'ACTIVE',page,9),
       staleTime:1000*60*10
     })
 
@@ -89,7 +91,28 @@ const ExploreCard = ({category,search}:CategoryProp) => {
 
             <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
-              {campaigns.map((property:CampaignInterface, index:number) => (
+              {campaigns?.content?.length==0?
+                    <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="col-span-full flex flex-col items-center justify-center py-20 text-center"
+          >
+            {/* ICON */}
+            <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+              <FolderOpen className="text-gray-400" size={28} />
+            </div>
+
+            {/* TITLE */}
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+              No Campaigns Found
+            </h2>
+
+            {/* DESCRIPTION */}
+            <p className="text-sm text-gray-500 mt-2 max-w-sm">
+              There are no campaigns available at the moment. Try adjusting filters or check back later.
+            </p>
+          </motion.div>:
+              campaigns?.content?.map((property:CampaignInterface, index:number) => (
 
                   <motion.div
                         key={index}  className="relative w-full overflow-hidden rounded-3xl bg-black">
@@ -160,7 +183,7 @@ const ExploreCard = ({category,search}:CategoryProp) => {
                         navigate("/login")
                         toaster("Please Login to Continue.")
                       }
-                     }}  initial={{ opacity: 0, y: 15 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
+                     }}  initial={{ opacity: 0, y: 5 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.1 }}  className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
                                        View Campaign
                       </motion.button>
                 
@@ -171,6 +194,64 @@ const ExploreCard = ({category,search}:CategoryProp) => {
               ))}
 
             </div>
+
+           {campaigns?.totalPages>1&&(
+                <motion.div
+             initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="flex justify-center items-center gap-2 mt-6 mb-4 flex-wrap"
+                >
+            {/* Prev */}
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    disabled={page === 0}
+                    onClick={() => setPage((prev) => prev - 1)}
+                    className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+                    bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+                    disabled:opacity-40 disabled:cursor-not-allowed
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                    Prev
+                </motion.button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center gap-2">
+                {Array.from({ length: campaigns?.totalPages || 0 }).map((_, i) => (
+                <motion.button
+                    key={i}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setPage(i)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold border transition-all
+                    ${
+                    page === i
+                        ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/30"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }`}
+                >
+                    {i + 1}
+                </motion.button>
+                ))}
+            </div>
+
+                {/* Next */}
+            <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                disabled={page + 1 >= campaigns?.totalPages}
+                onClick={() => setPage((prev) => prev + 1)}
+                className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+                bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+                disabled:opacity-40 disabled:cursor-not-allowed
+                hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+            >
+                Next
+            </motion.button>
+
+            </motion.div>
+           )}
 
           </motion.div>
 }

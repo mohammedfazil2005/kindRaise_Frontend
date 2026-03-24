@@ -6,9 +6,10 @@ import type React from "react";
 type AdminUserHeaderProps={
     setSearch:React.Dispatch<SetStateAction<string>>
     setRole:React.Dispatch<SetStateAction<string>>
+    setPage:React.Dispatch<SetStateAction<number>>
 }
 
-const AdminUserHeader = ({setSearch,setRole}:AdminUserHeaderProps) => {
+const AdminUserHeader = ({setSearch,setRole,setPage}:AdminUserHeaderProps) => {
 
     const [query,setQuery]=useState("")
 
@@ -81,7 +82,10 @@ const AdminUserHeader = ({setSearch,setRole}:AdminUserHeaderProps) => {
                     />
 
                     <select
-                    onChange={(e)=>setRole(e.target.value)}
+                    onChange={(e)=>{
+                        setRole(e.target.value)
+                        setPage(0)
+                    }}
                         className="pl-9 pr-6 py-3 rounded-xl border border-gray-200
                          dark:border-gray-700
                          bg-white dark:bg-gray-900

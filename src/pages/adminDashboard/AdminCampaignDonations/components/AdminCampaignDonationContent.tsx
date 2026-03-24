@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { findAllDonationsAdmin } from "../../../../services/apis/Donation";
-import { useEffect, useState } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 import type { UserDonationType } from "../../../../interfaces/interfaces";
 import moment from "moment";
 import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
@@ -10,11 +10,13 @@ import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
 
 type AdminCampaignDonationContentPropsType={
     search:string
+    page:number
+    setPage:Dispatch<SetStateAction<number>>
 }
 
-const AdminCampaignDonationContent = ({search}:AdminCampaignDonationContentPropsType) => {
+const AdminCampaignDonationContent = ({search,setPage,page}:AdminCampaignDonationContentPropsType) => {
 
-    const [page,setPage]=useState(0)
+   
 
     const {data,isLoading}=useQuery({
         queryKey:["allDonations",page,search],

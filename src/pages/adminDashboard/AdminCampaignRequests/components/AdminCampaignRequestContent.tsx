@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AdminCampaignRequestCardSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
 import type { CampaignInterface } from "../../../../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { toaster } from "../../../../services/Toaster";
 import { CampaignContext } from "../../../../contexts/CampainContext";
 import { ClipLoader } from "react-spinners";
@@ -14,13 +14,15 @@ import { ClipLoader } from "react-spinners";
 
 type searchAdminCampaignRequestType={
   search:string
+  page:number
+  setPage:Dispatch<SetStateAction<number>>
 }
 
-const AdminCampaignRequestContent = ({search}:searchAdminCampaignRequestType) => {
+const AdminCampaignRequestContent = ({search,page,setPage}:searchAdminCampaignRequestType) => {
 
    const [approveLoader,setApproveLoader]=useState(false);
    const [rejectLoader,setRejectLoader]=useState(false);
-   const [page,setPage]=useState(0)
+   
 
    const {setCampaignCreated}=useContext(CampaignContext)!
 

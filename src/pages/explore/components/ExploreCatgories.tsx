@@ -7,10 +7,11 @@ import type { CategoryInterface } from "../../../interfaces/interfaces";
 
 type ExploreCategoriesProps={
   setCategory:Dispatch<SetStateAction<string>>;
+  setPage:Dispatch<SetStateAction<number>>;
 }
 
 
-const ExploreCatgories = ({setCategory}:ExploreCategoriesProps) => {
+const ExploreCatgories = ({setCategory,setPage}:ExploreCategoriesProps) => {
 
   const [active, setActive] = useState("All");
   const [open, setOpen] = useState(false);
@@ -61,6 +62,7 @@ const ExploreCatgories = ({setCategory}:ExploreCategoriesProps) => {
                   onClick={() => {
                     setActive('All')
                     setCategory('')
+                    setPage(0)
                   }}
                   whileHover={{ scale: 1.03, x: 4 }}
                   whileTap={{ scale: 0.96 }}
@@ -171,6 +173,7 @@ const ExploreCatgories = ({setCategory}:ExploreCategoriesProps) => {
                         setActive(category.id);
                         setCategory(category.id)
                         setOpen(false);
+                        setPage(0)
                       }}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition
                       ${

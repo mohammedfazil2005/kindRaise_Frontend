@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 
 type HeroSearch={
   setSearch:React.Dispatch<React.SetStateAction<string>>
-  
+  setPage:React.Dispatch<React.SetStateAction<number>>
 }
 
-const Hero = ({setSearch}:HeroSearch) => {
+const Hero = ({setSearch,setPage}:HeroSearch) => {
 
     const [searchValue,setSearchValue]=useState("")
 
     useEffect(() => {
     const timer = setTimeout(() => {
       setSearch(searchValue);
+        setPage(0)
     }, 800);
   
     return () => clearTimeout(timer);

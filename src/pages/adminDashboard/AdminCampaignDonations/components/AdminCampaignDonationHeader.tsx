@@ -4,15 +4,17 @@ import React, { useEffect, useState, type SetStateAction } from "react";
 
 type AdminCampaignDonationHeaderPropsType={
     setSearch:React.Dispatch<SetStateAction<string>>;
+    setPage:React.Dispatch<SetStateAction<number>>
 }
 
-const AdminCampaignDonationHeader = ({setSearch}:AdminCampaignDonationHeaderPropsType) => {
+const AdminCampaignDonationHeader = ({setSearch,setPage}:AdminCampaignDonationHeaderPropsType) => {
 
     const [query,seyQuery]=useState("");
 
     useEffect(()=>{
         let timer=setTimeout(()=>{
             setSearch(query)
+            setPage(0)
         },800)
         return () => clearTimeout(timer); 
     },[query])

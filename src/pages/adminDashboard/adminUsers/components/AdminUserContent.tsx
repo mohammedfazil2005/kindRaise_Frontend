@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Eye } from "lucide-react";
 import { fetchAllUsers } from "../../../../services/apis/UserApi";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, type Dispatch, type SetStateAction } from "react";
 import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
 import type { UserInterface } from "../../../../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
@@ -12,14 +12,16 @@ import { AdminDashboardContext } from "../../../../contexts/AdminDashboardContex
 type AdminUserContentProps={
     search:string
     role:string
+    page:number
+    setPage:Dispatch<SetStateAction<number>>
 }
 
-const AdminUserContent = ({search,role}:AdminUserContentProps) => {
+const AdminUserContent = ({search,role,page,setPage}:AdminUserContentProps) => {
 
     const {user}=useContext(AdminDashboardContext)!
 
     const navigate=useNavigate();
-    const [page,setPage]=useState(0)
+    
     const {data,isLoading}=useQuery({
         queryKey:["adminUserContent",search,role,user,page],
         queryFn:()=>fetchAllUsers(page,search,role)

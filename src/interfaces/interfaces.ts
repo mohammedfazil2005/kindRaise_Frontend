@@ -1,4 +1,5 @@
 import type { AxiosHeaders } from "axios"
+import type { Dispatch, SetStateAction } from "react"
 
 export interface CommonApiInterface{
     method:string
@@ -110,6 +111,7 @@ export interface UserInterface{
 export type AdminCampaignHeaderProps = {
   setSearch: React.Dispatch<React.SetStateAction<string>>
   setStatus: React.Dispatch<React.SetStateAction<string>>
+  setPage: React.Dispatch<React.SetStateAction<number>>
   status:string
 }
 
@@ -123,6 +125,8 @@ export type AdminCampaignCardsProps = {
   search: string
   category: string
   status: string
+  setPage:Dispatch<SetStateAction<number>>
+  page:number
 }
 
 

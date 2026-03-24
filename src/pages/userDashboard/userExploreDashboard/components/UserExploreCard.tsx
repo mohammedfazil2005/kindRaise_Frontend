@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion'
 import {  Share2 } from 'lucide-react';
-import  { useContext, useEffect, useState } from 'react'
+import  { useContext, useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchActiveCampaigns } from '../../../../services/apis/CampaignApi';
 import { CampaignCardSkeleton } from '../../../../skeltons/CampaignSkeltons';
@@ -10,13 +10,16 @@ import moment from 'moment';
 import { CampaignContext } from '../../../../contexts/CampainContext';
 import { toaster } from '../../../../services/Toaster';
 
+type UserExploreCardPropsType={
+  page:number
+  setPage:Dispatch<SetStateAction<number>>
+}
 
-const UserExploreCard = () => {
+
+const UserExploreCard = ({page,setPage}:UserExploreCardPropsType) => {
     //  const [likedCards, setLikedCards] = useState<Record<string, boolean>>({});
       const [shareVisible, setShareVisible] = useState<Record<string, boolean>>({});
       const navigate=useNavigate()
-
-      const [page,setPage]=useState(0)
 
       const {searchCampaign,category,paymentAdded}=useContext(CampaignContext)!
 

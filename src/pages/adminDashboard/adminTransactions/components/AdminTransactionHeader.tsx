@@ -11,9 +11,10 @@ type AdminTransactionHeaderPropsType={
     setCampaignId:Dispatch<SetStateAction<string>>
     status:string
     campaignId:string
+    setPage:Dispatch<SetStateAction<number>>
 }
 
-const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campaignId}:AdminTransactionHeaderPropsType) => {
+const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campaignId,setPage}:AdminTransactionHeaderPropsType) => {
 
     const [query,setQuery]=useState("")
 
@@ -26,7 +27,8 @@ const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campai
 
     const {data,isLoading}=useQuery({
         queryKey:["AdminTransactionHeaderDetails"],
-        queryFn:getCampaginsTitleWithoutPending
+        queryFn:getCampaginsTitleWithoutPending,
+        staleTime:1000*60*10
     })
 
 
@@ -72,7 +74,7 @@ const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campai
                     <input
                     onChange={(e)=>setQuery(e.target.value)}
                         type="text"
-                        placeholder="Search by donor, campaign or transaction ID..."
+                        placeholder="Search by donor, campaign..."
                         className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200
             dark:border-gray-700
             bg-white dark:bg-gray-900
@@ -92,7 +94,10 @@ const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campai
                     />
 
                     <select
-                    onChange={(e)=>setStatus(e.target.value)}
+                    onChange={(e)=>{
+                        setStatus(e.target.value)
+                        setPage(0)
+                    }}
                     value={status}
                         className="pl-9 pr-6 py-3 rounded-xl border border-gray-200
             dark:border-gray-700
@@ -110,7 +115,10 @@ const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campai
 
                 {/* Campaign Filter */}
                 <select
-                onChange={(e)=>setCampaignId(e.target.value)}
+                onChange={(e)=>{
+                    setCampaignId(e.target.value)
+                    setPage(0)
+                }}
                 value={campaignId}
                     className="px-4 py-3 rounded-xl border border-gray-200
           dark:border-gray-700

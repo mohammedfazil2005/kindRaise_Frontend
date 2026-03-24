@@ -1,13 +1,15 @@
-import  { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "../../../../services/apis/CampaignApi";
 import type { CategoryInterface } from "../../../../interfaces/interfaces";
 import { CampaignContext } from "../../../../contexts/CampainContext";
 
+type UserExploreCategoriesPropsType={
+   setPage:Dispatch<SetStateAction<number>>
+}
 
-
-const UserExploreCategories = () => {
+const UserExploreCategories = ({setPage}:UserExploreCategoriesPropsType) => {
   const [active, setActive] = useState("All");
 
   const {setCategory}=useContext(CampaignContext)!
@@ -55,6 +57,7 @@ const UserExploreCategories = () => {
               onClick={() => {
                 setActive("All");
                 setCategory("")
+                setPage(0)
               }}
               className={`px-4 py-2 rounded-lg text-left text-sm transition
                 ${
@@ -74,6 +77,7 @@ const UserExploreCategories = () => {
               onClick={() => {
                 setActive(cat.title)
                 setCategory(cat.id)
+                setPage(0)
               }}
               className={`px-4 py-2 rounded-lg text-left text-sm transition
                 ${

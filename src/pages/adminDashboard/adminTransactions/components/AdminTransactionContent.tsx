@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { fetchAllTransactionsAdmin } from "../../../../services/apis/TransactionApi";
-import { useState } from "react";
+import {  type Dispatch, type SetStateAction } from "react";
 import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
 import type { TransactionInterface } from "../../../../interfaces/interfaces";
 import moment from "moment";
@@ -13,13 +13,16 @@ type AdminTransactionContentPropsType={
     search:string,
     status:string,
     campaignId:string
+    page:number
+    setPage:Dispatch<SetStateAction<number>>
 }
 
-const AdminTransactionContent = ({search,status,campaignId}:AdminTransactionContentPropsType) => {
-    const [page,setPage]=useState(0)
+const AdminTransactionContent = ({search,status,campaignId,page,setPage}:AdminTransactionContentPropsType) => {
+
     const {data,isLoading}=useQuery({
         queryKey:["AdminTransactionContentDetails",search,status,campaignId,page],
-        queryFn:()=>fetchAllTransactionsAdmin(page,8,campaignId,status,search)
+        queryFn:()=>fetchAllTransactionsAdmin(page,8,campaignId,status,search),
+        staleTime:1000*60*10
     })
     return (
         <>

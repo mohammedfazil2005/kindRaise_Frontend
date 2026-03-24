@@ -10,11 +10,11 @@ import moment from 'moment';
 import { CampaignContext } from '../../../../contexts/CampainContext';
 
 
-const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsProps) => {
+const AdminManageCampaignCards = ({search,status,category,setPage,page}:AdminCampaignCardsProps) => {
       
       const [showShare, setShowShare] = useState(false);
       const navigate=useNavigate()
-      const [page,setPage]=useState(0)
+      
 
       const {campaignCreated}=useContext(CampaignContext)!
 

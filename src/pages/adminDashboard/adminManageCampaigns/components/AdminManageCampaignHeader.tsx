@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const AdminManageCampaignHeader = ({setSearch,setStatus}:AdminCampaignHeaderProps) => {
+const AdminManageCampaignHeader = ({setSearch,setStatus,setPage}:AdminCampaignHeaderProps) => {
 
   const [searchValue,setSearchValue]=useState("");
   const navigate=useNavigate();
@@ -13,6 +13,7 @@ const AdminManageCampaignHeader = ({setSearch,setStatus}:AdminCampaignHeaderProp
 
   useEffect(() => {
   const timer = setTimeout(() => {
+    setPage(0)
     setSearch(searchValue);
   }, 800);
 
@@ -78,7 +79,10 @@ const AdminManageCampaignHeader = ({setSearch,setStatus}:AdminCampaignHeaderProp
           />
 
           <select
-          onClick={(e:any)=>setStatus(e.target.value)}
+          onChange={(e:any)=>{
+            setStatus(e.target.value)
+            setPage(0)
+          }}
             className="pl-9 pr-6 py-3 rounded-xl border border-gray-200 
             dark:border-gray-700 
             bg-white dark:bg-gray-900 
