@@ -16,11 +16,13 @@ const UserExploreCard = () => {
       const [shareVisible, setShareVisible] = useState<Record<string, boolean>>({});
       const navigate=useNavigate()
 
+      const [page,setPage]=useState(0)
+
       const {searchCampaign,category,paymentAdded}=useContext(CampaignContext)!
 
       const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
-        queryKey:["activeCampaigns",category,searchCampaign,paymentAdded],
-        queryFn:()=>fetchActiveCampaigns(searchCampaign,category,'ACTIVE'),
+        queryKey:["activeCampaigns",category,searchCampaign,paymentAdded,page],
+        queryFn:()=>fetchActiveCampaigns(searchCampaign,category,'ACTIVE',page,9),
         staleTime:1000*60*10
       })
 
@@ -77,7 +79,7 @@ const UserExploreCard = () => {
           >
             <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
-              {campaigns&&campaigns?.length>0?campaigns?.map((property:CampaignInterface, index:number) => (
+              {campaigns&&campaigns?.content?.length>0?campaigns?.content?.map((property:CampaignInterface, index:number) => (
 
                 <motion.div
                   key={index}
@@ -102,17 +104,7 @@ const UserExploreCard = () => {
 
 
 
-                  {/* <button
-                    onClick={() =>
-                      setLikedCards((prev) => ({
-                        ...prev,
-                        [property.id]: !prev[property.id],
-                      }))
-                    }
-                    className="backdrop-blur-md rounded-full bg-white/20 p-1.5 text-white"
-                  >
-                    <Heart size={16} fill={likedCards[property.id] ? "white" : "none"} />
-                  </button> */}
+                 
 
  
 
@@ -156,7 +148,7 @@ const UserExploreCard = () => {
                    <div className="mt-2 space-y-2">
 
                 <p className="text-emerald-400 text-xs font-semibold mt-2">
-                  ₹{property.amount?.toLocaleString("en-IN")} raised
+                  ₹{property.amount?.toLocaleString("en-IN")||0} raised
                 </p>
 
               <div className="w-full bg-gray-700/60 h-1.5 rounded-full">
@@ -193,7 +185,67 @@ const UserExploreCard = () => {
               </div>
               }
 
+
+
+
             </div>
+             {campaigns?.totalPages>1&&(
+        
+             <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex justify-center items-center gap-2 mt-6 mb-4 flex-wrap"
+            >
+  {/* Prev */}
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            disabled={page === 0}
+            onClick={() => setPage((prev) => prev - 1)}
+            className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+            bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+            disabled:opacity-40 disabled:cursor-not-allowed
+            hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+            Prev
+        </motion.button>
+
+  {/* Page Numbers */}
+        <div className="flex items-center gap-2">
+            {Array.from({ length: campaigns?.totalPages || 0 }).map((_, i) => (
+            <motion.button
+                key={i}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setPage(i)}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold border transition-all
+                ${
+                page === i
+                    ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/30"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+            >
+                {i + 1}
+            </motion.button>
+            ))}
+        </div>
+
+  {/* Next */}
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    disabled={page + 1 >= campaigns?.totalPages}
+                    onClick={() => setPage((prev) => prev + 1)}
+                    className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+                    bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+                    disabled:opacity-40 disabled:cursor-not-allowed
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                    Next
+                </motion.button>
+            </motion.div>
+      )}
           </motion.div>}
 
         </div>

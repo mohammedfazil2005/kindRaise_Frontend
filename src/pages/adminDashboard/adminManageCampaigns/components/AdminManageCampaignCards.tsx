@@ -14,12 +14,13 @@ const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsPro
       
       const [showShare, setShowShare] = useState(false);
       const navigate=useNavigate()
+      const [page,setPage]=useState(0)
 
       const {campaignCreated}=useContext(CampaignContext)!
 
       const {data:campaigns,isLoading:isCampaignLoading}=useQuery({
-        queryKey:["activeCampaigns",category,search,status,campaignCreated],
-        queryFn:()=>fetchActiveCampaigns(search,category,status),
+        queryKey:["activeCampaigns",category,search,status,campaignCreated,page],
+        queryFn:()=>fetchActiveCampaigns(search,category,status,page,6),
         staleTime:1000*60*10
       })
 
@@ -42,7 +43,7 @@ const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsPro
             <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
               {isCampaignLoading?Array(6).fill(0).map((_, i) => <CampaignCardSkeletonForExplorePage key={i} />):
-              campaigns.length==0?<div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+              campaigns?.content?.length==0?<div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
 
                 <p className="text-lg font-semibold">
                   No Campaigns Found
@@ -53,7 +54,7 @@ const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsPro
                 </p>
 
               </div>:
-              campaigns.map((campaign:CampaignInterface) => (
+              campaigns?.content?.map((campaign:CampaignInterface) => (
                 <motion.div  className="relative w-full overflow-hidden rounded-3xl bg-black"  initial={{ opacity: 0, y: 20 }}  animate={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}>
 
               {/* Image */}
@@ -171,6 +172,63 @@ const AdminManageCampaignCards = ({search,status,category}:AdminCampaignCardsPro
             </motion.div>
               ))}
             </div>
+              {campaigns?.totalPages>1&&(
+        
+             <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex justify-center items-center gap-2 mt-6 mb-4 flex-wrap"
+            >
+  {/* Prev */}
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            disabled={page === 0}
+            onClick={() => setPage((prev) => prev - 1)}
+            className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+            bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+            disabled:opacity-40 disabled:cursor-not-allowed
+            hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+            Prev
+        </motion.button>
+
+  {/* Page Numbers */}
+        <div className="flex items-center gap-2">
+            {Array.from({ length: campaigns?.totalPages || 0 }).map((_, i) => (
+            <motion.button
+                key={i}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setPage(i)}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold border transition-all
+                ${
+                page === i
+                    ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/30"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+            >
+                {i + 1}
+            </motion.button>
+            ))}
+        </div>
+
+  {/* Next */}
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    disabled={page + 1 >= campaigns?.totalPages}
+                    onClick={() => setPage((prev) => prev + 1)}
+                    className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+                    bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+                    disabled:opacity-40 disabled:cursor-not-allowed
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                    Next
+                </motion.button>
+            </motion.div>
+      )}
           </motion.div>
 
         </div>

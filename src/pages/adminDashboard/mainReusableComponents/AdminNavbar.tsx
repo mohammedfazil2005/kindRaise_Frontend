@@ -81,7 +81,7 @@ export default function AdminNavbar() {
             <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600">
 
               <img
-                src="https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg"
+                src="/unknownphoto.avif"
                 className="w-full h-full object-cover"
               />
 

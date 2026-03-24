@@ -20,14 +20,15 @@ const AdminCampaignRequestContent = ({search}:searchAdminCampaignRequestType) =>
 
    const [approveLoader,setApproveLoader]=useState(false);
    const [rejectLoader,setRejectLoader]=useState(false);
+   const [page,setPage]=useState(0)
 
    const {setCampaignCreated}=useContext(CampaignContext)!
 
   const navigate=useNavigate();
 
     const {data:campaigns,isLoading:isCampaignLoading,refetch}=useQuery({
-        queryKey:["ManageCampaingRequestSearch",search],
-        queryFn:()=>fetchActiveCampaigns(search,"","PENDING"),
+        queryKey:["ManageCampaingRequestSearch",search,page],
+        queryFn:()=>fetchActiveCampaigns(search,"","PENDING",page,9),
         staleTime:1000*60*10
     })
 
@@ -67,7 +68,7 @@ const AdminCampaignRequestContent = ({search}:searchAdminCampaignRequestType) =>
 
       {isCampaignLoading?Array.from({length:4}).map((_,_1)=>(
         <AdminCampaignRequestCardSkeleton/>
-      )):campaigns.length==0?
+      )):campaigns?.content?.length==0?
             <div className="text-center py-16">
 
           <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
@@ -80,7 +81,7 @@ const AdminCampaignRequestContent = ({search}:searchAdminCampaignRequestType) =>
 
         </div>
       :
-      campaigns.map((item:CampaignInterface, index:number) => (
+      campaigns?.content?.map((item:CampaignInterface, index:number) => (
 
         <motion.div
           key={item.id}
@@ -172,7 +173,63 @@ const AdminCampaignRequestContent = ({search}:searchAdminCampaignRequestType) =>
         </motion.div>
 
       ))}
+  {campaigns?.totalPages>1&&(
+        
+             <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex justify-center items-center gap-2 mt-6 mb-4 flex-wrap"
+            >
+  {/* Prev */}
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            disabled={page === 0}
+            onClick={() => setPage((prev) => prev - 1)}
+            className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+            bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+            disabled:opacity-40 disabled:cursor-not-allowed
+            hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+            Prev
+        </motion.button>
 
+  {/* Page Numbers */}
+        <div className="flex items-center gap-2">
+            {Array.from({ length: campaigns?.totalPages || 0 }).map((_, i) => (
+            <motion.button
+                key={i}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setPage(i)}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold border transition-all
+                ${
+                page === i
+                    ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/30"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+            >
+                {i + 1}
+            </motion.button>
+            ))}
+        </div>
+
+  {/* Next */}
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    disabled={page + 1 >= campaigns?.totalPages}
+                    onClick={() => setPage((prev) => prev + 1)}
+                    className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+                    bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+                    disabled:opacity-40 disabled:cursor-not-allowed
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                    Next
+                </motion.button>
+            </motion.div>
+      )}
     </div>
   );
 };

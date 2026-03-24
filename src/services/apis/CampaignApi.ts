@@ -1,24 +1,32 @@
 import { CommonApi } from "../CommonApi"
 
-export const fetchActiveCampaigns=async(search="",category="",status="")=>{
+export const fetchActiveCampaigns=async(search="",category="",status="",page:number,size:number)=>{
     const params=new URLSearchParams();
     if(search){
         params.append("search",search)
-        console.log("Search from api")
+       
     }
 
     if(category){
         params.append("category",category)
-        console.log(category)
+       
     }
 
     if(status){
         params.append("status",status)
-        console.log(status) 
+       
+    }
+    if(page){
+        params.append("page",page.toString())
+       
+    }
+    if(size){
+        params.append("size",size.toString())
+       
     }
 
 
-     const url = params.toString() ? `/campaign/active/campaigns?${params.toString()}`:`/campaign/active/campaigns`;
+     const url =  `/campaign/active/campaigns?${params.toString()}`
      return await CommonApi("GET",url);
 }
 

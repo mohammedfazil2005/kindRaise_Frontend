@@ -5,17 +5,42 @@ import { fetchProfileById } from '../../../../services/apis/ProfileApi';
 
 import { AdminViewProfileHeaderSkeleton } from '../../../../skeltons/AdminViewProfileSkeltons';
 import moment from 'moment';
+import { changeStatusOfUserAccount } from '../../../../services/apis/UserApi';
+import { toaster } from '../../../../services/Toaster';
+import { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 
 const AdminViewProfileHeader = () => {
+
+    const [loader,setLoader]=useState(false);
     
     const id=useParams()['id']
 
-    const {data,isLoading}=useQuery({
+    const {data,isLoading,refetch}=useQuery({
         queryKey:["AdminViewProfileHeaderDetails",id],
         queryFn:()=>fetchProfileById(id!),
         enabled:!!id ,
          staleTime:1000*60*10
     })
+
+    const onChangeStatus=async()=>{
+        let status;
+        if(data?.profile?.status=="ACTIVE"){
+            status="DISABLED"
+        }else{
+            status="ACTIVE"
+        }
+        setLoader(true)
+        try {
+            const responce=await changeStatusOfUserAccount(id!,status);
+            toaster(responce.message);
+            refetch()
+        } catch (error) {
+            console.log(error);
+        }finally{
+            setLoader(false);
+        }
+    }
 
 
 
@@ -95,12 +120,48 @@ const AdminViewProfileHeader = () => {
         </div>
 
         {/* STATUS BADGE */}
-        <div className="mt-5">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30">
-            <span className={`w-2 h-2 ${data?.profile?.status=="ACTIVE"?'bg-emerald-500':'bg-red-500'} rounded-full`}></span>
-            {data?.profile?.status}
-        </span>
-        </div>
+             <div
+      onClick={!loader ? onChangeStatus : undefined}
+      className={`mt-5 inline-block ${
+        loader
+          ? "cursor-not-allowed opacity-60 pointer-events-none"
+          : "cursor-pointer"
+      }`}
+    >
+      <span
+        className={`inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-full 
+        transition-all duration-300
+        ${
+           data?.profile?.status === "ACTIVE"
+            ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30"
+            : "bg-red-100 text-red-600 dark:bg-red-900/30"
+        }
+        ${!loader && "hover:scale-105"}
+        `}
+      >
+        {loader ? (
+          <>
+            <ClipLoader
+              size={14}
+              color={status === "ACTIVE" ? "#10b981" : "#ef4444"}
+              speedMultiplier={0.8}
+            />
+            <span className="animate-pulse">Updating...</span>
+          </>
+        ) : (
+          <>
+            <span
+              className={`w-2 h-2 rounded-full ${
+                data?.profile?.status === "ACTIVE"
+                  ? "bg-emerald-500"
+                  : "bg-red-500"
+              }`}
+            ></span>
+            { data?.profile?.status}
+          </>
+        )}
+      </span>
+    </div>
 
     </div>
             </motion.div>

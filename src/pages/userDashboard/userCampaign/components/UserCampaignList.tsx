@@ -15,19 +15,20 @@ import { CampaignCardSkeleton } from "../../../../skeltons/CampaignSkeltons";
 const UserCampaignList = () => {
      
       const [showShare, setShowShare] = useState<string | null>(null);
-      // const [page,setPage]=useState(0)
+      const [page,setPage]=useState(0)
      
       const navigate=useNavigate()
       
       const {campaignCreated}=useContext(CampaignContext)!
 
       const {data:campaigns,isLoading}=useQuery({
-        queryKey:['usercampaigns',campaignCreated],
-        queryFn:()=>fetchUserCampaigns(0,7),
+        queryKey:['usercampaigns',campaignCreated,page],
+        queryFn:()=>fetchUserCampaigns(page,6),
         staleTime:1000*60*10
       })
 
   return (
+    <>
     <div className="grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
 
       {isLoading?Array(4).fill(0).map((_, i) => <CampaignCardSkeleton key={i} />)
@@ -147,8 +148,65 @@ const UserCampaignList = () => {
 
           </motion.div>
       ))}
-
     </div>
+       {campaigns?.totalPages>1&&(
+        
+             <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex justify-center items-center gap-2 mt-6 mb-4 flex-wrap"
+            >
+  {/* Prev */}
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            disabled={page === 0}
+            onClick={() => setPage((prev) => prev - 1)}
+            className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+            bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+            disabled:opacity-40 disabled:cursor-not-allowed
+            hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+            Prev
+        </motion.button>
+
+  {/* Page Numbers */}
+        <div className="flex items-center gap-2">
+            {Array.from({ length: campaigns?.totalPages || 0 }).map((_, i) => (
+            <motion.button
+                key={i}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setPage(i)}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold border transition-all
+                ${
+                page === i
+                    ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/30"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+            >
+                {i + 1}
+            </motion.button>
+            ))}
+        </div>
+
+  {/* Next */}
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    disabled={page + 1 >= campaigns?.totalPages}
+                    onClick={() => setPage((prev) => prev + 1)}
+                    className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+                    bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+                    disabled:opacity-40 disabled:cursor-not-allowed
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                    Next
+                </motion.button>
+            </motion.div>
+      )}
+    </>
   );
 };
 

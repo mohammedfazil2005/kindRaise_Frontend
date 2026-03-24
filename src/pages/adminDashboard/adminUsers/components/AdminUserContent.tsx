@@ -1,12 +1,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Eye, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import { fetchAllUsers } from "../../../../services/apis/UserApi";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
 import type { UserInterface } from "../../../../interfaces/interfaces";
 import { useNavigate } from "react-router-dom";
+import { AdminDashboardContext } from "../../../../contexts/AdminDashboardContext";
 
 type AdminUserContentProps={
     search:string
@@ -15,10 +16,12 @@ type AdminUserContentProps={
 
 const AdminUserContent = ({search,role}:AdminUserContentProps) => {
 
+    const {user}=useContext(AdminDashboardContext)!
+
     const navigate=useNavigate();
     const [page,setPage]=useState(0)
     const {data,isLoading}=useQuery({
-        queryKey:["adminUserContent",search,role],
+        queryKey:["adminUserContent",search,role,user,page],
         queryFn:()=>fetchAllUsers(page,search,role)
     })
 
@@ -105,17 +108,18 @@ const AdminUserContent = ({search,role}:AdminUserContentProps) => {
                     </span>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center">
 
-                        <button onClick={()=>navigate(`/admin/viewuserprofile/${user.id}`)} className="text-blue-500 hover:text-blue-600">
-                            <Eye size={18} />
-                        </button>
+                <button
+                    onClick={() => navigate(`/admin/viewuserprofile/${user.id}`)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl 
+                    bg-emerald-500 text-white hover:bg-emerald-700 transition shadow-sm"
+                >
+                    <Eye size={16} />
+                    View Details
+                </button>
 
-                        <button className="text-red-500 hover:text-red-600">
-                            <Trash2 size={18} />
-                        </button>
-
-                    </div>
+                </div>
 
                 </motion.div>
             ))}
