@@ -121,3 +121,93 @@ export  function AdminCampaignRequestCardSkeleton() {
     </motion.div>
   );
 }
+
+
+
+
+export const RazorpaySkeleton = () => {
+  return (
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 animate-pulse">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+
+        {/* LEFT SIDE */}
+        <div className="space-y-5">
+
+          {/* Title */}
+          <div className="h-5 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
+
+          {/* Input 1 */}
+          <div>
+            <div className="h-4 w-32 mb-2 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+          </div>
+
+          {/* Input 2 */}
+          <div>
+            <div className="h-4 w-40 mb-2 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+          </div>
+
+          {/* Select */}
+          <div>
+            <div className="h-4 w-28 mb-2 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-12 w-full bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+          </div>
+
+          {/* Button */}
+          <div className="h-12 w-full bg-gray-300 dark:bg-gray-700 rounded-xl"></div>
+
+        </div>
+
+        {/* RIGHT SIDE IMAGE */}
+        <div className="flex justify-center">
+          <div className="w-40 h-40 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+
+
+ export const TransactionsHeaderSkeleton = () => {
+  return (
+    <div className="space-y-6 animate-pulse">
+
+      {/* TOP SECTION */}
+      <div className="flex items-center justify-between">
+
+        <div className="flex items-center gap-3">
+
+          {/* ICON */}
+          <div className="w-10 h-10 rounded-xl bg-gray-200 dark:bg-gray-700"></div>
+
+          {/* TITLE + SUBTITLE */}
+          <div className="space-y-2">
+            <div className="h-5 w-40 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-4 w-72 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* SEARCH + FILTERS */}
+      <div className="flex flex-col md:flex-row gap-4">
+
+        {/* SEARCH */}
+        <div className="flex-1 h-12 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+
+        {/* STATUS FILTER */}
+        <div className="w-full md:w-44 h-12 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+
+        {/* CAMPAIGN FILTER */}
+        <div className="w-full md:w-52 h-12 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+
+      </div>
+
+    </div>
+  );
+};

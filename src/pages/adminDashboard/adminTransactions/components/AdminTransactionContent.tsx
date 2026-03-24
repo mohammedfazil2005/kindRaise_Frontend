@@ -1,41 +1,29 @@
 
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { fetchAllTransactionsAdmin } from "../../../../services/apis/TransactionApi";
+import { useState } from "react";
+import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
+import type { TransactionInterface } from "../../../../interfaces/interfaces";
+import moment from "moment";
+import { Inbox } from "lucide-react";
 
-const transactions = [
-    {
-        id: "TXN12345",
-        donor: "Rahul Sharma",
-        avatar: "https://i.pravatar.cc/40?img=3",
-        campaign: "Flood Relief Kerala",
-        amount: "₹2000",
-        method: "Razorpay",
-        status: "Success",
-        date: "10 Mar 2026",
-    },
-    {
-        id: "TXN12346",
-        donor: "Aisha Khan",
-        avatar: "https://i.pravatar.cc/40?img=5",
-        campaign: "Medical Aid Fund",
-        amount: "₹5500",
-        method: "Razorpay",
-        status: "Pending",
-        date: "09 Mar 2026",
-    },
-    {
-        id: "TXN12347",
-        donor: "John Mathew",
-        avatar: "https://i.pravatar.cc/40?img=7",
-        campaign: "Education Support",
-        amount: "₹1200",
-        method: "Razorpay",
-        status: "Failed",
-        date: "08 Mar 2026",
-    },
-];
 
-const AdminTransactionContent = () => {
+type AdminTransactionContentPropsType={
+    search:string,
+    status:string,
+    campaignId:string
+}
+
+const AdminTransactionContent = ({search,status,campaignId}:AdminTransactionContentPropsType) => {
+    const [page,setPage]=useState(0)
+    const {data,isLoading}=useQuery({
+        queryKey:["AdminTransactionContentDetails",search,status,campaignId,page],
+        queryFn:()=>fetchAllTransactionsAdmin(page,8,campaignId,status,search)
+    })
     return (
+        <>
+        {isLoading?<DonationTableSkeleton/>:
         <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
@@ -55,7 +43,28 @@ const AdminTransactionContent = () => {
             </div>
 
             {/* Transactions */}
-            {transactions.map((txn, index) => (
+            {data?.content?.length==0?
+              <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col items-center justify-center py-16 text-center"
+    >
+      {/* ICON */}
+      <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+        <Inbox className="text-gray-400" size={28} />
+      </div>
+
+      {/* TITLE */}
+      <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+        No Transactions Found
+      </h2>
+
+      {/* DESCRIPTION */}
+      <p className="text-sm text-gray-500 mt-2 max-w-sm">
+        There are no transactions matching your search or filter criteria.
+      </p>
+    </motion.div>
+            :data?.content?.map((txn:TransactionInterface, index:number) => (
                 <motion.div
                     key={txn.id}
                     initial={{ opacity: 0, y: 15 }}
@@ -67,28 +76,28 @@ const AdminTransactionContent = () => {
                     {/* Donor */}
                     <div className="flex items-center gap-3">
                         <img
-                            src={txn.avatar}
-                            alt={txn.donor}
+                            src={`${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${txn.user_id}`}
+                            alt={txn.user_name}
                             className="w-9 h-9 rounded-full object-cover"
                         />
                         <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {txn.donor}
+                            {txn.user_name}
                         </span>
                     </div>
 
                     {/* Campaign */}
                     <span className="text-gray-500 dark:text-gray-400">
-                        {txn.campaign}
+                        {txn.campaign_name.slice(0,20)}...
                     </span>
 
                     {/* Transaction ID */}
                     <span className="text-gray-500 dark:text-gray-400">
-                        {txn.id}
+                        {txn.PaymentReference.slice(0,17)}
                     </span>
 
                     {/* Amount */}
                     <span className="text-emerald-500 font-semibold">
-                        {txn.amount}
+                        ₹{txn.amount.toLocaleString("en-IN")}
                     </span>
 
                     {/* Method */}
@@ -100,26 +109,86 @@ const AdminTransactionContent = () => {
                     <span>
                         <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold
-              ${txn.status === "Success"
+              ${txn.transactionStatus === "SUCCESS"
                                     ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30"
-                                    : txn.status === "Pending"
+                                    : txn.transactionStatus === "PENDING"
                                         ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30"
                                         : "bg-red-100 text-red-600 dark:bg-red-900/30"
                                 }`}
                         >
-                            {txn.status}
+                            {txn.transactionStatus}
                         </span>
                     </span>
 
                     {/* Date */}
                     <span className="text-gray-500 dark:text-gray-400">
-                        {txn.date}
+                        {moment(txn.transactionDate).format("MMMM- DD/Y")}
                     </span>
 
                 </motion.div>
             ))}
 
+             {data?.totalPages>1&&(
+        
+             <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex justify-center items-center gap-2 mt-6 mb-4 flex-wrap"
+            >
+  {/* Prev */}
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            disabled={page === 0}
+            onClick={() => setPage((prev) => prev - 1)}
+            className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+            bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+            disabled:opacity-40 disabled:cursor-not-allowed
+            hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+            Prev
+        </motion.button>
+
+  {/* Page Numbers */}
+        <div className="flex items-center gap-2">
+            {Array.from({ length: data?.totalPages || 0 }).map((_, i) => (
+            <motion.button
+                key={i}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setPage(i)}
+                className={`w-10 h-10 flex items-center justify-center rounded-xl text-sm font-semibold border transition-all
+                ${
+                page === i
+                    ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/30"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+            >
+                {i + 1}
+            </motion.button>
+            ))}
+        </div>
+
+  {/* Next */}
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    disabled={page + 1 >= data?.totalPages}
+                    onClick={() => setPage((prev) => prev + 1)}
+                    className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 
+                    bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+                    disabled:opacity-40 disabled:cursor-not-allowed
+                    hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                    Next
+                </motion.button>
+            </motion.div>
+      )}
+
         </motion.div>
+}
+        </>
     );
 };
 

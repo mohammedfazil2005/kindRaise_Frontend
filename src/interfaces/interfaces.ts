@@ -137,4 +137,14 @@ export interface TransactionInterface{
     campaign_name:string 
     user_id: string
     user_name: string
+    method:string
+}
+
+export interface RazorPayInterface{
+    id:string,
+    name:string,
+    apiKey:string,
+    secretKey:string,
+    mode:string,
+    active:boolean
 }

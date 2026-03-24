@@ -1,8 +1,38 @@
 
+import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, ArrowLeftRight } from "lucide-react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { getCampaginsTitleWithoutPending } from "../../../../services/apis/CampaignApi";
+import { TransactionsHeaderSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
 
-const AdminTransactionHeader = () => {
+type AdminTransactionHeaderPropsType={
+    setSearch:Dispatch<SetStateAction<string>>
+    setStatus:Dispatch<SetStateAction<string>>
+    setCampaignId:Dispatch<SetStateAction<string>>
+    status:string
+    campaignId:string
+}
+
+const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campaignId}:AdminTransactionHeaderPropsType) => {
+
+    const [query,setQuery]=useState("")
+
+    useEffect(()=>{
+        let timer=setTimeout(()=>{
+            setSearch(query)
+        },800)
+        return ()=>clearTimeout(timer)
+    },[query])
+
+    const {data,isLoading}=useQuery({
+        queryKey:["AdminTransactionHeaderDetails"],
+        queryFn:getCampaginsTitleWithoutPending
+    })
+
+
     return (
+        <>
+        {isLoading?<TransactionsHeaderSkeleton/>:
         <div className="space-y-6">
 
             {/* Top Section */}
@@ -40,6 +70,7 @@ const AdminTransactionHeader = () => {
                     />
 
                     <input
+                    onChange={(e)=>setQuery(e.target.value)}
                         type="text"
                         placeholder="Search by donor, campaign or transaction ID..."
                         className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200
@@ -61,37 +92,46 @@ const AdminTransactionHeader = () => {
                     />
 
                     <select
+                    onChange={(e)=>setStatus(e.target.value)}
+                    value={status}
                         className="pl-9 pr-6 py-3 rounded-xl border border-gray-200
             dark:border-gray-700
             bg-white dark:bg-gray-900
             text-gray-700 dark:text-gray-200
             focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
-                        <option>All Status</option>
-                        <option>Successful</option>
-                        <option>Pending</option>
-                        <option>Failed</option>
+                        <option value={""}>All Status</option>
+                        <option value={"SUCCESS"}>Successful</option>
+                        <option value={"PENDING"}>Pending</option>
+                        <option value={"FAILED"}>Failed</option>
                     </select>
 
                 </div>
 
                 {/* Campaign Filter */}
                 <select
+                onChange={(e)=>setCampaignId(e.target.value)}
+                value={campaignId}
                     className="px-4 py-3 rounded-xl border border-gray-200
           dark:border-gray-700
           bg-white dark:bg-gray-900
           text-gray-700 dark:text-gray-200
           focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
-                    <option>All Campaigns</option>
-                    <option>Flood Relief</option>
-                    <option>Medical Aid</option>
-                    <option>Education Fund</option>
+                    <option value={""}>All Campaigns</option>
+                   {data?.map((each:any)=>(
+                    <>
+                     <option value={each.id}>{each.title}</option>
+               
+                    </>
+                   ))}
                 </select>
 
             </div>
 
         </div>
+}
+        </>
     );
 };
 

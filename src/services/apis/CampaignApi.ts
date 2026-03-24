@@ -65,3 +65,7 @@ export const getTotalNumberOfPendingRequests=async()=>{
 export const getTotalNumberOfCampaignsOfUser=async(id:string)=>{
     return await CommonApi("GET",`/campaign/user/totalcampaigns/${id}`);
 }
+
+export const getCampaginsTitleWithoutPending=async()=>{
+    return await CommonApi("GET",`/campaign/titles`);
+}

@@ -1,7 +1,17 @@
 
-import { CreditCard } from "lucide-react";
+import { CheckCircle, CreditCard, Loader2, XCircle } from "lucide-react";
+import { validateRazorPayCreds } from "../../../../services/apis/RazorPayApi";
+import { useQuery } from "@tanstack/react-query";
 
-const AdminRazorPaySettingHeader = () => {
+type AdminRazorPaySettingHeaderPropsType={
+    razorpayUpdated:string
+}
+const AdminRazorPaySettingHeader = ({razorpayUpdated}:AdminRazorPaySettingHeaderPropsType) => {
+       const {data,isLoading}=useQuery({
+            queryKey:["ValidatingtheRazorPaycreds",razorpayUpdated],
+            queryFn:validateRazorPayCreds,
+            
+    })
     return (
         <div className="flex items-center justify-between">
 
@@ -27,9 +37,34 @@ const AdminRazorPaySettingHeader = () => {
             {/* Right Status */}
             <div className="flex items-center gap-3">
 
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30">
-                    Connected
-                </span>
+  {/* STATUS BADGE */}
+            <span
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-all
+                ${
+                isLoading
+                    ? "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                    : data?.status
+                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                    : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                }`}
+            >
+
+                {/* ICON */}
+                {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+                ) : data?.status ? (
+                <CheckCircle className="w-4 h-4" />
+                ) : (
+                <XCircle className="w-4 h-4" />
+                )}
+
+                {/* TEXT */}
+                {isLoading
+                ? "Checking..."
+                : data?.status
+                ? "Connected"
+                : "Invalid Credentials"}
+            </span>
 
             </div>
 
