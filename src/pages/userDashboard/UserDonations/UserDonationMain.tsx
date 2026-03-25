@@ -1,11 +1,17 @@
 
 
+import { Outlet, useLocation } from "react-router-dom";
 import UserDonationCard from "./components/UserDonationCard";
 import UserDonationStats from "./components/UserDonationStats";
 // import UserDonationTable from "./components/UserDonationCard";
 
 const UserDonationMain = () => {
+   const location = useLocation();
+   const isViewCampaign = location.pathname.includes("viewcampaign")
   return (
+    <>
+    {isViewCampaign?(<Outlet/>):
+   (
     <div className="space-y-8 mt-10">
 
       {/* Page Title */}
@@ -25,6 +31,9 @@ const UserDonationMain = () => {
       <UserDonationCard />
 
     </div>
+   
+)}
+  </>
   );
 };
 

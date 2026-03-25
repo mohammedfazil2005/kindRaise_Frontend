@@ -6,10 +6,13 @@ import { fetchLoggedInUserProfile, updateProfile } from "../../../services/apis/
 import { ProfileSkelton } from "../../../skeltons/ProfileSkelton";
 import { toaster } from "../../../services/Toaster";
 import { ClipLoader } from "react-spinners";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CampaignContext } from "../../../contexts/CampainContext";
 
 const UserProfile = () => {
+  const location = useLocation();
+
+  const isChangePassword = location.pathname.includes("change-password")
 
   const [profile, setProfile] = useState({
     id:null,
@@ -83,7 +86,9 @@ const UserProfile = () => {
 
   return (
     <>
-    {isLoading?<ProfileSkelton/>:
+    {isChangePassword?(<Outlet/>):(   
+    isLoading?<ProfileSkelton/>:
+  
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -194,7 +199,7 @@ const UserProfile = () => {
 
           <div className="flex items-center gap-4">
                 {/* Change Password Button */}
-                <button onClick={()=>navigate(`/user/oldpassword/${profile.id}`)}  type="button"  className="  bg-emerald-500  text-white  px-4 py-2  rounded-lg  text-sm  font-semibold  hover:bg-emerald-600  transition  " >
+                <button onClick={()=>navigate(`/user/profile/change-password/${profile.id}`)}  type="button"  className="  bg-emerald-500  text-white  px-4 py-2  rounded-lg  text-sm  font-semibold  hover:bg-emerald-600  transition  " >
                   Change Password
                 </button>
           </div>
@@ -222,7 +227,7 @@ const UserProfile = () => {
       </form>
 
     </motion.div>
-    }
+     )}
     </>
   );
 };

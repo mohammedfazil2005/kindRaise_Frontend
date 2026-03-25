@@ -76,7 +76,7 @@ const UserCampaignList = () => {
               showShare === campaign.id ? "pointer-events-auto" : "pointer-events-none"
             }`}>
             <div className="backdrop-blur-md rounded-lg bg-black/70 p-1 text-xs text-white shadow-lg">
-              <button onClick={()=>navigate(`/user/editcampaign/${showShare}`)} className="block w-full rounded-md px-3 py-1 hover:bg-white/20">
+              <button onClick={()=>navigate(`/user/my/campaigns/editcampaign/${showShare}`)} className="block w-full rounded-md px-3 py-1 hover:bg-white/20">
                   Edit
               </button>
             </div>
@@ -136,7 +136,7 @@ const UserCampaignList = () => {
 
               
               <motion.button
-              onClick={()=>navigate(`/user/viewcampaign/${campaign.id}`)}
+              onClick={()=>navigate(`/user/my/campaigns/viewcampaign/${campaign.id}`)}
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.95 }}
                 className="cursor-pointer mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white hover:bg-emerald-600"

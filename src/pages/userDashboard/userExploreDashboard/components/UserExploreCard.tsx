@@ -167,7 +167,7 @@ const UserExploreCard = ({page,setPage}:UserExploreCardPropsType) => {
 
                     {/* Button */}
 
-                   <motion.button  onClick={()=>navigate(`/user/viewcampaign/${property.id}`)}  initial={{ opacity: 0, y: 15 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
+                   <motion.button  onClick={()=>navigate(`/user/explore/campaigns/viewcampaign/${property.id}`)}  initial={{ opacity: 0, y: 15 }}  whileInView={{ opacity: 1, y: 0 }}  transition={{ duration: 0.4 }}  className="mt-3 w-full rounded-xl py-2 text-sm font-semibold text-white shadow-md  bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-900  bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500">
                        View Campaign
                   </motion.button>
 

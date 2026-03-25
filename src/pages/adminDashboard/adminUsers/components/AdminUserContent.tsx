@@ -113,7 +113,7 @@ const AdminUserContent = ({search,role,page,setPage}:AdminUserContentProps) => {
                     <div className="flex items-center">
 
                 <button
-                    onClick={() => navigate(`/admin/viewuserprofile/${user.id}`)}
+                    onClick={() => navigate(`/admin/users/viewuserprofile/${user.id}`)}
                     className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl 
                     bg-emerald-500 text-white hover:bg-emerald-700 transition shadow-sm"
                 >

@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { User } from "lucide-react";
-import { adminDashboardRecentUsers } from "../../../../services/apis/AdminDashboardApi";
 import { AdminDashboardActivityRowSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
 import { useQuery } from "@tanstack/react-query";
 import type { UserInterface } from "../../../../interfaces/interfaces";
 import moment from "moment";
+import { adminDashboardRecentUsers } from "../../../../services/apis/AdminDashboardApi";
 
 
 export default function AdminRecentUsers() {

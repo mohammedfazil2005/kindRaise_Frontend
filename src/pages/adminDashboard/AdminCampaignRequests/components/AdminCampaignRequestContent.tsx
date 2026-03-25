@@ -135,7 +135,7 @@ const AdminCampaignRequestContent = ({search,page,setPage}:searchAdminCampaignRe
           <div className="flex gap-2">
 
             <motion.button
-            onClick={() => navigate(`/admin/viewcampaign/${item.id}`)}
+            onClick={() => navigate(`/admin/campaigns/viewcampaign/${item.id}`)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
               className="flex items-center gap-1 px-3 py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600"

@@ -142,7 +142,7 @@ const AdminViewCampaign = () => {
 
         {/* ================= EDIT ICON ================= */}
         <button
-            onClick={()=>navigate(`/admin/createcampaign?id=${id}`)}
+            onClick={()=>navigate(`/admin/campaigns/createcampaign?id=${id}`)}
             className="absolute top-6 right-6 p-2 rounded-full 
             bg-white/90 dark:bg-gray-800 text-gray-800 dark:text-white 
             shadow-md hover:scale-110 hover:bg-white transition-all duration-300"
@@ -311,7 +311,7 @@ const AdminViewCampaign = () => {
             <motion.button
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.03 }}
-                onClick={() => console.log("Go to profile")}
+                onClick={() =>navigate(`/admin/campaigns/viewuserprofile/${profileData?.profile?.id}`)}
                 className="mt-6 w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-600 text-white font-semibold py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
             >
                 View Profile

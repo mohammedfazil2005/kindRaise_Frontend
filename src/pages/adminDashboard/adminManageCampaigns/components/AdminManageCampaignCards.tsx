@@ -99,7 +99,7 @@ const AdminManageCampaignCards = ({search,status,category,setPage,page}:AdminCam
 
               </div>
 
-            {/* Share Menu */}
+            
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{
@@ -160,7 +160,7 @@ const AdminManageCampaignCards = ({search,status,category,setPage,page}:AdminCam
 
                 {/* Button */}
                 <motion.button
-                  onClick={() => navigate(`/admin/viewcampaign/${campaign.id}`)}
+                  onClick={() => navigate(`/admin/campaigns/viewcampaign/${campaign.id}`)}
                   whileHover={{ y: -3, scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   className="mt-3 w-full rounded-xl bg-emerald-500 py-2 text-sm font-semibold text-white shadow-md hover:bg-emerald-600"

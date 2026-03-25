@@ -15,3 +15,16 @@ export const adminDashboardRecentDonations=async()=>{
 export const adminDashboardRecentUsers=async()=>{
     return await CommonApi("GET",'/admin/dashboard/recent/users')
 }
+
+export const adminDashboardAnalyticsStats=async()=>{
+    return await CommonApi("GET",'/admin/dashboard/analytics/stats')
+}
+export const adminDashboardAnalyticsDonationChart=async()=>{
+    return await CommonApi("GET",'admin/dashboard/analytics/donations')
+}
+export const adminDashboardAnalyticsTopRaisedCampaigns=async()=>{
+    return await CommonApi("GET",'/admin/dashboard/analytics/top/raised/campaigns')
+}
+export const adminDashboardAnalyticsRecentDonations=async()=>{
+    return await CommonApi("GET",'/admin/dashboard/analytics/recent/donations')
+}

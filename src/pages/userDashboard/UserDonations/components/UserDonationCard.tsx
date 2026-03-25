@@ -108,7 +108,7 @@ const UserDonationCard = () => {
 
                 {/* View Button */}
                 <motion.button
-                onClick={()=>navigate(`/user/viewcampaign/${donation.campaign_id}`)}
+                onClick={()=>navigate(`/user/donations/viewcampaign/${donation.campaign_id}`)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="text-xs px-3 py-1.5 rounded-lg bg-emerald-500 text-white font-medium hover:bg-emerald-600"

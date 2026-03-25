@@ -1,12 +1,18 @@
+import { useQuery } from "@tanstack/react-query";
+import { adminDashboardAnalyticsRecentDonations } from "../../../../services/apis/AdminDashboardApi";
+import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
+import type { UserDonationType } from "../../../../interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
 
 
-const donations = [
-    { user: "Rahul", amount: "₹500", campaign: "Flood Relief Kerala" },
-    { user: "Aisha", amount: "₹2000", campaign: "Medical Aid Fund" },
-    { user: "John", amount: "₹750", campaign: "Animal Rescue" },
-];
+;
 
 const AdminAnalyticsRecentDonations = () => {
+      const {data,isLoading}=useQuery({
+        queryKey:["AdminAnalyticsRecentDonations"],
+        queryFn:adminDashboardAnalyticsRecentDonations
+    })
+    const navigate=useNavigate();
     return (
         <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 mt-8">
             <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
@@ -14,19 +20,19 @@ const AdminAnalyticsRecentDonations = () => {
             </h2>
 
             <div className="space-y-3">
-                {donations.map((donation, index) => (
+                {isLoading?<DonationTableSkeleton rows={3}/>:data.map((donation:UserDonationType, index:number) => (
                     <div
                         key={index}
                         className="flex justify-between text-sm border-b pb-2 border-gray-200 dark:border-gray-700"
                     >
-                        <span className="text-gray-600 dark:text-gray-300">
-                            {donation.user}
+                        <span onClick={()=>navigate(`/admin/users/viewuserprofile/${donation.user_id}`)} className="text-gray-600 dark:text-gray-300 dark:hover:text-emerald-500 cursor-pointer hover:underline">
+                            {donation?.fullName}
                         </span>
 
-                        <span className="text-gray-500">{donation.campaign}</span>
+                        <span onClick={()=>navigate(`/admin/campaigns/viewcampaign/${donation.campaign_id}`)}  className="text-gray-500 hover:underline dark:hover:text-emerald-500 cursor-pointer">{donation?.title}</span>
 
                         <span className="text-emerald-500 font-semibold">
-                            {donation.amount}
+                            ₹{donation.amount.toLocaleString("en-IN")}
                         </span>
                     </div>
                 ))}

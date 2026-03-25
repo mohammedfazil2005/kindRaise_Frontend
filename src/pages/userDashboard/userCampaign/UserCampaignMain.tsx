@@ -1,11 +1,19 @@
 
 import UserCampaignStats from './components/UserCampaignStats'
 import UserCampaignList from './components/UserCampaignList'
-import { useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 const UserCampaignMain = () => {
   const navigate = useNavigate()
+    const location = useLocation();
+  const isSubRoute =
+      location.pathname.includes("/create") ||
+      location.pathname.includes("/viewcampaign") ||
+      location.pathname.includes("/editcampaign");
   return (
+    <>
+    {isSubRoute?<Outlet/>:
+   
     <div className="space-y-8 mt-10">
 
       {/* Header */}
@@ -21,7 +29,7 @@ const UserCampaignMain = () => {
           </p>
         </div>
 
-        <button onClick={() => navigate('/user/create/campaign')} className="bg-emerald-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition">
+        <button onClick={() => navigate('/user/my/campaigns/create')} className="bg-emerald-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition">
           + Create Campaign
         </button>
 
@@ -31,6 +39,8 @@ const UserCampaignMain = () => {
       <UserCampaignList />
 
     </div>
+}
+</>
   )
 }
 
