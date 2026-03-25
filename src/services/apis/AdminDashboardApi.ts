@@ -28,3 +28,6 @@ export const adminDashboardAnalyticsTopRaisedCampaigns=async()=>{
 export const adminDashboardAnalyticsRecentDonations=async()=>{
     return await CommonApi("GET",'/admin/dashboard/analytics/recent/donations')
 }
+export const fetchDailyDonations=async()=>{
+    return await CommonApi("GET",'/admin/dashboard/dailydonations')
+}

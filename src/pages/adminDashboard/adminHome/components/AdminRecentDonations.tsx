@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Eye } from "lucide-react";
+
 import { adminDashboardRecentDonations } from "../../../../services/apis/AdminDashboardApi";
 import { AdminDashboardActivityRowSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
 import { useQuery } from "@tanstack/react-query";
@@ -78,7 +78,7 @@ export default function AdminRecentDonations() {
               </span>
 
               {/* View button */}
-              <motion.button
+              {/* <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
                 className="
@@ -92,7 +92,7 @@ export default function AdminRecentDonations() {
               >
                 <Eye size={14} />
                 View
-              </motion.button>
+              </motion.button> */}
 
             </div>
 

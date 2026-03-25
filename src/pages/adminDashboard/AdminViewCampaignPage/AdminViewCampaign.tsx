@@ -129,10 +129,10 @@ const AdminViewCampaign = () => {
 
         <img
             src={
-  profileData?.profile?.id
-    ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profileData.profile.id}`
-    : "/unknownphoto.avif"
-}
+         campaign?.id
+            ? import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`
+            : "/unknownphoto.avif"
+          }
             alt="campaign"
             className="w-full h-[420px] object-cover group-hover:scale-105 transition duration-500"
         />
@@ -166,7 +166,7 @@ const AdminViewCampaign = () => {
         <div className="flex items-center gap-4 mt-6">
 
           <img
-            src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData.profile.id}`}
+            src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData?.profile.id}`}
             alt="org"
             className="w-12 h-12 rounded-full object-cover"
           />

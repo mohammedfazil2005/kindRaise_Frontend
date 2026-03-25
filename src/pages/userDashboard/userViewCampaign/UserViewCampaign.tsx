@@ -154,10 +154,10 @@ const UserViewCampaign = () => {
 
           <img
           src={
-  profileData?.profile?.id
-    ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profileData.profile.id}`
-    : "/unknownphoto.avif"
-}
+         campaign?.id
+            ? import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`
+            : "/unknownphoto.avif"
+          }
             alt="org"
             className="w-12 h-12 rounded-full object-cover"
           />

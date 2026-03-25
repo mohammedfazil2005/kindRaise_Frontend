@@ -4,6 +4,7 @@ import { Eye } from "lucide-react";
 import { adminDashboardRecentCampaigns } from "../../../../services/apis/AdminDashboardApi";
 import { AdminDashboardActivityRowSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
 import type { CampaignInterface } from "../../../../interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
 
 
 const AdminRecentCampaigns = () => {
@@ -13,6 +14,8 @@ const AdminRecentCampaigns = () => {
     queryFn:adminDashboardRecentCampaigns,
      staleTime:1000*60*10
   })
+
+  const navigate=useNavigate()
 
 
   return (
@@ -70,6 +73,7 @@ const AdminRecentCampaigns = () => {
 
                   {/* View Button */}
                   <motion.button
+                  onClick={()=>navigate(`/admin/viewcampaign/${item.id}`)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.9 }}
                     className="

@@ -3,6 +3,7 @@ import AdminStatsCards from './components/AdminStatsCards'
 import AdminRecentCampaigns from './components/AdminRecentCampaigns'
 import AdminRecentDonations from './components/AdminRecentDonations'
 import AdminRecentUsers from './components/AdminRecentUsers'
+import AdminDailyDonationChart from './components/AdminDailyDonationChart'
 
 const AdminHome = () => {
   return (
@@ -12,6 +13,7 @@ const AdminHome = () => {
         <AdminRecentCampaigns />
         <AdminRecentDonations />
         <AdminRecentUsers />
+        <AdminDailyDonationChart/>
       </div>
     </div>
   )
