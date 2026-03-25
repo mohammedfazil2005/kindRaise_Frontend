@@ -58,7 +58,11 @@ export interface CampaignContextType {
 
 export interface AdminDashboardContextType {
     user:string
+    notificationUpdate:string
   setUser:React.Dispatch<React.SetStateAction<string>>
+  setNotificationUpdated:React.Dispatch<React.SetStateAction<string>>
+  profileUpdate:string
+  setProfileUpdated:React.Dispatch<React.SetStateAction<string>>
 }
 
 export interface UserDonationType{

@@ -1,13 +1,26 @@
-import  { useState } from "react"
+import  { useContext, useState } from "react"
 import { ArrowBigRight, LogOut, Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useNavigate } from "react-router-dom"
+import { AdminDashboardContext } from "../contexts/AdminDashboardContext"
+import { useQuery } from "@tanstack/react-query"
+import { fetchLoggedInUserProfile } from "../services/apis/ProfileApi"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
     const [open, setOpen] = useState(false);
   const navigate=useNavigate()
   const token=localStorage.getItem("token")
+
+    const {profileUpdate}=useContext(AdminDashboardContext)!
+
+
+    const {data}=useQuery({
+    queryKey:['profileAdmin',profileUpdate],
+    queryFn:fetchLoggedInUserProfile,
+     staleTime:1000*60*10,
+     enabled:!!token
+  })
 
   return (
     <>
@@ -55,23 +68,39 @@ const Navbar = () => {
 
       {token&&(
          <div className="relative hidden md:block" onMouseEnter={() => setOpen(true)}  onMouseLeave={() => setOpen(false)}   >
+         
 
+           
           {/* Profile Trigger */}
-          <div className="flex items-center gap-3 cursor-pointer px-3 py-2 rounded-xl hover:bg-gray-100 transition">
+         <div className="flex items-center gap-3 cursor-pointer px-3 py-2 rounded-xl hover:bg-gray-100 transition">
 
-            <div className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold text-gray-800">
-                {localStorage.getItem("name")}
-              </span>
+    {/* ✅ Image moved inside */}
+    <img
+      src={
+        data?.id
+          ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${data.id}`
+          : "/unknownphoto.avif"
+      }
+      onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+        e.currentTarget.src = "/unknownphoto.avif";
+      }}
+      className="w-10 h-10 rounded-full object-cover border"
+    />
 
-              <span className="text-xs text-gray-500">
-                {localStorage.getItem("role") === "ROLE_USER"
-                  ? "KindRaise Member"
-                  : "System Administrator"}
-              </span>
-            </div>
+    {/* Text */}
+    <div className="flex flex-col leading-tight">
+      <span className="text-sm font-semibold text-gray-800">
+        {data?.fullName}
+      </span>
 
-          </div>
+      <span className="text-xs text-gray-500">
+        {data?.role === "ROLE_USER"
+          ? "KindRaise Member"
+          : "System Administrator"}
+      </span>
+    </div>
+
+  </div>
 
         {/* Dropdown */}
         <AnimatePresence>
@@ -87,7 +116,7 @@ const Navbar = () => {
               {/* Dashboard */}
               <button
                 onClick={() =>{ 
-                  if(localStorage.getItem("role") === "ROLE_USER"){
+                  if(data?.role=="USER"){
                      navigate('/user')
                   }else{
                     navigate('/admin')

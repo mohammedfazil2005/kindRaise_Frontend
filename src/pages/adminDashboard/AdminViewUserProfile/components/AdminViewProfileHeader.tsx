@@ -9,10 +9,13 @@ import { changeStatusOfUserAccount } from '../../../../services/apis/UserApi';
 import { toaster } from '../../../../services/Toaster';
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 const AdminViewProfileHeader = () => {
 
     const [loader,setLoader]=useState(false);
+    const [open,setOpen]=useState(false)
     
     const id=useParams()['id']
 
@@ -71,6 +74,9 @@ const AdminViewProfileHeader = () => {
         {/* Avatar */}
         <div className="relative">
             <img
+            onClick={()=>{
+              setOpen(true)
+            }}
             src={`${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${data?.profile?.id}`}
             alt={data?.profile?.name}
             className="w-28 h-28 rounded-full object-cover border-4 border-white dark:border-gray-900 shadow-md"
@@ -167,6 +173,27 @@ const AdminViewProfileHeader = () => {
             </motion.div>
     </div>
 }
+<Lightbox
+          open={open}
+          close={() => setOpen(false)}
+          slides={[
+            {
+              src:
+               
+                   data?.profile?.id
+                  ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${ data?.profile?.id}`
+                  : "/addprofilephoto.png",
+            },
+          ]}
+          styles={{
+      container: { backgroundColor: "rgba(0,0,0,0.85)" },
+      
+    }}
+    render={{
+      buttonPrev: () => null,   // ❌ remove left arrow
+      buttonNext: () => null,   // ❌ remove right arrow
+    }}
+      />
     </>
   )
 }

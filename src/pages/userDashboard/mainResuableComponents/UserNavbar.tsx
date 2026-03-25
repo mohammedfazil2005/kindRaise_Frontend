@@ -22,7 +22,7 @@ export default function UserNavbar() {
      staleTime:1000*60*10
   })
   const {data:notificationCount}=useQuery({
-    queryKey:['profile',profileUpdated,campaignCreated,paymentAdded],
+    queryKey:['notificationCountUser',profileUpdated,campaignCreated,paymentAdded],
     queryFn:totalMessagesUnRead,
      staleTime:1000*60*10
   })
@@ -76,10 +76,18 @@ export default function UserNavbar() {
     
             <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600">
 
-              <img
-                src={data?.id?import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${data.id}`:'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg'}
-                className="w-full h-full object-cover"
-              />
+              
+           <img
+          src={
+            data?.id
+              ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${data.id}`
+              : "/unknownphoto.avif"
+          }
+          onError={(e:any) => {
+            e.target.src = "/unknownphoto.avif";
+          }}
+          className="w-full h-full object-cover"
+        />
 
             </div>
 

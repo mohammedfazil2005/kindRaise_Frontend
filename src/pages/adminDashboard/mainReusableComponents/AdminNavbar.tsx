@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BellRing, LogOut, User } from "lucide-react";
+import { ArrowBigLeft, BellRing, LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toaster } from "../../../services/Toaster";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLoggedInUserProfile } from "../../../services/apis/ProfileApi";
+import { totalMessagesUnRead } from "../../../services/apis/UserDashboardApi";
+import { AdminDashboardContext } from "../../../contexts/AdminDashboardContext";
 
 export default function AdminNavbar() {
 
@@ -14,6 +18,27 @@ export default function AdminNavbar() {
       toaster("Logged out!");
       navigate('/');
     }
+
+    const {notificationUpdate,profileUpdate}=useContext(AdminDashboardContext)!
+
+
+    const {data}=useQuery({
+    queryKey:['profileAdmin',profileUpdate],
+    queryFn:fetchLoggedInUserProfile,
+     staleTime:1000*60*10
+  })
+  const {data:notificationCount}=useQuery({
+    queryKey:['notificationCountAdmin',notificationUpdate],
+    queryFn:totalMessagesUnRead,
+     staleTime:1000*60*10
+  })
+
+  useEffect(()=>{
+    console.log(data)
+    console.log(notificationCount)
+  },[data,notificationCount])
+
+  
 
   return (
     <div
@@ -57,7 +82,9 @@ export default function AdminNavbar() {
           />
 
           {/* Notification Dot */}
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+          {notificationCount?.total>0&&(
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"/>
+          )}
 
         </button>
 
@@ -80,10 +107,17 @@ export default function AdminNavbar() {
             {/* Avatar */}
             <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600">
 
-              <img
-                src="/unknownphoto.avif"
-                className="w-full h-full object-cover"
-              />
+           <img
+          src={
+            data?.id
+              ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${data.id}`
+              : "/unknownphoto.avif"
+          }
+          onError={(e:any) => {
+            e.target.src = "/unknownphoto.avif";
+          }}
+          className="w-full h-full object-cover"
+        />
 
             </div>
 
@@ -91,7 +125,7 @@ export default function AdminNavbar() {
             <div className="hidden sm:flex flex-col leading-tight">
 
               <span className="text-sm font-medium text-gray-800 dark:text-white">
-               {localStorage.getItem("name")}
+               {data?.fullName}
               </span>
 
               <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -107,6 +141,8 @@ export default function AdminNavbar() {
           <AnimatePresence>
             {open && (
 
+
+
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -120,7 +156,16 @@ export default function AdminNavbar() {
                 "
               >
 
+                 <button onClick={()=>navigate('/')} className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+
+                  <ArrowBigLeft size={16} />
+
+                Home
+
+                </button>
+
                 <button
+                onClick={()=>navigate('/admin/profile')}
                   className="
                   flex items-center gap-3 w-full
                   px-4 py-3 text-sm

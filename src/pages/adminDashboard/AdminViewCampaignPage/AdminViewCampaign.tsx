@@ -47,7 +47,7 @@ const AdminViewCampaign = () => {
 
      const {data:profileData,isLoading:isProfileLoading}=useQuery({
       queryKey:['profile'],
-      queryFn:()=>fetchProfileById(campaign.user_id),
+      queryFn:()=>fetchProfileById(campaign?.user_id),
       enabled:!!campaign
      })
 
@@ -128,7 +128,11 @@ const AdminViewCampaign = () => {
         <div className="relative rounded-3xl overflow-hidden group">
 
         <img
-            src={import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`}
+            src={
+  profileData?.profile?.id
+    ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profileData.profile.id}`
+    : "/unknownphoto.avif"
+}
             alt="campaign"
             className="w-full h-[420px] object-cover group-hover:scale-105 transition duration-500"
         />
@@ -172,7 +176,7 @@ const AdminViewCampaign = () => {
               {profileData?.profile?.fullName}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-            {profileData?.profile.role === "USER" ? "Community Member" : "Platform Administrator"}
+            {profileData?.profile?.role === "USER" ? "Community Member" : "Platform Administrator"}
             </p>
           </div>
 
@@ -241,7 +245,7 @@ const AdminViewCampaign = () => {
 
        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-2xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700">
 
-        {profileData.profile.role!="ADMIN"&&(
+        {profileData?.profile?.role!="ADMIN"&&(
             <>
                {/* Profile Header */}
             <div className="flex items-center gap-4">
@@ -250,7 +254,11 @@ const AdminViewCampaign = () => {
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.3 }}
                 className="w-14 h-14 rounded-full object-cover border-2 border-emerald-500"
-                src={`${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profileData?.profile?.id}`}
+                      src={
+          profileData?.profile?.id
+            ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profileData.profile.id}`
+            : "/unknownphoto.avif"
+        }
                 alt="profile"
                 />
 

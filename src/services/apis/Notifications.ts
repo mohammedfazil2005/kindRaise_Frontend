@@ -11,3 +11,10 @@ export const markNotificationAsRead=async(id:string)=>{
 export const markAllUserNotificationAsRead=async()=>{
     return CommonApi("PUT",'/notifications/read/all/notification')
 }
+export const markAllAdminNotificationAsRead=async()=>{
+    return CommonApi("PUT",'/notifications/read/all/notification/admin')
+}
+
+export const fetchAdminNotifications=async(page:number)=>{
+    return CommonApi("GET",`/notifications/admin?page=${page}`)
+}

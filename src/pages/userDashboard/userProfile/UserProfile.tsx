@@ -8,12 +8,14 @@ import { toaster } from "../../../services/Toaster";
 import { ClipLoader } from "react-spinners";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CampaignContext } from "../../../contexts/CampainContext";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 const UserProfile = () => {
   const location = useLocation();
 
   const isChangePassword = location.pathname.includes("change-password")
-
+  const [open,setOpen]=useState(false);
   const [profile, setProfile] = useState({
     id:null,
     fullName: "John Doe",
@@ -111,9 +113,23 @@ const UserProfile = () => {
         <div className="relative">
 
           <img
-            src={ preview? preview:import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profile.id}`}
-            className="w-20 h-20 rounded-full object-cover border"
-          />
+          onClick={()=>{
+            setOpen(true)
+            console.log("clicked")
+          }}
+          src={
+            preview
+              ? preview
+              : profile?.id
+              ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profile.id}`
+              : "/addprofilephoto.png"
+          }
+          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+            e.currentTarget.onerror = null; // prevent loop
+            e.currentTarget.src = "/addprofilephoto.png";
+          }}
+          className="w-20 h-20 rounded-full object-cover border"
+        />
 
           <label className="absolute bottom-0 right-0 bg-emerald-500 p-1 rounded-full cursor-pointer">
             <Camera size={14} className="text-white" />
@@ -228,6 +244,28 @@ const UserProfile = () => {
 
     </motion.div>
      )}
+      <Lightbox
+          open={open}
+          close={() => setOpen(false)}
+          slides={[
+            {
+              src:
+                preview
+                  ? preview
+                  : profile?.id
+                  ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profile.id}`
+                  : "/addprofilephoto.png",
+            },
+          ]}
+          styles={{
+      container: { backgroundColor: "rgba(0,0,0,0.85)" },
+      
+    }}
+    render={{
+      buttonPrev: () => null,   // ❌ remove left arrow
+      buttonNext: () => null,   // ❌ remove right arrow
+    }}
+      />
     </>
   );
 };

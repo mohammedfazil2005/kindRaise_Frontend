@@ -130,7 +130,7 @@ const UserViewCampaign = () => {
       <div className="relative rounded-3xl overflow-hidden group">
 
         <img
-          src={import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`}
+          src={import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign?.id}`}
           alt="Reforestation"
           className="w-full h-[420px] object-cover group-hover:scale-105 transition duration-500"
         />
@@ -153,7 +153,11 @@ const UserViewCampaign = () => {
         <div className="flex items-center gap-4 mt-6">
 
           <img
-            src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData.profile.id}`}
+          src={
+  profileData?.profile?.id
+    ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${profileData.profile.id}`
+    : "/unknownphoto.avif"
+}
             alt="org"
             className="w-12 h-12 rounded-full object-cover"
           />

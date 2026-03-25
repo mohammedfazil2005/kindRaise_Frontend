@@ -7,9 +7,11 @@ export const AdminDashboardContext=createContext<AdminDashboardContextType|null>
 export const AdminDashboardContextProvider=({children}:any)=>{
 
     const [user,setUser]=useState<string>("")   
+    const [notificationUpdate,setNotificationUpdated]=useState<string>("");
+    const [profileUpdate,setProfileUpdated]=useState<string>("");
 
     return(
-        <AdminDashboardContext.Provider value={{user,setUser}}>
+        <AdminDashboardContext.Provider value={{user,setUser,notificationUpdate,setNotificationUpdated,profileUpdate,setProfileUpdated}}>
             {children}
         </AdminDashboardContext.Provider>
     )

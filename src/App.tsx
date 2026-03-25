@@ -34,6 +34,8 @@ import ProtectedRoutes from './utils/ProtectedRoutes'
 import AdminViewCampaign from './pages/adminDashboard/AdminViewCampaignPage/AdminViewCampaign'
 import AdminCreateCampaign from './pages/adminDashboard/adminCreateCampaign/AdminCreateCampaign'
 import AdminViewUserProfile from './pages/adminDashboard/AdminViewUserProfile/AdminViewUserProfile'
+import AdminChangePassword from './pages/adminDashboard/adminProfile/AdminChangePassword'
+import NotFound from './components/NotFound'
 
 
 function App() {
@@ -91,14 +93,17 @@ function App() {
               <Route path='analytics' element={<AdminAnalytics/>}/>
               <Route path='create/users' element={<AdminCreateUser/>}/>
               <Route path='notifications' element={<AdminNotifications/>}/>
-              <Route path='profile' element={<AdminProfile/>}/>
+              <Route path='profile' element={<AdminProfile/>}>
+                  <Route path="change-password/:id" element={<AdminChangePassword />} />
+              </Route>
               <Route path='transactions' element={<AdminTransactions/>}/>
+       
               <Route path='viewcampaign/:id' element={<AdminViewCampaign/>}/>
              
               
         </Route>
         </Route>
-
+  <Route path="*" element={<NotFound />} />
       </Routes>
 
 
