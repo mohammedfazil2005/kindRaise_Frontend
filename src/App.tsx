@@ -1,6 +1,6 @@
 
 import './App.css'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Home from './pages/home/components/Home'
@@ -36,9 +36,15 @@ import AdminCreateCampaign from './pages/adminDashboard/adminCreateCampaign/Admi
 import AdminViewUserProfile from './pages/adminDashboard/AdminViewUserProfile/AdminViewUserProfile'
 import AdminChangePassword from './pages/adminDashboard/adminProfile/AdminChangePassword'
 import NotFound from './components/NotFound'
+import Chatbot from './components/chatbot/Chatbot'
 
 
 function App() {
+
+  const location = useLocation();
+
+ 
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
 
   return (
@@ -106,7 +112,7 @@ function App() {
   <Route path="*" element={<NotFound />} />
       </Routes>
 
-
+{!isAdminRoute && <Chatbot />}
     </>
   )
 }

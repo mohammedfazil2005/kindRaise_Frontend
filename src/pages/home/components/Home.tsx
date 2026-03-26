@@ -1,9 +1,9 @@
-import React from "react"
+
 import { motion } from "framer-motion"
-import { ArrowRight, TrendingUp, Users, HandCoins, Megaphone, Verified } from "lucide-react"
+import { ArrowRight, Verified } from "lucide-react"
 import HomeFirst from "./HomeFirst"
 import HomeTwo from "../HomeTwo"
-import HomeThird from "./HomeThird"
+
 
 const Home = () => {
   return (
