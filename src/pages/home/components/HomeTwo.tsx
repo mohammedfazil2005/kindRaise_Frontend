@@ -20,7 +20,7 @@ function HomeTwo() {
       <div className="grid md:grid-cols-3 gap-8 mt-12">
 
   {/* Card 1 */}
-  <div style={{background:'url("https://img.freepik.com/premium-vector/white-abstract-background-white-grey-gray-abstract-modern-background-design-designed-poster-template-web-backdrop-banner-social-media-template-app-background-business-presentation_249611-12555.jpg")'}} className="roup relative bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 border border-emerald-100 hover:-translate-y-3">
+  <div style={{background:'url("")'}} className="roup relative bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 border border-emerald-100 hover:-translate-y-3">
     <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-lg mb-4">
       <CreditCard className="text-emerald-600 w-6 h-6" />
     </div>
@@ -35,7 +35,7 @@ function HomeTwo() {
   </div>
 
   {/* Card 2 */}
-  <div  style={{background:'url("https://img.freepik.com/premium-vector/white-abstract-background-white-grey-gray-abstract-modern-background-design-designed-poster-template-web-backdrop-banner-social-media-template-app-background-business-presentation_249611-12555.jpg")'}} className="roup relative bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 border border-emerald-100 hover:-translate-y-3">
+  <div  style={{background:'url("")'}} className="roup relative bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 border border-emerald-100 hover:-translate-y-3">
     <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-lg mb-4">
       <ShieldCheck className="text-emerald-600 w-6 h-6" />
     </div>
@@ -50,7 +50,7 @@ function HomeTwo() {
   </div>
 
   {/* Card 3 */}
-  <div style={{background:'url("https://img.freepik.com/premium-vector/white-abstract-background-white-grey-gray-abstract-modern-background-design-designed-poster-template-web-backdrop-banner-social-media-template-app-background-business-presentation_249611-12555.jpg")'}} className="broup relative bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 border border-emerald-100 hover:-translate-y-3 ">
+  <div style={{background:'url("")'}} className="broup relative bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-md hover:shadow-2xl transition-all duration-500 border border-emerald-100 hover:-translate-y-3 ">
     <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 rounded-lg mb-4">
       <Headphones className="text-emerald-600 w-6 h-6" />
     </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, Send } from "lucide-react";
+import {  Send } from "lucide-react";
 import { sendMessageToGenAi } from "../../services/apis/ChatApiService";
 import { ClipLoader } from "react-spinners";
 
@@ -43,7 +43,7 @@ const Chatbot = () => {
         setMessages((prev) => [...prev, userMessage, loadingMessage]);
 
         setCurrentMessage(""); // clear input
-
+        setLoader(true)
         try {
             const sessionId =
                     localStorage.getItem("chatSessionId") || crypto.randomUUID();
@@ -81,6 +81,7 @@ const Chatbot = () => {
             });
         }finally{
             setCurrentMessage("")
+            setLoader(false)
         }
         };
 

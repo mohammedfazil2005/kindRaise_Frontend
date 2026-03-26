@@ -1,16 +1,17 @@
 
 import { motion } from "framer-motion"
 import { ArrowRight, Verified } from "lucide-react"
-import HomeFirst from "./HomeFirst"
-import HomeTwo from "../HomeTwo"
+import HomeFirst from "./components/HomeFirst"
+import HomeTwo from "./components/HomeTwo"
+import StatsSection from "./components/StatsCounterSection"
 
 
 const Home = () => {
   return (
-    <div className="bg-[#f4f7f6] min-h-screen">
+    <div className="bg-[#f4f7f6] h-full">
 
       {/* HERO SECTION */}
-      <div className=" mx-auto px-6 lg:px-12 pt-20 pb-16 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="mx-auto px-6 lg:px-12 pt-20 pb-16 grid lg:grid-cols-2 gap-12 items-center">
 
         {/* LEFT CONTENT */}
         <div className="space-y-6">
@@ -68,13 +69,13 @@ const Home = () => {
           className="relative"
         >
 
-          <img src="/home3.png" alt="" />
-
+          {/* <img src="/Gemini_Generated_Image_hwj7g4hwj7g4hwj7.png" alt="" /> */}
+          <img src="/home.png" className="" alt=""  />
 
         </motion.div>
       </div>
 
-
+<StatsSection/>
       <HomeFirst />
       <HomeTwo />
       {/* <HomeThird/> */}

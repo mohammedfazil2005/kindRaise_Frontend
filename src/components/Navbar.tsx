@@ -30,7 +30,7 @@ const Navbar = () => {
 
         {/* LOGO */}
         <div className="flex items-center gap-2">
-          <img src="/logo.png" className="h-12"/>
+          <img src="/logo.png" className="h-8"/>
         </div>
 
         {/* DESKTOP NAV */}
