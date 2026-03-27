@@ -24,11 +24,11 @@ const Hero = ({setSearch,setPage}:HeroSearch) => {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://static.vecteezy.com/system/resources/previews/047/411/853/non_2x/wavy-abstract-background-of-indian-independence-theme-annual-holiday-template-design-for-banner-greeting-card-poster-free-vector.jpg"
+          src="/bghome.png"
           alt="Support Causes"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="absolute inset-0 bg-black/80"></div>
       </div>
 
       {/* Content */}

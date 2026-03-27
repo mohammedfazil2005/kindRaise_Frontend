@@ -37,6 +37,7 @@ import AdminViewUserProfile from './pages/adminDashboard/AdminViewUserProfile/Ad
 import AdminChangePassword from './pages/adminDashboard/adminProfile/AdminChangePassword'
 import NotFound from './components/NotFound'
 import Chatbot from './components/chatbot/Chatbot'
+import ContactUs from './pages/contactus/ContactUs'
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
         <Route element={<LayoutWithNavbar />}>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Route>
 
         <Route path="/login" element={<Login />} />

@@ -51,7 +51,7 @@ const FancyCounter = ({ target }: Props) => {
 
   return (
     <div ref={ref}>
-      <h2 className="text-5xl md:text-6xl font-extrabold text-emerald-400 
+      <h2 className="text-5xl md:text-6xl font-extrabold text-white
       tracking-wide ">
         +{count}
       </h2>

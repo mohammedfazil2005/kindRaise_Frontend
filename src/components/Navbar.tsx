@@ -41,6 +41,9 @@ const Navbar = () => {
           <Link to="/explore" className="hover:text-gray-900 transition">
             Explore
           </Link>
+          <Link to="/contact" className="hover:text-gray-900 transition">
+            Contact Us
+          </Link>
           
         </div>
 
@@ -171,15 +174,15 @@ const Navbar = () => {
           >
             <div className="px-6 py-6 flex flex-col gap-5 text-sm font-medium text-gray-700">
 
-              <a href="#" onClick={() => setIsOpen(false)}>
+              <Link to={'/'} onClick={() => setIsOpen(false)}>
                 Home
-              </a>
-              <a href="#" onClick={() => setIsOpen(false)}>
+              </Link>
+              <Link to={'/explore'}  onClick={() => setIsOpen(false)}>
                 Explore
-              </a>
-              <a href="#" onClick={() => setIsOpen(false)}>
-                How It Works
-              </a>
+              </Link>
+              <Link  to={'/contact'} onClick={() => setIsOpen(false)}>
+                Contact Us
+              </Link>
 
               {!token&&(
                 <div className="border-t border-gray-200 pt-4 flex flex-col gap-4">

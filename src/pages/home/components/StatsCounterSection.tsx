@@ -3,7 +3,9 @@ import FancyCounter from "./FancyCounter";
 
 const StatsSection = () => {
   return (
-    <section className="relative w-full py-24   overflow-hidden">
+    <>
+
+    <section className="relative w-full py-20   overflow-hidden bg-gradient-to-r from-emerald-500 to-emerald-700">
 
       {/* 🔥 Animated Background Glow */}
       <div className="absolute inset-0">
@@ -44,7 +46,7 @@ const StatsSection = () => {
               className="space-y-3"
             >
               <FancyCounter target={item.value} />
-              <p className="text-gray-400 text-sm tracking-wide">
+              <p className="text-white text-sm tracking-wide">
                 {item.label}
               </p>
             </motion.div>
@@ -53,6 +55,7 @@ const StatsSection = () => {
         </motion.div>
       </div>
     </section>
+     </>
   );
 };
 
