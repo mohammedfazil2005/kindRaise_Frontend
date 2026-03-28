@@ -16,7 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 const AdminAnalyticsDonationChart = () => {
        const {data,isLoading}=useQuery({
         queryKey:["AdminAnalyticsDonationChart"],
-        queryFn:adminDashboardAnalyticsDonationChart
+        queryFn:adminDashboardAnalyticsDonationChart,
+         staleTime:1000*60*10
     })
         const allMonths = Array.from({ length: 12 }, (_, i) => {
             const date = new Date(2026, i); // year, month index

@@ -7,7 +7,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  CartesianGrid,
+
 } from "recharts";
 import { fetchDailyDonations } from "../../../../services/apis/AdminDashboardApi";
 import { ChartSkeleton } from "../../../../skeltons/CampaignSkeltons";
@@ -31,11 +31,11 @@ const AdminDailyDonationChart = () => {
 
   return (
     <>{isLoading?<ChartSkeleton/>:
-    <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-5 shadow-lg">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border p-6 border-gray-200 dark:border-gray-700">
       
       {/* 🔥 Header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-white text-lg font-semibold">
+        <h2 className="text-gray-800 dark:text-white text-lg font-semibold">
           Daily Donations
         </h2>
         <span className="text-emerald-400 text-sm font-medium">
@@ -46,40 +46,40 @@ const AdminDailyDonationChart = () => {
       {/* 📊 Chart */}
       <div style={{ width: "100%", height: 250 }}>
         <ResponsiveContainer width="100%" height={250}>
-  <LineChart data={formattedData}>
-    
-    <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+          <LineChart data={formattedData}>
+            
+           
 
-    <XAxis
-      dataKey="day"
-      stroke="#9ca3af"
-      tick={{ fontSize: 12 }}
-    />
+            <XAxis
+              dataKey="day"
+              stroke="#9ca3af"
+              tick={{ fontSize: 12 }}
+            />
 
-    <YAxis
-      stroke="#9ca3af"
-      tick={{ fontSize: 12 }}
-    />
+            <YAxis
+              stroke="#9ca3af"
+              tick={{ fontSize: 12 }}
+            />
 
-    <Tooltip
-      contentStyle={{
-        backgroundColor: "#020617",
-        border: "1px solid #1f2937",
-        borderRadius: "10px",
-        color: "#fff",
-      }}
-    />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#020617",
+                border: "1px solid #1f2937",
+                borderRadius: "10px",
+                color: "#fff",
+              }}
+            />
 
-    <Line
-      type="monotone"
-      dataKey="amount"
-      stroke="#10b981"
-      strokeWidth={3}
-      dot={{ r: 4 }}
-      activeDot={{ r: 6 }}
-    />
-  </LineChart>
-</ResponsiveContainer>
+            <Line
+              type="monotone"
+              dataKey="amount"
+              stroke="#10b981"
+              strokeWidth={3}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
 }

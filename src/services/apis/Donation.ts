@@ -16,3 +16,7 @@ export const fetchAdminDonationDashboardStats=async()=>{
     return await CommonApi("GET","/donation/admin/dashboard/donation/stats")
 }
 
+export const fetchAllDonationsInOneCall=async()=>{
+    return await CommonApi("GET","/donation/admin/all/once")
+}
+

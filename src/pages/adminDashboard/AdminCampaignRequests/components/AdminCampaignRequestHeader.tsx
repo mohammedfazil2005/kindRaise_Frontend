@@ -7,15 +7,16 @@ import { useQuery } from "@tanstack/react-query";
 type CampaignHeaderSearchType={
   setSearch:React.Dispatch<SetStateAction<string>>
   setPage:React.Dispatch<SetStateAction<number>>
+  changeStatus:string
 }
 
-const AdminCampaignRequestHeader = ({setSearch,setPage}:CampaignHeaderSearchType) => {
+const AdminCampaignRequestHeader = ({setSearch,setPage,changeStatus}:CampaignHeaderSearchType) => {
   const [query, setQuery] = useState("");
 
   const inputRef:any = useRef(null);
 
   const {data:TotalPendingRequestscount}=useQuery({
-        queryKey:["ManageCampaingRequestCount"],
+        queryKey:["ManageCampaingRequestCount",changeStatus],
         queryFn:getTotalNumberOfPendingRequests,
         staleTime:1000*60*10
     })

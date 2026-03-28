@@ -10,7 +10,8 @@ import { useNavigate } from "react-router-dom";
 const AdminAnalyticsRecentDonations = () => {
       const {data,isLoading}=useQuery({
         queryKey:["AdminAnalyticsRecentDonations"],
-        queryFn:adminDashboardAnalyticsRecentDonations
+        queryFn:adminDashboardAnalyticsRecentDonations,
+         staleTime:1000*60*10
     })
     const navigate=useNavigate();
     return (

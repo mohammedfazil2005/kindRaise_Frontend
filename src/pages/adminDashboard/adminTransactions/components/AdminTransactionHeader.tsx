@@ -1,10 +1,15 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, ArrowLeftRight } from "lucide-react";
+import { Search, Filter, ArrowLeftRight, Download } from "lucide-react";
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { getCampaginsTitleWithoutPending } from "../../../../services/apis/CampaignApi";
 import { TransactionsHeaderSkeleton } from "../../../../skeltons/AdminDashboardSkeltons";
-
+import * as XLSX from "xlsx";
+import { toaster } from "../../../../services/Toaster";
+import { fetchAllTransactionsInOneCallAdmin } from "../../../../services/apis/TransactionApi";
+import type { TransactionInterface } from "../../../../interfaces/interfaces";
+import { motion } from "framer-motion";
+import { ClipLoader } from "react-spinners";
 type AdminTransactionHeaderPropsType={
     setSearch:Dispatch<SetStateAction<string>>
     setStatus:Dispatch<SetStateAction<string>>
@@ -17,6 +22,7 @@ type AdminTransactionHeaderPropsType={
 const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campaignId,setPage}:AdminTransactionHeaderPropsType) => {
 
     const [query,setQuery]=useState("")
+    const [loader,setLoader]=useState(false)
 
     useEffect(()=>{
         let timer=setTimeout(()=>{
@@ -30,6 +36,50 @@ const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campai
         queryFn:getCampaginsTitleWithoutPending,
         staleTime:1000*60*10
     })
+
+
+     const onExportClick=async()=>{
+                setLoader(true)
+                try {
+                    const apiResponse=await fetchAllTransactionsInOneCallAdmin()
+                    if(!apiResponse||apiResponse.length==0){
+                        toaster("There is no Transaction found to export.")
+                        return
+                    }
+                    excelSave(apiResponse)
+        
+                } catch (error) {
+                    toaster("Something went wrong please contact the kindraise admin.")
+                    console.log(error)
+                }finally{
+                    setLoader(false)
+                }
+            }
+        
+          const excelSave = (apiResponse: Array<TransactionInterface>) => {
+    
+            const formattedData = apiResponse.map((item: TransactionInterface) => ({
+            "Transaction ID": item.id,
+            "User Name": item.user_name,
+            "User ID": item.user_id,
+            "Campaign Name": item.campaign_name,
+            "Campaign ID": item.campaign_id,
+            "Amount (₹)": item.amount,
+            "Payment Method": item.method,
+            "Reference ID": item.PaymentReference,
+            "Status": item.transactionStatus.toUpperCase(),
+            "Transaction Date": new Date(item.transactionDate).toLocaleString(),
+            }));
+    
+            const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    
+     
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+    
+            // 💾 Download file
+            XLSX.writeFile(workbook, "Transaction.xlsx");
+        };
 
 
     return (
@@ -57,8 +107,25 @@ const AdminTransactionHeader = ({setSearch,setStatus,setCampaignId,status,campai
                     </div>
 
                 </div>
+                 <motion.button
+                onClick={onExportClick}
+                disabled={loader}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full 
+                text-white shadow-md 
+                bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-700
+                bg-[length:200%_100%] bg-left hover:bg-right
+                transition-all duration-500"
+                    >
+               {loader?<ClipLoader size={16} color="white"/>:<>
+                <Download size={16} />
+                Export 
+               </>}
+            </motion.button>
 
             </div>
+
+            
 
             {/* Search + Filters */}
             <div className="flex flex-col md:flex-row gap-4">

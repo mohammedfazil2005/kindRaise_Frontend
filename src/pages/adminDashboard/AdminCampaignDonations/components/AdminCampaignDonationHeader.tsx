@@ -1,6 +1,12 @@
 
-import { Search } from "lucide-react";
+import { motion } from "framer-motion";
+import { Download, Search } from "lucide-react";
 import React, { useEffect, useState, type SetStateAction } from "react";
+import { fetchAllDonationsInOneCall } from "../../../../services/apis/Donation";
+import { toaster } from "../../../../services/Toaster";
+import { ClipLoader } from "react-spinners";
+import * as XLSX from "xlsx";
+import type { UserDonationType } from "../../../../interfaces/interfaces";
 
 type AdminCampaignDonationHeaderPropsType={
     setSearch:React.Dispatch<SetStateAction<string>>;
@@ -10,6 +16,7 @@ type AdminCampaignDonationHeaderPropsType={
 const AdminCampaignDonationHeader = ({setSearch,setPage}:AdminCampaignDonationHeaderPropsType) => {
 
     const [query,seyQuery]=useState("");
+    const [loader,setLoader]=useState(false);
 
     useEffect(()=>{
         let timer=setTimeout(()=>{
@@ -19,12 +26,53 @@ const AdminCampaignDonationHeader = ({setSearch,setPage}:AdminCampaignDonationHe
         return () => clearTimeout(timer); 
     },[query])
 
+    const onExportClick=async()=>{
+        setLoader(true)
+        try {
+            const apiResponse=await fetchAllDonationsInOneCall()
+            if(!apiResponse||apiResponse.length==0){
+                toaster("There is no donations found to export.")
+                return
+            }
+            excelSave(apiResponse)
+
+        } catch (error) {
+            toaster("Something went wrong please contact the kindraise admin.")
+            console.log(error)
+        }finally{
+            setLoader(false)
+        }
+    }
+
+    const excelSave=(apiResponse:Array<UserDonationType>)=>{
+
+         const formattedData = apiResponse.map((item:UserDonationType) => ({
+            "Donor Name": item.fullName,
+            "Campaign Title": item.title,
+            "Amount (₹)": item.amount,
+            "Transaction ID": item.transactionId,
+            "Donation Date": new Date(item.donationDate).toLocaleString(),
+            "User ID": item.user_id,
+            "Campaign ID": item.campaign_id,
+            }));
+
+            // 📄 Create worksheet
+            const worksheet = XLSX.utils.json_to_sheet(formattedData);
+             // 📦 Create workbook
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Donations");
+           
+             // 💾 Download file
+            XLSX.writeFile(workbook, "Donations.xlsx");
+    }
+
 
     return (
         <div className="space-y-6">
 
             {/* Title */}
-            <div>
+            <div className="flex items-center justify-between">
+                 <div>
                 <h1 className="text-2xl font-semibold text-gray-800 dark:text-white">
                     Campaign Donations
                 </h1>
@@ -33,7 +81,23 @@ const AdminCampaignDonationHeader = ({setSearch,setPage}:AdminCampaignDonationHe
                     Track and monitor donations across all fundraising campaigns
                 </p>
             </div>
-
+             <motion.button
+                    onClick={onExportClick}
+                    disabled={loader}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full 
+                    text-white shadow-md 
+                    bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-700
+                    bg-[length:200%_100%] bg-left hover:bg-right
+                    transition-all duration-500"
+        >
+           {loader?<ClipLoader size={16} color="white"/>:<>
+            <Download size={16} />
+            Export 
+           </>}
+        </motion.button>
+            </div>
+           
             {/* Search + Filters */}
             <div className="flex gap-4 flex-col md:flex-row">
 

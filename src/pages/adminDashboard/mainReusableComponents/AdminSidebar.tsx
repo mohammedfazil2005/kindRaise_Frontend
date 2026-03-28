@@ -115,28 +115,28 @@
 
 
 {/* Bottom Section */}
-<div className="mt-auto">
+    <div className="mt-auto">
 
-  {/* Theme Toggle */}
-  <button
-    onClick={toggleTheme}
-    className="
-    flex items-center gap-3 px-4 py-3 rounded-lg text-sm
-    text-gray-600 dark:text-gray-300
-    hover:bg-gray-200 dark:hover:bg-gray-800
-    transition mb-3 w-full
-    "
-  >
-    {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-    {darkMode ? "Light Mode" : "Dark Mode"}
-  </button>
+      {/* Theme Toggle */}
+      <button
+        onClick={toggleTheme}
+        className="
+        flex items-center gap-3 px-4 py-3 rounded-lg text-sm
+        text-gray-600 dark:text-gray-300
+        hover:bg-gray-200 dark:hover:bg-gray-800
+        transition mb-3 w-full
+        "
+      >
+        {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+        {darkMode ? "Light Mode" : "Dark Mode"}
+      </button>
 
-  {/* Footer */}
-  <div className="text-xs text-gray-500 dark:text-gray-400">
-    KindRaise Admin Panel
-  </div>
+      {/* Footer */}
+      <div className="text-xs text-gray-500 dark:text-gray-400">
+        KindRaise Admin Panel
+      </div>
 
-</div>
+    </div>
 
         </motion.aside>
       </>

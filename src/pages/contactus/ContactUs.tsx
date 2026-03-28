@@ -13,6 +13,7 @@ export default function ContactUs() {
     email: "",
     phone: "",
     message:"",
+    readStatus:false
    
   });
 

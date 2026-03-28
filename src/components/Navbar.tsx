@@ -1,7 +1,7 @@
 import  { useContext, useState } from "react"
 import { ArrowBigRight, LogOut, Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Link, useNavigate } from "react-router-dom"
+import {  NavLink, useNavigate } from "react-router-dom"
 import { AdminDashboardContext } from "../contexts/AdminDashboardContext"
 import { useQuery } from "@tanstack/react-query"
 import { fetchLoggedInUserProfile } from "../services/apis/ProfileApi"
@@ -30,20 +30,32 @@ const Navbar = () => {
 
         {/* LOGO */}
         <div className="flex items-center gap-2">
-          <img src="/logo.png" className="h-8"/>
+          <img onClick={()=>navigate('/')} src="/logo.png" className="h-8 cursor-pointer"/>
         </div>
 
         {/* DESKTOP NAV */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-          <Link to="/" className="hover:text-gray-900 transition">
+          <NavLink to="/"  className={({ isActive }) =>
+          isActive 
+            ? "text-emerald-600 font-semibold border-b-2 border-emerald-500 pb-1"
+            : "hover:text-gray-900 transition"
+        }>
             Home
-          </Link>
-          <Link to="/explore" className="hover:text-gray-900 transition">
+          </NavLink>
+          <NavLink to="/explore"  className={({ isActive }) =>
+            isActive 
+              ? "text-emerald-600 font-semibold border-b-2 border-emerald-500 pb-1"
+              : "hover:text-gray-900 transition"
+          }>
             Explore
-          </Link>
-          <Link to="/contact" className="hover:text-gray-900 transition">
+          </NavLink>
+          <NavLink to="/contact"  className={({ isActive }) =>
+          isActive 
+            ? "text-emerald-600 font-semibold border-b-2 border-emerald-500 pb-1"
+            : "hover:text-gray-900 transition"
+        }>
             Contact Us
-          </Link>
+          </NavLink>
           
         </div>
 
@@ -174,15 +186,21 @@ const Navbar = () => {
           >
             <div className="px-6 py-6 flex flex-col gap-5 text-sm font-medium text-gray-700">
 
-              <Link to={'/'} onClick={() => setIsOpen(false)}>
+              <NavLink to={'/'}   className={({ isActive }) =>
+              isActive ? "text-emerald-600 font-semibold" : ""
+            } onClick={() => setIsOpen(false)}>
                 Home
-              </Link>
-              <Link to={'/explore'}  onClick={() => setIsOpen(false)}>
+              </NavLink>
+              <NavLink to={'/explore'}   className={({ isActive }) =>
+              isActive ? "text-emerald-600 font-semibold" : ""
+            }  onClick={() => setIsOpen(false)}>
                 Explore
-              </Link>
-              <Link  to={'/contact'} onClick={() => setIsOpen(false)}>
+              </NavLink>
+              <NavLink   className={({ isActive }) =>
+                isActive ? "text-emerald-600 font-semibold" : ""
+              }  to={'/contact'} onClick={() => setIsOpen(false)}>
                 Contact Us
-              </Link>
+              </NavLink>
 
               {!token&&(
                 <div className="border-t border-gray-200 pt-4 flex flex-col gap-4">

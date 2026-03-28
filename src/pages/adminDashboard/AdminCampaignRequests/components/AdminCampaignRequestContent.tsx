@@ -16,9 +16,10 @@ type searchAdminCampaignRequestType={
   search:string
   page:number
   setPage:Dispatch<SetStateAction<number>>
+  setChangeStatus:Dispatch<SetStateAction<string>>
 }
 
-const AdminCampaignRequestContent = ({search,page,setPage}:searchAdminCampaignRequestType) => {
+const AdminCampaignRequestContent = ({search,page,setPage,setChangeStatus}:searchAdminCampaignRequestType) => {
 
    const [approveLoader,setApproveLoader]=useState(false);
    const [rejectLoader,setRejectLoader]=useState(false);
@@ -61,7 +62,7 @@ const AdminCampaignRequestContent = ({search,page,setPage}:searchAdminCampaignRe
         }finally{
             setApproveLoader(false)
             setRejectLoader(false)
-           
+           setChangeStatus("updated")
         }
   }
 

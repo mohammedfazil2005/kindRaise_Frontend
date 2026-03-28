@@ -76,6 +76,7 @@ export interface UserDonationType{
     fullName:string
     user_id:string
     donationDate:string
+    transactionId:string
 }
 
 export interface UserDonationDashboardStats{
@@ -155,4 +156,15 @@ export interface RazorPayInterface{
     secretKey:string,
     mode:string,
     active:boolean
+}
+
+export interface TicketInterface{
+    id:string,
+    firstName:string,
+    lastName:string,
+    phone:string,
+    email:string,
+    readStatus:boolean,
+    message:string,
+    createdAt:string
 }

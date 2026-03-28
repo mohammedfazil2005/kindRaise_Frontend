@@ -9,7 +9,8 @@ import { DonationStatsCardSkeleton } from "../../../../skeltons/DonationSkeltons
 const AdminAnalyticsStatsCards = () => {
     const {data,isLoading}=useQuery({
         queryKey:["AdminAnalyticsStatsCards"],
-        queryFn:adminDashboardAnalyticsStats
+        queryFn:adminDashboardAnalyticsStats,
+         staleTime:1000*60*10
     })
     return (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">

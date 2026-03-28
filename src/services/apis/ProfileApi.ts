@@ -20,3 +20,7 @@ export const checkPassword=async(id:string,password:string)=>{
 export const changePassword=async(id:string,password:string)=>{
    return await CommonApi("PUT",`/user/change/password/${id}/${password}`)
 }
+
+export const getAllUsersInOneCall=async()=>{
+   return await CommonApi("GET",`/user/all/once`)
+}

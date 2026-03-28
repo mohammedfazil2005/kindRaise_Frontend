@@ -38,6 +38,7 @@ import AdminChangePassword from './pages/adminDashboard/adminProfile/AdminChange
 import NotFound from './components/NotFound'
 import Chatbot from './components/chatbot/Chatbot'
 import ContactUs from './pages/contactus/ContactUs'
+import AdminTickets from './pages/adminDashboard/adminTickets/AdminTickets'
 
 
 function App() {
@@ -105,6 +106,7 @@ function App() {
               <Route path="change-password/:id" element={<AdminChangePassword />} />
             </Route>
             <Route path='transactions' element={<AdminTransactions />} />
+            <Route path='tickets' element={<AdminTickets />} />
 
             <Route path='viewcampaign/:id' element={<AdminViewCampaign />} />
 
