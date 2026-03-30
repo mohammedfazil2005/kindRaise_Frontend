@@ -169,3 +169,16 @@ export interface TicketInterface{
     message:string,
     createdAt:string
 }
+
+
+export interface TestimonialInterface{
+    id:string,
+    name:string,
+    company:string,
+    role:string,
+    message:string,
+    rating:number,
+    status:boolean,
+    user_id:string
+
+}

@@ -40,6 +40,7 @@ import Chatbot from './components/chatbot/Chatbot'
 import ContactUs from './pages/contactus/ContactUs'
 import AdminTickets from './pages/adminDashboard/adminTickets/AdminTickets'
 import UserTransactions from './pages/userDashboard/userTransactions/UserTransactions'
+import AdminTestimonial from './pages/adminDashboard/AdminTestimonials/AdminTestimonial'
 
 
 function App() {
@@ -104,6 +105,7 @@ function App() {
             <Route path='analytics' element={<AdminAnalytics />} />
             <Route path='create/users' element={<AdminCreateUser />} />
             <Route path='notifications' element={<AdminNotifications />} />
+            <Route path='testimonials' element={<AdminTestimonial />} />
             <Route path='profile' element={<AdminProfile />}>
               <Route path="change-password/:id" element={<AdminChangePassword />} />
             </Route>

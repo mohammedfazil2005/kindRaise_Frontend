@@ -48,3 +48,43 @@ export const AdminViewProfileHeaderSkeleton = () => {
   );
 };
 
+
+export const TestimonialSkeleton = () => {
+  return (
+    <div className="mx-auto max-w-sm px-4 py-20 md:max-w-4xl md:px-8 lg:px-12 animate-pulse">
+      <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
+        
+        {/* Image Skeleton */}
+        <div>
+          <div className="h-80 w-full rounded-3xl bg-gray-300 dark:bg-neutral-700"></div>
+        </div>
+
+        {/* Text Skeleton */}
+        <div className="flex flex-col justify-between py-4">
+          
+          <div>
+            {/* Name */}
+            <div className="h-6 w-40 rounded bg-gray-300 dark:bg-neutral-700"></div>
+
+            {/* Role */}
+            <div className="mt-3 h-4 w-28 rounded bg-gray-200 dark:bg-neutral-600"></div>
+
+            {/* Quote */}
+            <div className="mt-8 space-y-3">
+              <div className="h-4 w-full rounded bg-gray-200 dark:bg-neutral-600"></div>
+              <div className="h-4 w-5/6 rounded bg-gray-200 dark:bg-neutral-600"></div>
+              <div className="h-4 w-4/6 rounded bg-gray-200 dark:bg-neutral-600"></div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-4 pt-12 md:pt-0">
+            <div className="h-7 w-7 rounded-full bg-gray-300 dark:bg-neutral-700"></div>
+            <div className="h-7 w-7 rounded-full bg-gray-300 dark:bg-neutral-700"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};

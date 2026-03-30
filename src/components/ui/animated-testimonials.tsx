@@ -6,17 +6,23 @@ import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 
 type Testimonial = {
-  quote: string;
-  name: string;
-  designation: string;
-  src: string;
+    id:string,
+    name:string,
+    company:string,
+    role:string,
+    message:string,
+    rating:number,
+    status:boolean,
+    user_id:string
 };
 export const AnimatedTestimonials = ({
   testimonials,
   autoplay = false,
+
 }: {
   testimonials: Testimonial[];
   autoplay?: boolean;
+  
 }) => {
   const [active, setActive] = useState(0);
 
@@ -50,7 +56,7 @@ export const AnimatedTestimonials = ({
             <AnimatePresence>
               {testimonials.map((testimonial, index) => (
                 <motion.div
-                  key={testimonial.src}
+                  key={testimonial?.user_id?`${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${testimonial.user_id}`:`${import.meta.env.VITE_KINDRAISE_API_URL}/testimonial/image/${testimonial.id}`}
                   initial={{
                     opacity: 0,
                     scale: 0.9,
@@ -80,7 +86,7 @@ export const AnimatedTestimonials = ({
                   className="absolute inset-0 origin-bottom"
                 >
                   <img
-                    src={testimonial.src}
+                    src={testimonial?.user_id?`${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${testimonial.user_id}`:`${import.meta.env.VITE_KINDRAISE_API_URL}/testimonial/image/${testimonial.id}`}
                     alt={testimonial.name}
                     width={500}
                     height={500}
@@ -116,10 +122,10 @@ export const AnimatedTestimonials = ({
               {testimonials[active].name}
             </h3>
             <p className="text-sm text-gray-500 dark:text-neutral-500">
-              {testimonials[active].designation}
+              {testimonials[active].role} at {testimonials[active].company} 
             </p>
             <motion.p className="mt-8 text-lg text-gray-500 dark:text-neutral-300">
-              {testimonials[active].quote.split(" ").map((word, index) => (
+              {testimonials[active].message.split(" ").map((word, index) => (
                 <motion.span
                   key={index}
                   initial={{

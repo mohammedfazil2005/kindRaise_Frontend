@@ -1,4 +1,4 @@
-import {LayoutDashboard,Megaphone,HeartHandshake,Users,Bell,FileCheck,BarChart3,User,CreditCard,UserPlus, ArrowLeftRight, Ticket} from "lucide-react";
+import {LayoutDashboard,Megaphone,HeartHandshake,Users,Bell,FileCheck,BarChart3,User,CreditCard,UserPlus, ArrowLeftRight, Ticket, MessageSquareQuote} from "lucide-react";
 
 export const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
@@ -19,6 +19,8 @@ export const menuItems = [
 
 
   { label: "Analytics", icon: BarChart3, path: "/admin/analytics" },
+
+  { label: "Testimonials", icon: MessageSquareQuote , path: "/admin/testimonials" },
 
   { label: "Notifications", icon: Bell, path: "/admin/notifications" },
 
