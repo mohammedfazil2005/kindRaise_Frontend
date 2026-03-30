@@ -63,6 +63,8 @@ export interface AdminDashboardContextType {
   setNotificationUpdated:React.Dispatch<React.SetStateAction<string>>
   profileUpdate:string
   setProfileUpdated:React.Dispatch<React.SetStateAction<string>>
+  testimonialUpdate:string,
+  setTestimonialUpdate:React.Dispatch<React.SetStateAction<string>>
 }
 
 export interface UserDonationType{

@@ -88,3 +88,50 @@ export const TestimonialSkeleton = () => {
     </div>
   );
 };
+
+export const TestimonialSkeletonCard = () => {
+  return (
+    <div
+      className="
+        w-full h-full p-[1px] rounded-2xl
+        bg-gradient-to-br from-gray-200 via-gray-300 to-gray-200
+        dark:from-gray-700 dark:via-gray-800 dark:to-gray-700
+      "
+    >
+      <div
+        className="
+          rounded-2xl p-5 h-full
+          bg-white/80 dark:bg-gray-900/70
+          border border-gray-200 dark:border-gray-700
+          animate-pulse
+        "
+      >
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex gap-3 items-center">
+            <div className="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+
+            <div className="space-y-2">
+              <div className="h-3 w-24 bg-gray-300 dark:bg-gray-700 rounded"></div>
+              <div className="h-2 w-16 bg-gray-300 dark:bg-gray-700 rounded"></div>
+            </div>
+          </div>
+
+          <div className="h-6 w-10 bg-gray-300 dark:bg-gray-700 rounded-md"></div>
+        </div>
+
+        {/* Message */}
+        <div className="space-y-2 mb-4">
+          <div className="h-3 w-full bg-gray-300 dark:bg-gray-700 rounded"></div>
+          <div className="h-3 w-5/6 bg-gray-300 dark:bg-gray-700 rounded"></div>
+          <div className="h-3 w-4/6 bg-gray-300 dark:bg-gray-700 rounded"></div>
+        </div>
+
+        {/* Button */}
+        <div className="flex justify-start">
+          <div className="h-7 w-20 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+  );
+};

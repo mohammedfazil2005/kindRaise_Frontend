@@ -3,14 +3,19 @@ import { AnimatedTestimonials } from '../../../components/ui/animated-testimonia
 import { fetchActiveTestimonials } from '../../../services/apis/TestimonialApi'
 
 import { TestimonialSkeleton } from '../../../skeltons/AdminViewProfileSkeltons'
+import { AdminDashboardContext } from '../../../contexts/AdminDashboardContext';
+import { useContext } from 'react';
 
 
 const HomeMainRight = () => {
+     const {testimonialUpdate}=useContext(AdminDashboardContext)!
     const {data,isLoading}=useQuery({
-        queryKey:["HomeMainRightTestimonials"],
+        queryKey:["HomeMainRightTestimonials",testimonialUpdate],
         queryFn:fetchActiveTestimonials,
         staleTime:1000*60*10
     })
+
+    
    
   
   return (

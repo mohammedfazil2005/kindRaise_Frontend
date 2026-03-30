@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { MessageSquareQuote, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AdminTestimonialsHeader = () => {
+    const navigate=useNavigate()
   return (
     <div className="flex items-center justify-between">
 
@@ -29,7 +31,7 @@ const AdminTestimonialsHeader = () => {
       {/* Right (Optional actions later) */}
       <div className="flex items-center gap-3">
       <motion.button
-                    
+                    onClick={()=>navigate('/admin/testimonials/create')}
                     whileTap={{ scale: 0.95 }}
                     className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full 
                     text-white shadow-md 
