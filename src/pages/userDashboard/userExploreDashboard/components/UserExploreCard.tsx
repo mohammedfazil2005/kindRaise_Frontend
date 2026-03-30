@@ -141,7 +141,7 @@ const UserExploreCard = ({page,setPage}:UserExploreCardPropsType) => {
 
                   <div className="bg-gradient-to-b from-black/80 to-black px-3 py-3 space-y-1">
 
-                    <h2 className="text-base font-semibold text-white">
+                    <h2 className="text-sm font-semibold text-white">
                       {property.title}
                     </h2>
 

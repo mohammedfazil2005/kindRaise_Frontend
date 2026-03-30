@@ -41,7 +41,7 @@ const NotFound = () => {
           className="mt-8"
         >
           <img
-            src="logo.png"
+            src="/logo.png"
             alt="404 illustration"
             className="w-64 mx-auto opacity-90"
           />

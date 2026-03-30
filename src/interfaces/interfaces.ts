@@ -77,6 +77,7 @@ export interface UserDonationType{
     user_id:string
     donationDate:string
     transactionId:string
+    deadline:string
 }
 
 export interface UserDonationDashboardStats{

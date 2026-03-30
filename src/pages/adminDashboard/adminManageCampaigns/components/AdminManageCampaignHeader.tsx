@@ -94,6 +94,7 @@ const AdminManageCampaignHeader = ({setSearch,setStatus,setPage}:AdminCampaignHe
             <option value={"PENDING"}>Pending</option>
             <option value={"COMPLETED"}>Completed</option>
             <option value={"REJECTED"}>Rejected</option>
+            <option value={"EXPIRED"}>Expired</option>
           </select>
         </div>
 

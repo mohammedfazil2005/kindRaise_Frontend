@@ -39,6 +39,7 @@ import NotFound from './components/NotFound'
 import Chatbot from './components/chatbot/Chatbot'
 import ContactUs from './pages/contactus/ContactUs'
 import AdminTickets from './pages/adminDashboard/adminTickets/AdminTickets'
+import UserTransactions from './pages/userDashboard/userTransactions/UserTransactions'
 
 
 function App() {
@@ -78,6 +79,7 @@ function App() {
               <Route path="editcampaign/:id" element={<UserEditCampaign />} />
             </Route>
             <Route path='notifications' element={<UserNotification />} />
+            <Route path='transactions' element={<UserTransactions />} />
             <Route path='profile' element={<UserProfile />}>
               <Route path="change-password/:id" element={<UserOldPassword />} />
             </Route>

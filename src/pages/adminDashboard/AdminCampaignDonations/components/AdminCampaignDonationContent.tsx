@@ -1,8 +1,8 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { motion,AnimatePresence } from "framer-motion";
 import { findAllDonationsAdmin } from "../../../../services/apis/Donation";
-import { useEffect, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import type { UserDonationType } from "../../../../interfaces/interfaces";
 import moment from "moment";
 import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
@@ -16,6 +16,7 @@ type AdminCampaignDonationContentPropsType={
 
 const AdminCampaignDonationContent = ({search,setPage,page}:AdminCampaignDonationContentPropsType) => {
 
+           const [selectedTxn, setSelectedTxn] = useState<UserDonationType | null>(null);
    
 
     const {data,isLoading}=useQuery({
@@ -60,6 +61,7 @@ const AdminCampaignDonationContent = ({search,setPage,page}:AdminCampaignDonatio
             {/* Table Rows */}
             {data?.content?.map((donation:UserDonationType, index:number) => (
                 <motion.div
+                 onClick={()=>setSelectedTxn(donation)}
                     key={donation.id}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -161,6 +163,117 @@ const AdminCampaignDonationContent = ({search,setPage,page}:AdminCampaignDonatio
             </motion.div>
         </motion.div>
         }
+
+        <AnimatePresence>
+    {selectedTxn && (
+        <motion.div
+        key="overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        >
+
+        <motion.div
+            key="modal"
+            initial={{ scale: 0.85, opacity: 0, y: 40 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.85, opacity: 0, y: 40 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white dark:bg-gray-900 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden relative"
+        >
+
+            {/* 🔴 Close Button */}
+            <button
+            onClick={() => setSelectedTxn(null)}
+            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center 
+            rounded-full bg-gray-100 dark:bg-gray-800 
+            text-gray-500 dark:text-gray-300 
+            hover:text-red-500 hover:bg-red-100 
+            dark:hover:bg-red-900/30 transition"
+            >
+            ✕
+            </button>
+
+            {/* 🟢 Header */}
+            <div className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-700 text-white p-6">
+            <h2 className="text-lg font-semibold">Transaction Details</h2>
+            <p className="text-xs opacity-90">
+                Detailed overview of this transaction
+            </p>
+            </div>
+
+            {/* 👤 User Info */}
+            <div className="p-6 border-b dark:border-gray-700 flex items-center gap-4">
+
+            <img
+                src={`${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${selectedTxn.user_id}`}
+                className="w-14 h-14 rounded-full object-cover border"
+            />
+
+            <div>
+                <p className="font-semibold text-gray-800 dark:text-white">
+                {selectedTxn.fullName}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-300">
+                Donor
+                </p>
+            </div>
+
+            </div>
+
+            {/* 📊 Details */}
+            <div className="p-6 space-y-4 text-sm">
+
+            <div className="flex justify-between">
+                <span className="text-gray-500 dark:text-gray-300">Campaign</span>
+                <span className="font-medium text-gray-800 dark:text-white">
+                {selectedTxn.title}
+                </span>
+            </div>
+
+            <div className="flex justify-between">
+                <span className="text-gray-500 dark:text-gray-300">Amount</span>
+                <span className="text-emerald-600 font-semibold text-base">
+                ₹{selectedTxn.amount.toLocaleString("en-IN")}
+                </span>
+            </div>
+
+           
+
+            
+
+            <div className="flex justify-between">
+                <span className="text-gray-500 dark:text-gray-300">Date</span>
+                <span className="text-gray-800 dark:text-white">
+                {moment(selectedTxn.donationDate).format("MMM DD, YYYY • hh:mm A")}
+                </span>
+            </div>
+
+            {/* Status */}
+           
+
+            </div>
+
+            {/* 🔘 Footer */}
+            <div className="flex justify-end p-4 border-t dark:border-gray-700">
+            <button
+                onClick={() => setSelectedTxn(null)}
+                className="px-5 py-2 rounded-full text-sm font-medium 
+                text-gray-700 dark:text-white 
+                border border-gray-300 dark:border-gray-600
+                bg-white dark:bg-gray-800
+                hover:bg-gray-100 dark:hover:bg-gray-700
+                transition"
+            >
+                Close
+            </button>
+            </div>
+
+        </motion.div>
+        </motion.div>
+    )}
+    </AnimatePresence>
         </>
     );
 };

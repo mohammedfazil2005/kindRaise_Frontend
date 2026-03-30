@@ -78,6 +78,9 @@ const AdminManageCampaignCards = ({search,status,category,setPage,page}:AdminCam
                     {campaign.status}
                   </span>:campaign.status=="REJECTED"?<span className="bg-red-500 text-white text-[11px] px-2 py-1 rounded-full">
                     {campaign.status}
+                  </span>:campaign.status=="EXPIRED"?<span className="bg-blue-300 text-white text-[11px] px-2 py-1 rounded-full">
+                    {campaign.status}
+                    
                   </span>:<span className="bg-yellow-500 text-white text-[11px] px-2 py-1 rounded-full">
                     {campaign.status}
                   </span>}

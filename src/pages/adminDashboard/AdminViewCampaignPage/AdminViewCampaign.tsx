@@ -100,6 +100,7 @@ const AdminViewCampaign = () => {
                 setApproveLoader(false)
                 setRejectLoader(false)
                 setCompleteLoader(false)
+                    setCampaignCreated("updatedStatus")
             }
     }
 

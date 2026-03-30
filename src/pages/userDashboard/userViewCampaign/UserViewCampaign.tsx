@@ -12,6 +12,8 @@ import { createOrder, failedOrder, verifyOrder } from '../../../services/apis/Ra
 import { toaster } from '../../../services/Toaster';
 import { CampaignContext } from '../../../contexts/CampainContext';
 import { motion } from 'framer-motion';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 
 declare global {
@@ -21,6 +23,7 @@ declare global {
 }
 
 const UserViewCampaign = () => {
+    const [open,setOpen]=useState(false);
       const [selectedAmount, setSelectedAmount] = useState('');
       const id=useParams()['id']!
 
@@ -127,11 +130,15 @@ const UserViewCampaign = () => {
         <div className="lg:col-span-2 space-y-10">
 
       {/* Hero Image */}
-      <div className="relative rounded-3xl overflow-hidden group">
+      <div className="relative rounded-3xl overflow-hidden group" onClick={()=>{
+            setOpen(true)
+            console.log("clicked")
+          }}>
 
         <img
+        
           src={import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign?.id}`}
-          alt="Reforestation"
+          alt="Campaign Image"
           className="w-full h-[420px] object-cover group-hover:scale-105 transition duration-500"
         />
 
@@ -155,7 +162,7 @@ const UserViewCampaign = () => {
           <img
           src={
          campaign?.id
-            ? import.meta.env.VITE_KINDRAISE_API_URL+`/campaign/image/campaign/${campaign.id}`
+            ? import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${profileData?.profile?.id}`
             : "/unknownphoto.avif"
           }
             alt="org"
@@ -164,7 +171,7 @@ const UserViewCampaign = () => {
 
           <div>
             <p className="font-semibold text-gray-800 dark:text-gray-200">
-              {profileData?.profile.fullName}
+              {profileData?.profile?.fullName}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
             {profileData?.profile?.role === "USER" ? "Community Member" : "Platform Administrator"}
@@ -237,7 +244,7 @@ const UserViewCampaign = () => {
     {/* RIGHT SIDEBAR */}
     <div className="space-y-8 sticky top-24 h-fit">
 
-      {campaign.status=="ACTIVE"?
+      {campaign?.status=="ACTIVE"?
       <>
       {/* Donation Card */}
       <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border dark:border-gray-700">
@@ -261,7 +268,7 @@ const UserViewCampaign = () => {
               className={`py-2 rounded-full border text-sm font-medium transition
               ${
                 selectedAmount === amount
-                  ? "bg-emerald-100 dark:bg-emerald-900 border-emerald-500 text-emerald-600"
+                  ? "bg-emerald-100 dark:bg-emerald-900 border-emerald-500 text-white "
                   : "bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
               }`}
             >
@@ -307,50 +314,42 @@ const UserViewCampaign = () => {
 
       </div>
       </>
-      : <div className="mt-6 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/40 backdrop-blur-sm p-5 space-y-4">
+      : 
+      
+  <div className="mt-6 space-y-4">
 
-  <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">
-    Donations Unavailable
-  </h3>
-
-  {/* PENDING */}
   {campaign.status === "PENDING" && (
-    <div className="p-4 rounded-xl border border-yellow-200 bg-yellow-50 dark:bg-yellow-500/10 flex items-center gap-3">
-      <Clock className="text-yellow-500 w-5 h-5" />
-      <p className="text-sm text-yellow-600 dark:text-yellow-400">
-        This campaign is waiting for admin approval.
-      </p>
-    </div>
+    <StatusCard
+      icon={Clock}
+      title="Awaiting Approval"
+      description="Your campaign is under review. It will go live once approved by the admin."
+      color="bg-yellow-400"
+      badge="Pending"
+    />
   )}
 
-  {/* REJECTED */}
   {campaign.status === "REJECTED" && (
-    <div className="p-4 rounded-xl border border-red-200 bg-red-50 dark:bg-red-500/10 flex items-start gap-3">
-      <XCircle className="text-red-500 w-5 h-5 mt-0.5" />
-      <div>
-        <p className="text-sm font-semibold text-red-600 dark:text-red-400">
-          Campaign Rejected
-        </p>
-        <p className="text-xs text-red-500 dark:text-red-300">
-          This campaign did not meet approval guidelines.
-        </p>
-      </div>
-    </div>
+    <StatusCard
+      icon={XCircle}
+      title="Not Approved"
+      description="This campaign didn’t meet guidelines. Update details and resubmit."
+      color="bg-red-500"
+      badge="Rejected"
+    />
   )}
 
-  {/* COMPLETED */}
   {campaign.status === "COMPLETED" && (
-    <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50 dark:bg-emerald-500/10 flex items-start gap-3">
-      <CheckCircle className="text-emerald-500 w-5 h-5 mt-0.5" />
-      <div>
-        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-          Campaign Completed 🎉
-        </p>
-        <p className="text-xs text-emerald-500 dark:text-emerald-300">
-          This campaign has successfully reached its goal.
-        </p>
-      </div>
-    </div>
+    <StatusCard
+      icon={CheckCircle}
+      title="Campaign Completed"
+      description={
+        campaign?.amount === campaign?.goalAmount
+          ? "Successfully reached the goal and made an impact."
+          : "Marked as completed by the campaign owner."
+      }
+      color="bg-emerald-500"
+      badge="Completed"
+    />
   )}
 
 </div>
@@ -361,8 +360,65 @@ const UserViewCampaign = () => {
   </div>
 </section>
     }
+        <Lightbox
+      open={open}
+      close={() => setOpen(false)}
+      slides={[
+        {
+          src: campaign?.id
+            ? `${import.meta.env.VITE_KINDRAISE_API_URL}/campaign/image/campaign/${campaign?.id}`
+            : "",
+        },
+      ]}
+      styles={{
+        container: { backgroundColor: "rgba(0,0,0,0.85)" },
+      }}
+      render={{
+        buttonPrev: () => null,
+        buttonNext: () => null,
+      }}
+    />
     </>
   )
 }
 
 export default UserViewCampaign
+
+
+const StatusCard = ({ icon: Icon, title, description, color, badge }:any) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className={`relative flex items-start gap-4 p-5 rounded-2xl border 
+      bg-white dark:bg-gray-900 
+      border-gray-200 dark:border-gray-800 
+      hover:shadow-lg transition-all duration-300 group`}
+    >
+      
+      {/* LEFT ACCENT LINE */}
+      <div className={`absolute left-0 top-0 h-full w-1 rounded-l-2xl ${color}`} />
+
+      {/* ICON */}
+      <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-gray-100 dark:bg-gray-800 group-hover:scale-105 transition">
+        <Icon className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+      </div>
+
+      {/* CONTENT */}
+      <div className="flex-1">
+        <p className="text-sm font-semibold text-gray-900 dark:text-white">
+          {title}
+        </p>
+
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+          {description}
+        </p>
+      </div>
+
+      {/* BADGE */}
+      <span className="text-[10px] font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+        {badge}
+      </span>
+    </motion.div>
+  );};

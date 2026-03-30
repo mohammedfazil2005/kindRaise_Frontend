@@ -13,7 +13,13 @@ export const fetchAllTransactionsAdmin=async(currentPage:number,size:number,camp
     return await CommonApi("GET",`/transaction/all?campaignId=${campaignId}&status=${status}&page=${currentPage}&size=${size}&search=${search}`)
 }
 
+export const fetchAllTransactionsByUserId=async(currentPage:number,size:number,campaignId="",type="",search="")=>{
+    
+    return await CommonApi("GET",`/transaction/all/user?campaignId=${campaignId}&type=${type}&page=${currentPage}&size=${size}&search=${search}`)
+}
+
 
 export const fetchAllTransactionsInOneCallAdmin=async()=>{
     return await CommonApi("GET",`/transaction/admin/all/once`)
 }
+

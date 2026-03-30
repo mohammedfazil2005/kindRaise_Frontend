@@ -53,7 +53,7 @@ export default function AdminRecentDonations() {
 
               {/* Avatar */}
               <div className=" b flex items-center justify-center text-white text-sm font-semibold">
-                <img className="w-10 h-10 rounded-full" src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${item.user_id}`} alt="" />
+                <img className="w-6 h-6 rounded-full" src={import.meta.env.VITE_KINDRAISE_API_URL+`/user/profile/image/${item.user_id}`} alt="" />
               </div>
 
               {/* User Info */}

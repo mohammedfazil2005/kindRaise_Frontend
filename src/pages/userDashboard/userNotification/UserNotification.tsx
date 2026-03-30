@@ -175,7 +175,8 @@ const UserNotification = () => {
               </motion.div>
             ))}
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="flex justify-center items-center gap-2 mt-8 flex-wrap">
+      {notifications?.totalPages>1&&(
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="flex justify-center items-center gap-2 mt-8 flex-wrap">
                 {/* Previous Button */}
                   <motion.button
                     whileHover={{ scale: 1.08 }}
@@ -225,6 +226,7 @@ const UserNotification = () => {
               </motion.button>
 
               </motion.div>
+      )}
 
           </div>
 

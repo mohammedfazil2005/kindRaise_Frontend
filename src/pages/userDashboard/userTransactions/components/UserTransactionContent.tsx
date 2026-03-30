@@ -1,29 +1,31 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { motion,AnimatePresence } from "framer-motion";
-import { fetchAllTransactionsAdmin } from "../../../../services/apis/TransactionApi";
-import {  useState, type Dispatch, type SetStateAction } from "react";
+import {AnimatePresence, motion } from "framer-motion";
+import { fetchAllTransactionsByUserId } from "../../../../services/apis/TransactionApi";
+import {  useContext, useState, type Dispatch, type SetStateAction } from "react";
 import { DonationTableSkeleton } from "../../../../skeltons/CampaignSkeltons";
 import type { TransactionInterface } from "../../../../interfaces/interfaces";
 import moment from "moment";
 import { Inbox } from "lucide-react";
+import { CampaignContext } from "../../../../contexts/CampainContext";
 
 
 type AdminTransactionContentPropsType={
     search:string,
-    status:string,
+    type:string,
     campaignId:string
     page:number
     setPage:Dispatch<SetStateAction<number>>
 }
 
-const AdminTransactionContent = ({search,status,campaignId,page,setPage}:AdminTransactionContentPropsType) => {
+const UserTransactionContent = ({search,type,campaignId,page,setPage}:AdminTransactionContentPropsType) => {
 
-      const [selectedTxn, setSelectedTxn] = useState<TransactionInterface | null>(null);
+    const [selectedTxn, setSelectedTxn] = useState<TransactionInterface | null>(null);
+    const {paymentAdded}=useContext(CampaignContext)!
 
     const {data,isLoading}=useQuery({
-        queryKey:["AdminTransactionContentDetails",search,status,campaignId,page],
-        queryFn:()=>fetchAllTransactionsAdmin(page,8,campaignId,status,search),
+        queryKey:["AdminTransactionContentDetails",search,type,campaignId,page,paymentAdded],
+        queryFn:()=>fetchAllTransactionsByUserId(page,8,campaignId,type,search),
         staleTime:1000*60*10
     })
     return (
@@ -71,7 +73,7 @@ const AdminTransactionContent = ({search,status,campaignId,page,setPage}:AdminTr
     </motion.div>
             :data?.content?.map((txn:TransactionInterface, index:number) => (
                 <motion.div
-                 onClick={() => setSelectedTxn(txn)}
+                onClick={() => setSelectedTxn(txn)}
                     key={txn.id}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -192,10 +194,7 @@ const AdminTransactionContent = ({search,status,campaignId,page,setPage}:AdminTr
             </motion.div>
       )}
 
-        </motion.div>
-}
-
-<AnimatePresence>
+          <AnimatePresence>
     {selectedTxn && (
         <motion.div
         key="overlay"
@@ -230,7 +229,7 @@ const AdminTransactionContent = ({search,status,campaignId,page,setPage}:AdminTr
             <div className="bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-700 text-white p-6">
             <h2 className="text-lg font-semibold">Transaction Details</h2>
             <p className="text-xs opacity-90">
-                Detailed overview of this transaction
+                Detailed overview of this donation
             </p>
             </div>
 
@@ -330,8 +329,12 @@ const AdminTransactionContent = ({search,status,campaignId,page,setPage}:AdminTr
         </motion.div>
     )}
     </AnimatePresence>
+        </motion.div>
+        
+}
+
         </>
     );
 };
 
-export default AdminTransactionContent;
+export default UserTransactionContent;

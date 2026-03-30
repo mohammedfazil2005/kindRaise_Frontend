@@ -4,7 +4,7 @@ import { ArrowBigLeft, BellRing, LogOut } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 import { toaster } from "../../../services/Toaster";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLoggedInUserProfile } from "../../../services/apis/ProfileApi";
 import { CampaignContext } from "../../../contexts/CampainContext";
 import { totalMessagesUnRead } from "../../../services/apis/UserDashboardApi";
@@ -13,6 +13,9 @@ export default function UserNavbar() {
 
   const [open, setOpen] = useState(false);
   const navigate=useNavigate()
+
+  const queryClient = useQueryClient();
+
   
   const {profileUpdated,campaignCreated,paymentAdded}=useContext(CampaignContext)!
 
@@ -30,6 +33,7 @@ export default function UserNavbar() {
   const onLogout=()=>{
     localStorage.clear();
     toaster("Logged out!");
+    queryClient.clear()
     navigate('/');
   }
 

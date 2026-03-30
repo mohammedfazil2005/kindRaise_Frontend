@@ -30,7 +30,8 @@ export default function Register() {
     username: "",
     password: "",
     confirmPassword: "",
-    role: "USER"
+    role: "USER",
+    status:"ACTIVE"
   })
 
 
@@ -123,7 +124,7 @@ export default function Register() {
   }
 
   const resetData = () => {
-    setFormData({ ...formData, fullName: "", phone: "", username: "", password: "", confirmPassword: "", role: "USER" })
+    setFormData({ ...formData, fullName: "", phone: "", username: "", password: "", confirmPassword: "", role: "USER",status:"ACTIVE" })
     setPreview("")
     setProfilePhoto(null)
   }

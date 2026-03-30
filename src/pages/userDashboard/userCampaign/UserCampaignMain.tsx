@@ -2,6 +2,7 @@
 import UserCampaignStats from './components/UserCampaignStats'
 import UserCampaignList from './components/UserCampaignList'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Plus } from 'lucide-react'
 
 const UserCampaignMain = () => {
   const navigate = useNavigate()
@@ -29,8 +30,8 @@ const UserCampaignMain = () => {
           </p>
         </div>
 
-        <button onClick={() => navigate('/user/my/campaigns/create')} className="bg-emerald-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition">
-          + Create Campaign
+        <button onClick={() => navigate('/user/my/campaigns/create')} className="flex items-center gap-2 bg-emerald-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-emerald-600 transition">
+           Create Campaign <Plus size={18}/>
         </button>
 
       </div>

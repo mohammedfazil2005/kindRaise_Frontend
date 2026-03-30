@@ -10,7 +10,8 @@ import {
   Menu,
   X,
   Moon,
-  Sun
+  Sun,
+  ArrowLeftRight
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useTheme } from "../../../contexts/ThemeContext";
@@ -20,6 +21,7 @@ const menuItems = [
   { label: "Explore Campaigns", icon: Megaphone, path: "/user/explore/campaigns" },
   { label: "My Donations", icon: HeartHandshake, path: "/user/donations" },
   { label: "My Campaigns", icon: FolderHeart, path: "/user/my/campaigns" },
+  { label: "Transactions", icon: ArrowLeftRight, path: "/user/transactions" },
   { label: "Notifications", icon: Bell, path: "/user/notifications" },
   { label: "Profile Settings", icon: User, path: "/user/profile" }
 ];

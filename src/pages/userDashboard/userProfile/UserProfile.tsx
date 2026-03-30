@@ -76,7 +76,7 @@ const UserProfile = () => {
   };
 
   const {data,isLoading}=useQuery({
-    queryKey:['profile'],
+    queryKey:['UserProfileView'],
     queryFn:fetchLoggedInUserProfile,
     staleTime:1000*60*10
   })

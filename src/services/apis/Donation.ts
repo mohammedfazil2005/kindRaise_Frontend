@@ -1,7 +1,7 @@
 import { CommonApi } from "../CommonApi"
 
-export const fetchUserDonations=async()=>{
-    return await CommonApi("GET","/donation/user");
+export const fetchUserDonations=async(page:number)=>{
+    return await CommonApi("GET",`/donation/user?page=${page}`);
 }
 
 export const fetchUserDonationDashboardStats=async()=>{

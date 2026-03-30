@@ -1,7 +1,9 @@
 
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const HomeBannerBottom = () => {
+  const navigate=useNavigate()
     const containerVariants :any= {
     hidden: { opacity: 0 },
     visible: {
@@ -92,6 +94,18 @@ const HomeBannerBottom = () => {
           </motion.h1>
           <motion.button
             variants={buttonVariants}
+            onClick={()=>{
+              if(localStorage.getItem("token")){
+                if(localStorage.getItem("role")=="ROLE_ADMIN"){
+                  navigate("/admin")
+                }else{
+                  navigate("/user")
+                }
+                
+              }else{
+                navigate("/login")
+              }
+            }}
             whileHover="hover"
             className="bg-white text-teal-900 px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-shadow"
           >

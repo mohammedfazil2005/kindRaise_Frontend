@@ -6,9 +6,9 @@ import { fetchAdminDonationDashboardStats } from "../../../../services/apis/Dona
 import { useEffect } from "react";
 import { DonationStatsCardSkeleton } from "../../../../skeltons/DonationSkeltons";
 
-
-
 const AdminCampaignDonationCards = () => {
+
+
 
     const {data,isLoading}=useQuery({
         queryKey:["adminCampaignDonaionDashboard"],
@@ -28,6 +28,7 @@ const AdminCampaignDonationCards = () => {
             )):
             <>
                     <motion.div
+                   
                         initial={{ opacity: 0, y: 25 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1 * 0.1 }}
@@ -141,6 +142,8 @@ const AdminCampaignDonationCards = () => {
             </>
 
         }
+
+
 
         </div>
     );
