@@ -1,12 +1,14 @@
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import { Eye, EyeOff, Shield, Verified, Bell, FolderHeart, HeartHandshake, Megaphone, ArrowRight } from "lucide-react"
+import { Eye, EyeOff, Verified, Bell, FolderHeart, HeartHandshake, Megaphone, ArrowRight } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 
 import { onCheckUsernameAlreadyExists, onRegister } from "../../services/apis/AuthApi"
 import { toaster } from "../../services/Toaster"
 import { ClipLoader } from "react-spinners"
 
+
+import { AuroraBackground } from "../../components/ui/aurora"
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
@@ -179,96 +181,78 @@ export default function Register() {
 
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-[#f6f9f8]">
+    <>
+    <AuroraBackground showRadialGradient={true} animationSpeed={15} className="pointer-events-none">
+    <div className="min-h-screen flex items-center justify-center pointer-events-auto">
 
-      {/* LEFT SECTION */}
-      <div className="w-full lg:w-3/3 bg-[#eef5f2] p-10 lg:p-16 flex flex-col gap-12">
-
-        <div>
-          <div className="inline-block bg-emerald-100 text-emerald-600 px-4 py-1 rounded-full text-xs font-semibold tracking-wide mb-3">
-            JOIN THE COMMUNITY
-          </div>
-
-          <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 leading-tight mb-4">
-            Start your journey with KindRaise
-          </h1>
-
-          <p className="text-gray-600 max-w-md mb-8">
-            Create a premium account to access world-class SaaS tools and grow your impact today.
-          </p>
-
-          <div className="space-y-6 mb-10">
-            <div className="flex gap-4">
-              <Verified className="text-emerald-600 mt-1" size={20} />
-              <div>
-                <h3 className="font-semibold text-gray-900">Verified Impact</h3>
-                <p className="text-xs lg:text-sm text-gray-600">
-                  Join over 10,000+ non-profits raising more.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <Shield className="text-emerald-600 mt-1" size={20} />
-              <div>
-                <h3 className="font-semibold text-gray-900">Bank-Level Security</h3>
-                <p className="text-xs lg:text-sm text-gray-600">
-                  Your data and donations are always safe.
-                </p>
-              </div>
-            </div>
+     <div className="w-full max-w-6xl max-h-[640px] grid md:grid-cols-2 bg-white rounded-2xl overflow-hidden shadow-xl">
 
 
+    {/* LEFT SIDE - PREMIUM UI */}
+    <div className="hidden md:flex flex-col justify-between p-10 h-full relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 text-white">
 
-            {/* Explore Campaigns */}
-            <div className="flex gap-4">
-              <Megaphone className="text-emerald-600 mt-1" size={20} />
-              <div>
-                <h3 className="font-semibold text-gray-900">Explore Campaigns</h3>
-                <p className="text-xs lg:text-sm text-gray-600">
-                  Discover meaningful campaigns and support causes that matter to you.
-                </p>
-              </div>
-            </div>
+      {/* Background Glow */}
+      <div className="absolute w-72 h-72 bg-white/10 rounded-full blur-3xl -top-10 -left-10"></div>
+      <div className="absolute w-72 h-72 bg-black/10 rounded-full blur-3xl bottom-0 right-0"></div>
 
-            {/* Track Donations */}
-            <div className="flex gap-4">
-              <HeartHandshake className="text-emerald-600 mt-1" size={20} />
-              <div>
-                <h3 className="font-semibold text-gray-900">Track Your Donations</h3>
-                <p className="text-xs lg:text-sm text-gray-600">
-                  Monitor your contributions and see the real impact of your support.
-                </p>
-              </div>
-            </div>
+      {/* TOP CONTENT */}
+      <div className="relative z-10">
+        
+        {/* Logo / Brand */}
+        <img src="/logo.png" alt="logo" className="h-7 mb-2" />
 
-            {/* Create Campaign */}
-            <div className="flex gap-4">
-              <FolderHeart className="text-emerald-600 mt-1" size={20} />
-              <div>
-                <h3 className="font-semibold text-gray-900">Launch Campaigns</h3>
-                <p className="text-xs lg:text-sm text-gray-600">
-                  Start your own fundraising campaign and bring people together for a cause.
-                </p>
-              </div>
-            </div>
+        {/* Heading */}
+        <h2 className="text-2xl font-bold leading-snug">
+          Start Your  Fundraising Journey 
+        </h2>
 
-            {/* Notifications */}
-            <div className="flex gap-4">
-              <Bell className="text-emerald-600 mt-1" size={20} />
-              <div>
-                <h3 className="font-semibold text-gray-900">Real-Time Updates</h3>
-                <p className="text-xs lg:text-sm text-gray-600">
-                  Get notified instantly when campaigns reach milestones or receive donations.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <p className="text-white/80 text-xs mt-1 max-w-sm mb-3">
+          Join thousands of people making a real impact. Create campaigns,
+          donate securely, and track every contribution.
+        </p>
       </div>
 
-      {/* RIGHT SECTION */}
-      <div className="w-full lg:w-2/3 bg-white flex items-center justify-center p-10">
+      {/* FEATURES */}
+      <div className="relative z-10 space-y-4">
+
+        {[
+          { icon: Verified, title: "Verified Impact", desc: "Trusted by 10,000+ nonprofits." },
+          { icon: Megaphone, title: "Explore Campaigns", desc: "Find causes that matter." },
+          { icon: HeartHandshake, title: "Track Donations", desc: "See real-time impact." },
+          { icon: FolderHeart, title: "Launch Campaigns", desc: "Start fundraising easily." },
+          { icon: Bell, title: "Real-Time Updates", desc: "Instant notifications." },
+        ].map((item, i) => (
+          <div
+            key={i}
+            className="flex items-start gap-4 p-4 rounded-xl bg-white/10 backdrop-blur-md hover:bg-white/20 transition"
+          >
+            <div className="p-2 bg-white/20 rounded-lg">
+              <item.icon size={18} />
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold">{item.title}</h3>
+              <p className="text-xs text-white/80">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* BOTTOM TRUST */}
+      <div className="relative z-10 text-xs text-white/70 mt-6">
+        Trusted by creators worldwide 🌍
+      </div>
+    </div>
+
+    {/* RIGHT SIDE */}
+    <div className="p-3 flex  overflow-y-auto items-center justify-center">
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full "
+      >
+ <div className="w-full bg-white flex items-center justify-center p-3">
 
         <motion.div
           initial={{ opacity: 0, x: 40 }}
@@ -278,7 +262,7 @@ export default function Register() {
         >
           {!showProfilePhotoAdder && (
             <div>
-              <img src="/logo.png" alt="logo" className="h-12 w-auto mb-4" />
+              <img src="/logo.png" alt="logo" className="h-10 w-auto mb-4" />
 
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
                 Create Account
@@ -555,6 +539,13 @@ export default function Register() {
 
         </motion.div>
       </div>
+
+      </motion.div>
     </div>
+
+  </div>
+    </div>
+   </AuroraBackground>
+    </>
   )
 }

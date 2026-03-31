@@ -24,7 +24,7 @@ const Hero = ({setSearch,setPage}:HeroSearch) => {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="/bghome.png"
+          src="/bannernew.avif"
           alt="Support Causes"
           className="w-full h-full object-cover"
         />

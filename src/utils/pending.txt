@@ -16,3 +16,74 @@
                <i className="fa-brands fa-github"></i> GitHub
               </button>
             </div> */}
+
+
+
+new
+              <div className="space-y-6 mb-10">
+            <div className="flex gap-4">
+              <Verified className="text-emerald-600 mt-1" size={20} />
+              <div>
+                <h3 className="font-semibold text-gray-900">Verified Impact</h3>
+                <p className="text-xs lg:text-sm text-gray-600">
+                  Join over 10,000+ non-profits raising more.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <Shield className="text-emerald-600 mt-1" size={20} />
+              <div>
+                <h3 className="font-semibold text-gray-900">Bank-Level Security</h3>
+                <p className="text-xs lg:text-sm text-gray-600">
+                  Your data and donations are always safe.
+                </p>
+              </div>
+            </div>
+
+
+
+            {/* Explore Campaigns */}
+            <div className="flex gap-4">
+              <Megaphone className="text-emerald-600 mt-1" size={20} />
+              <div>
+                <h3 className="font-semibold text-gray-900">Explore Campaigns</h3>
+                <p className="text-xs lg:text-sm text-gray-600">
+                  Discover meaningful campaigns and support causes that matter to you.
+                </p>
+              </div>
+            </div>
+
+            {/* Track Donations */}
+            <div className="flex gap-4">
+              <HeartHandshake className="text-emerald-600 mt-1" size={20} />
+              <div>
+                <h3 className="font-semibold text-gray-900">Track Your Donations</h3>
+                <p className="text-xs lg:text-sm text-gray-600">
+                  Monitor your contributions and see the real impact of your support.
+                </p>
+              </div>
+            </div>
+
+            {/* Create Campaign */}
+            <div className="flex gap-4">
+              <FolderHeart className="text-emerald-600 mt-1" size={20} />
+              <div>
+                <h3 className="font-semibold text-gray-900">Launch Campaigns</h3>
+                <p className="text-xs lg:text-sm text-gray-600">
+                  Start your own fundraising campaign and bring people together for a cause.
+                </p>
+              </div>
+            </div>
+
+            {/* Notifications */}
+            <div className="flex gap-4">
+              <Bell className="text-emerald-600 mt-1" size={20} />
+              <div>
+                <h3 className="font-semibold text-gray-900">Real-Time Updates</h3>
+                <p className="text-xs lg:text-sm text-gray-600">
+                  Get notified instantly when campaigns reach milestones or receive donations.
+                </p>
+              </div>
+            </div>
+          </div>

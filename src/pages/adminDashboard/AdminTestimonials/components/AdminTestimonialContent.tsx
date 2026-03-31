@@ -16,10 +16,11 @@ const AdminTestimonialContent = () => {
     const [selectedTestimonial,setSelectedTestimonial]=useState<any>(null)
     const [showModal,setShowModal]=useState(false)
     const [loader,setLoader]=useState({userId:"",status:false})
+    const [page,setPage]=useState(0)
         const {testimonialUpdate,setTestimonialUpdate}=useContext(AdminDashboardContext)!
     const {data,isLoading,refetch}=useQuery({
-        queryKey:["AdminTestimonialContent",testimonialUpdate],
-        queryFn:fetchAllTestimonials
+        queryKey:["AdminTestimonialContent",testimonialUpdate,page],
+        queryFn:()=>fetchAllTestimonials(page)
     })
 
 
@@ -189,6 +190,8 @@ const AdminTestimonialContent = () => {
   </div>
 </motion.div>
       ))}
+     
+        
        <AnimatePresence>
         {showModal && selectedTestimonial && (
             <motion.div
@@ -225,98 +228,97 @@ const AdminTestimonialContent = () => {
                     </p>
                 </div>
 
-                {/* Content */}
+        
               <div className="p-5">
+  
+        <div className="
+          relative p-1 rounded-2xl
+          b
+        ">
 
-  {/* SAME STRUCTURE AS GRID CARD */}
-  <div className="
-    relative p-1 rounded-2xl
-    b
-  ">
+          {/* TOP */}
+          <div className="flex items-center gap-3">
 
-    {/* TOP */}
-    <div className="flex items-center gap-3">
+            {/* Avatar */}
+            <div className="relative">
+              <img
+                src={
+                  selectedTestimonial?.user_id
+                    ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${selectedTestimonial.user_id}`
+                    : `${import.meta.env.VITE_KINDRAISE_API_URL}/testimonial/image/${selectedTestimonial.id}`
+                }
+                className="h-14 w-14 rounded-full object-cover ring-2 ring-emerald-500/30"
+                alt=""
+              />
 
-      {/* Avatar */}
-      <div className="relative">
-        <img
-          src={
-            selectedTestimonial?.user_id
-              ? `${import.meta.env.VITE_KINDRAISE_API_URL}/user/profile/image/${selectedTestimonial.user_id}`
-              : `${import.meta.env.VITE_KINDRAISE_API_URL}/testimonial/image/${selectedTestimonial.id}`
-          }
-          className="h-14 w-14 rounded-full object-cover ring-2 ring-emerald-500/30"
-          alt=""
-        />
+              <span className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
+            </div>
 
-        <span className="absolute bottom-0 right-0 h-2.5 w-2.5 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
-      </div>
+            {/* Info */}
+            <div className="flex-1">
+              <h4 className="text-base font-semibold text-gray-900 dark:text-white">
+                {selectedTestimonial.name}
+              </h4>
 
-      {/* Info */}
-      <div className="flex-1">
-        <h4 className="text-base font-semibold text-gray-900 dark:text-white">
-          {selectedTestimonial.name}
-        </h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {selectedTestimonial.role || "Supporter"} ·{" "}
+                {selectedTestimonial.company || "KindRaise"}
+              </p>
 
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          {selectedTestimonial.role || "Supporter"} ·{" "}
-          {selectedTestimonial.company || "KindRaise"}
-        </p>
+              {/* ⭐ Rating */}
+              <div className="flex gap-[2px] mt-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className={`text-sm ${
+                      i < selectedTestimonial.rating
+                        ? "text-yellow-400"
+                        : "text-gray-300 dark:text-gray-600"
+                    }`}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
 
-        {/* ⭐ Rating */}
-        <div className="flex gap-[2px] mt-1">
-          {Array.from({ length: 5 }).map((_, i) => (
+          {/* Divider */}
+          <div className="my-4 h-px bg-gray-200 dark:bg-gray-700" />
+
+          {/* MESSAGE */}
+          <div className="relative">
+            <span className="absolute -top-3 left-0 text-5xl text-gray-200 dark:text-gray-700 font-serif">
+              “
+            </span>
+
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed pl-6">
+              {selectedTestimonial.message}
+            </p>
+          </div>
+
+          {/* Bottom Row */}
+          <div className="mt-5 flex justify-between items-center">
+
+            {/* Date */}
+            <span className="text-xs text-gray-400">
+              {moment(selectedTestimonial.date).format("DD MMM YYYY, hh:mm A")}
+            </span>
+
+            {/* Status */}
             <span
-              key={i}
-              className={`text-sm ${
-                i < selectedTestimonial.rating
-                  ? "text-yellow-400"
-                  : "text-gray-300 dark:text-gray-600"
+              className={`text-[10px] px-2 py-1 rounded-full font-medium ${
+                selectedTestimonial.status
+                  ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400"
+                  : "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400"
               }`}
             >
-              ★
+              {selectedTestimonial.status ? "Active" : "Disabled"}
             </span>
-          ))}
+          </div>
+
         </div>
       </div>
-    </div>
-
-    {/* Divider */}
-    <div className="my-4 h-px bg-gray-200 dark:bg-gray-700" />
-
-    {/* MESSAGE */}
-    <div className="relative">
-      <span className="absolute -top-3 left-0 text-5xl text-gray-200 dark:text-gray-700 font-serif">
-        “
-      </span>
-
-      <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed pl-6">
-        {selectedTestimonial.message}
-      </p>
-    </div>
-
-    {/* Bottom Row */}
-    <div className="mt-5 flex justify-between items-center">
-
-      {/* Date */}
-      <span className="text-xs text-gray-400">
-        {moment(selectedTestimonial.date).format("DD MMM YYYY, hh:mm A")}
-      </span>
-
-      {/* Status */}
-      <span
-        className={`text-[10px] px-2 py-1 rounded-full font-medium ${
-          selectedTestimonial.status
-            ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400"
-            : "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400"
-        }`}
-      >
-        {selectedTestimonial.status ? "Active" : "Disabled"}
-      </span>
-    </div>
-
-  </div>
-</div>
 
                 {/* Footer */}
                 <div className="flex justify-end items-center p-4 border-t dark:border-gray-700">
@@ -346,6 +348,59 @@ const AdminTestimonialContent = () => {
             )}
     </AnimatePresence>
 </div>
+
+ {data?.totalPages>1&&(
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="flex justify-center items-center gap-2 mt-8 flex-wrap">
+                {/* Previous Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.9 }}
+                    disabled={page === 0}
+                    onClick={() => setPage((prev) => prev - 1)}
+                    className="px-3 py-2 rounded-lg border text-sm text-black dark:text-white
+                    disabled:opacity-40
+                    hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    Prev
+                  </motion.button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: data?.totalPages || 0 }).map((_, i) => (
+                  <motion.button
+                    key={i}
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.9 }}
+                    animate={{
+                      scale: page === i ? 1.2 : 1,
+                    }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    onClick={() => setPage(i)}
+                    className={`px-3 py-2 rounded-lg text-sm border transition text-black dark:text-white
+                    ${
+                      page === i
+                        ? "bg-emerald-500 text-white border-emerald-500"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
+                  >
+                    {i + 1}
+                  </motion.button>
+                ))}
+
+              {/* Next Button */}
+              <motion.button
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.9 }}
+                disabled={page + 1 >= data?.totalPages}
+                onClick={() => setPage((prev) => prev + 1)}
+                className="px-3 py-2 rounded-lg border text-sm
+                disabled:opacity-40 text-white
+                hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Next
+              </motion.button>
+
+              </motion.div>
+      )}
       
     </>
   );

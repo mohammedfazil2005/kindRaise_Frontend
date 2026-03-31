@@ -129,3 +129,13 @@
     --radius: 0.5rem;
   }
 }
+
+.swiper-pagination-bullet {
+  background: white;
+  opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+  background: #10b981; /* emerald */
+  opacity: 1;
+}

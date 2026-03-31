@@ -4,8 +4,8 @@ export const fetchActiveTestimonials=()=>{
     return CommonApi("GET","/testimonial/all/active")
 }
 
-export const fetchAllTestimonials=()=>{
-    return CommonApi("GET","/testimonial/all")
+export const fetchAllTestimonials=(page:number)=>{
+    return CommonApi("GET",`/testimonial/all?page=${page}`)
 }
 
 export const changeStatusOfTestimonial=(id:string,status:boolean)=>{

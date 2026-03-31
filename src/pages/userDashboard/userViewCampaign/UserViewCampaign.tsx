@@ -11,9 +11,11 @@ import { fetchProfileById } from '../../../services/apis/ProfileApi';
 import { createOrder, failedOrder, verifyOrder } from '../../../services/apis/RazorPayApi';
 import { toaster } from '../../../services/Toaster';
 import { CampaignContext } from '../../../contexts/CampainContext';
-import { motion } from 'framer-motion';
+import { motion,AnimatePresence } from 'framer-motion';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { createTestimonial } from '../../../services/apis/TestimonialApi';
+import { ClipLoader } from 'react-spinners';
 
 
 declare global {
@@ -26,6 +28,12 @@ const UserViewCampaign = () => {
     const [open,setOpen]=useState(false);
       const [selectedAmount, setSelectedAmount] = useState('');
       const id=useParams()['id']!
+      const [showTestimonialModal, setShowTestimonialModal] = useState(false);
+      const [testimonialLoading,setTestimonialLoading]=useState(false)
+      const [testimonial, setTestimonial] = useState({
+        rating: 0,
+        message: ""
+      });
 
       const amounts = ["25", "50", "100", "250", "500", "1000"];
 
@@ -75,6 +83,7 @@ const UserViewCampaign = () => {
                 refetch()
                 toaster("❤️ Donation successfull! Your support makes a real difference.");
                 setPaymentAdded("Payment done.")
+                setShowTestimonialModal(true);
               }
             }
             const rzp = new window.Razorpay(options)
@@ -109,6 +118,21 @@ const UserViewCampaign = () => {
 
      }
 
+     const onSubmitTestimonial=async()=>{
+      try {
+           setTestimonialLoading(true);
+        const formDataPayload=new FormData();
+        formDataPayload.append("info",new Blob([JSON.stringify(testimonial)],{type:'application/json'})) ;
+        await createTestimonial(formDataPayload);
+        setShowTestimonialModal(false);
+        toaster("Thanks for sharing your feedback! It helps others trust KindRaise.")
+      } catch (error) {
+        console.log(error)
+      }finally{
+        setTestimonialLoading(false);
+      }
+     }
+
     
 
      useEffect(()=>{
@@ -119,14 +143,24 @@ const UserViewCampaign = () => {
       console.log(campaign)
      },[campaign])
 
+        useEffect(() => {
+      if (showTestimonialModal) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
+
+  return () => {
+    document.body.style.overflow = "auto";
+  };
+}, [showTestimonialModal]);
+
 
   return (
     <>
     {isLoading||isProfileLoading?<CampaignDetailsSkeleton/>:
        <section className="bg-gray-50 dark:bg-gray-900 py-12 transition-colors">
           <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-3 gap-12">
-
-    
         <div className="lg:col-span-2 space-y-10">
 
       {/* Hero Image */}
@@ -358,8 +392,140 @@ const UserViewCampaign = () => {
     </div>
 
   </div>
-</section>
+    </section>
+    
     }
+    <AnimatePresence>
+  {showTestimonialModal && (
+    <motion.div
+      className="fixed inset-0 bg-black/80 backdrop-blur-xs flex items-center justify-center z-50 p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={() => setShowTestimonialModal(false)}
+    >
+      <motion.div
+        onClick={(e) => e.stopPropagation()}
+        initial={{ scale: 0.9, opacity: 0, y: 40 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="relative w-full max-w-md rounded-2xl overflow-hidden"
+      >
+
+        {/* Glow Effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-transparent blur-2xl opacity-40" />
+
+        {/* Card */}
+        <div className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl dark:border dark:border-gray-700 shadow-2xl rounded-2xl">
+
+          {/* 🔥 Header */}
+          <div className="flex flex-col items-center text-center bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-6">
+            
+            <img
+              src="/logo.png"
+              alt="KindRaise"
+              className="h-12 mb-2 drop-shadow-md"
+            />
+
+            <h3 className="text-lg font-semibold tracking-wide flex items-center gap-4">
+              Thank You for Your Support
+            </h3>
+
+            <p className="text-xs opacity-90 mt-1">
+              Tell us about your experience with KindRaise
+            </p>
+          </div>
+
+          {/* Content */}
+          <div className="p-5 space-y-5">
+
+            {/* ⭐ Rating */}
+            <div className="text-center">
+              <p className="text-sm text-gray-800 dark:text-gray-400 mb-2">
+                How was your experience?
+              </p>
+
+              <div className="flex justify-center gap-2">
+                {[1,2,3,4,5].map((num)=>(
+                  <motion.span
+                    key={num}
+                    whileHover={{ scale: 1.3 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={()=>setTestimonial(prev=>({...prev,rating:num}))}
+                    className={`cursor-pointer text-3xl transition ${
+                      num <= testimonial.rating
+                        ? "text-yellow-400 drop-shadow-md"
+                        : "text-gray-800 dark:text-gray-600"
+                    }`}
+                  >
+                    ★
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+
+            {/* Message */}
+            <div>
+              <textarea
+                rows={4}
+                value={testimonial.message}
+                onChange={(e)=>setTestimonial(prev=>({...prev,message:e.target.value}))}
+                placeholder="How was your experience with KindRaise?"
+                className="w-full p-3 text-sm rounded-xl border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-between items-center pt-2">
+
+              {/* Skip */}
+              <button
+                onClick={()=>setShowTestimonialModal(false)}
+                className="text-xs text-gray-400 hover:text-gray-600"
+              >
+                Maybe later
+              </button>
+
+              {/* Submit */}
+                        <motion.button
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={onSubmitTestimonial}
+              disabled={
+                testimonialLoading ||
+                !testimonial.message.trim() ||
+                testimonial.rating === 0
+              }
+              className={`
+                px-4 py-2 text-sm font-medium rounded-full
+                flex items-center justify-center gap-2
+                transition-all duration-300
+                ${
+                  testimonialLoading ||
+                  !testimonial.message.trim() ||
+                  testimonial.rating === 0
+                    ? "bg-gray-300 dark:bg-gray-700 text-gray-500"
+                    : "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:shadow-lg"
+                }
+              `}
+            >
+              {testimonialLoading ? (
+                <ClipLoader size={14} color="white" />
+              ) : (
+                "Submit Feedback"
+              )}
+            </motion.button>
+
+            </div>
+
+          </div>
+
+        </div>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
         <Lightbox
       open={open}
       close={() => setOpen(false)}

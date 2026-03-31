@@ -5,8 +5,9 @@ import emailjs from "@emailjs/browser";
 import { toaster } from "../../services/Toaster";
 import { createTicket } from "../../services/apis/TicketApi";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 export default function ContactUs() {
-
+  const navigate=useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -130,7 +131,14 @@ export default function ContactUs() {
                 Launch your fundraising campaign and help people in need.
             </p>
 
-            <button className="bg-white text-emerald-700 px-5 py-2 rounded-md font-semibold hover:bg-gray-300 transition">
+            <button onClick={()=>{
+              if(localStorage.getItem("token")){
+                navigate('/user')
+              }else{
+                navigate('/login')
+                toaster("Please Login to continue")
+              }
+            }} className="bg-white text-emerald-700 px-5 py-2 rounded-md font-semibold hover:bg-gray-300 transition">
                 Start Campaign
             </button>
             </div>
