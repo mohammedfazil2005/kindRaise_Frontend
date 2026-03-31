@@ -183,7 +183,7 @@ export default function Register() {
   return (
     <>
     <AuroraBackground showRadialGradient={true} animationSpeed={15} className="pointer-events-none">
-    <div className="min-h-screen flex items-center justify-center pointer-events-auto">
+    <div className="min-h-screen flex items-center justify-center pointer-events-auto isolate">
 
      <div className="w-full max-w-6xl max-h-[640px] grid md:grid-cols-2 bg-white rounded-2xl overflow-hidden shadow-xl">
 

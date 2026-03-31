@@ -34,7 +34,7 @@ const AdminProfile = () => {
 
 
   const {data,isLoading,refetch}=useQuery({
-    queryKey:['profile'],
+    queryKey:['Adminprofilefetching'],
     queryFn:fetchLoggedInUserProfile,
     staleTime:1000*60*10
   })

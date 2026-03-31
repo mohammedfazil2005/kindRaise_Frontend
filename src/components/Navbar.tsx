@@ -235,7 +235,7 @@ const Navbar = () => {
                 <motion.button
                 onClick={()=>{
                   localStorage.clear()
-                  navigate('/login')
+                  navigate('/')
                 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-emerald-500 text-white py-2 "

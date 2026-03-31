@@ -68,8 +68,7 @@ const UserOldPassword = () => {
     setLoading1(true)
     try {
         const apiResponse=await checkPassword(id!,password);
-        toaster(apiResponse.message);
-        console.log(apiResponse)
+        
         if(apiResponse.status){
             setVerified(true);
         }

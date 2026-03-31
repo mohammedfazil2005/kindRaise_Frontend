@@ -71,7 +71,7 @@ const Login = () => {
    <AuroraBackground showRadialGradient={true} animationSpeed={15} className="pointer-events-none">
 <div className="min-h-screen flex items-center justify-center pointer-events-auto">
 
-  <div className="w-full max-w-5xl max-h-[600px] grid md:grid-cols-2 bg-white rounded-2xl overflow-hidden shadow-xl">
+  <div className="w-full max-w-5xl max-h-[600px] grid md:grid-cols-2 bg-white rounded-2xl overflow-hidden shadow-xl isolate">
 
     {/* LEFT IMAGE */}
         <div className="hidden md:block relative h-full">
